@@ -662,9 +662,17 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   function dismiss() {
     if (dismissed) return;
     dismissed = true;
-    loader.style.transition = 'opacity .7s ease';
+    // Hide page content first so it doesn't flash
+    document.body.style.opacity = '0';
+    // Fade out loader
+    loader.style.transition = 'opacity 1s ease';
     loader.style.opacity = '0';
-    setTimeout(() => { loader.style.display = 'none'; }, 750);
+    // Fade in page content gently after loader is gone
+    setTimeout(() => {
+      loader.style.display = 'none';
+      document.body.style.transition = 'opacity 1s ease';
+      document.body.style.opacity = '1';
+    }, 800);
   }
 
   function frame(ts) {

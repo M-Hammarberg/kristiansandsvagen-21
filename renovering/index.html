@@ -26,16 +26,13 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: "Montserrat", sans-serif;
-  background: #0d0d0d;
+  background: var(--ivory);
   color: var(--charcoal);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  opacity: 0;
-  transition: opacity 1.2s ease, background 0s 1.2s;
 }
 body.loaded {
   background: var(--ivory);
-  opacity: 1;
 }
 
 /* ─── NAV ─── */
@@ -317,6 +314,8 @@ body.loaded {
     <div id="rl-sub" style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,184,150,0);transform:translateY(10px);transition:color .9s ease,transform .9s cubic-bezier(.22,1,.36,1);margin-top:4px;">Steg för steg</div>
   </div>
 </div>
+<!-- Dark veil that fades out after loader, masking the page snap -->
+<div id="reno-veil" style="position:fixed;inset:0;z-index:9997;background:#0d0d0d;pointer-events:none;opacity:1;transition:opacity 1s ease;"></div>
 
 <nav class="site-nav">
   <a href="/" class="nav-logo"><em>Kristiansandsvägen</em> <span>21</span></a>
@@ -668,14 +667,14 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   function dismiss() {
     if (dismissed) return;
     dismissed = true;
-    loader.style.transition = 'opacity 1.2s ease';
-    loader.style.opacity = '0';
-    document.body.style.transition = 'opacity 1.2s ease';
-    document.body.style.opacity = '1';
-    setTimeout(() => {
-      loader.style.display = 'none';
-      document.body.style.background = 'var(--ivory)';
-    }, 1300);
+    const veil = document.getElementById('reno-veil');
+    // Snap hide the loader canvas immediately
+    loader.style.display = 'none';
+    // Then slowly fade the dark veil to reveal the page underneath
+    requestAnimationFrame(() => {
+      veil.style.opacity = '0';
+      setTimeout(() => { veil.style.display = 'none'; }, 1100);
+    });
   }
 
   function frame(ts) {
@@ -728,8 +727,8 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   if (sessionStorage.getItem('hasVisitedReno')) {
     loader.style.display = 'none';
     dismissed = true;
-    document.body.style.background = 'var(--ivory)';
-    document.body.style.opacity = '1';
+    const veil = document.getElementById('reno-veil');
+    if (veil) veil.style.display = 'none';
   } else {
     sessionStorage.setItem('hasVisitedReno', '1');
     animId = requestAnimationFrame(frame);

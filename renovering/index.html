@@ -314,8 +314,6 @@ body.loaded {
     <div id="rl-sub" style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,184,150,0);transform:translateY(10px);transition:color .9s ease,transform .9s cubic-bezier(.22,1,.36,1);margin-top:4px;">Steg för steg</div>
   </div>
 </div>
-<!-- Dark veil that fades out after loader, masking the page snap -->
-<div id="reno-veil" style="position:fixed;inset:0;z-index:9997;background:#0d0d0d;pointer-events:none;opacity:1;transition:opacity 1s ease;"></div>
 
 <nav class="site-nav">
   <a href="/" class="nav-logo"><em>Kristiansandsvägen</em> <span>21</span></a>
@@ -667,14 +665,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   function dismiss() {
     if (dismissed) return;
     dismissed = true;
-    const veil = document.getElementById('reno-veil');
-    // Snap hide the loader canvas immediately
     loader.style.display = 'none';
-    // Then slowly fade the dark veil to reveal the page underneath
-    requestAnimationFrame(() => {
-      veil.style.opacity = '0';
-      setTimeout(() => { veil.style.display = 'none'; }, 1100);
-    });
   }
 
   function frame(ts) {
@@ -727,8 +718,6 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   if (sessionStorage.getItem('hasVisitedReno')) {
     loader.style.display = 'none';
     dismissed = true;
-    const veil = document.getElementById('reno-veil');
-    if (veil) veil.style.display = 'none';
   } else {
     sessionStorage.setItem('hasVisitedReno', '1');
     animId = requestAnimationFrame(frame);

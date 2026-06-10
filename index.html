@@ -988,6 +988,7 @@ footer {
     <a href="#pris">Pris</a>
     <a href="#karta">Karta</a>
     <a href="#dela">Dela</a>
+    <a href="renovering.html">Renovering</a>
   </div>
 </nav>
 
@@ -1603,7 +1604,7 @@ window.addEventListener('scroll', () => {
   btn.onmouseleave = () => { btn.style.background='transparent'; btn.style.borderColor='rgba(168,135,46,.5)'; };
   btn.onclick = async () => {
     try {
-      const url = window.location.href;
+      const url = 'https://kristiansandsvägen21.se';
       try { await navigator.clipboard.writeText(url); } catch(e) {
         const ta = document.createElement("textarea"); ta.value = url;
         ta.style.position = "fixed"; ta.style.opacity = "0";

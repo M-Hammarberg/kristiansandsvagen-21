@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<script>document.documentElement.style.background="#0d0d0d"</script>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="images/misc/favicon.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renoveringsplaner — Kristiansandsvägen 21</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --obsidian: #0d0d0d;
+  --charcoal: #1a1917;
+  --champagne: #d4b896;
+  --champagne2: #e8d5bb;
+  --ivory: #f7f3ee;
+  --ivory2: #ede8e1;
+  --stone: #7a7670;
+  --cream: #f2ece4;
+  --gold: #c9a55a;
+  --gold2: #a8872e;
+  --border: #2e2c28;
+  --border-light: #d8d0c4;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Montserrat", sans-serif;
+  background: var(--ivory);
+  color: var(--charcoal);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─── */
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center;
+  padding: 0 40px;
+  height: 64px;
+  background: rgba(13,13,13,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: "Libre Baskerville", serif; font-size: .95rem; font-style: italic;
+  color: var(--champagne); letter-spacing: .06em; margin-right: auto;
+  text-decoration: none;
+}
+.nav-logo em { font-style: normal; color: var(--gold); }
+.nav-links { display: flex; }
+.nav-links a {
+  color: rgba(255,255,255,.35); text-decoration: none;
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  padding: 20px 22px; transition: color .25s; font-weight: 400;
+}
+.nav-links a:hover { color: var(--champagne); }
+.nav-links a.active { color: var(--gold); }
+.nav-links a.active::after {
+  content: ''; display: block; height: 1px;
+  background: var(--gold); margin-top: 3px;
+}
+
+/* ─── PAGE HERO ─── */
+.page-hero {
+  background: var(--charcoal);
+  padding: 140px 40px 80px;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero-inner { max-width: 900px; margin: 0 auto; }
+.eyebrow {
+  font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold); display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px; font-weight: 500;
+}
+.eyebrow::after { content: ''; flex: 0 0 40px; height: 1px; background: var(--gold2); }
+.page-hero h1 {
+  font-family: "Libre Baskerville", serif;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--champagne2);
+  margin-bottom: 24px;
+}
+.page-hero h1 em { font-style: italic; color: var(--gold); }
+.page-hero p {
+  font-size: .85rem; line-height: 1.9; color: rgba(212,184,150,.6);
+  max-width: 560px; font-weight: 300;
+}
+
+/* ─── PROGRESS BAR ─── */
+.progress-bar-section {
+  background: var(--obsidian);
+  padding: 40px;
+  border-bottom: 1px solid var(--border);
+}
+.progress-inner { max-width: 900px; margin: 0 auto; }
+.progress-label {
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--stone); margin-bottom: 14px;
+}
+.progress-track {
+  height: 3px; background: var(--border);
+  border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--gold2), var(--gold));
+  border-radius: 2px;
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  width: 0;
+}
+.progress-stats {
+  display: flex; gap: 40px; margin-top: 20px;
+}
+.progress-stat { }
+.progress-stat .num {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.6rem; color: var(--champagne); font-weight: 400;
+}
+.progress-stat .lbl {
+  font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--stone); margin-top: 2px;
+}
+
+/* ─── MAIN CONTENT ─── */
+.content-wrap { max-width: 980px; margin: 0 auto; padding: 80px 40px; }
+
+/* ─── SECTION HEADING ─── */
+.section-heading {
+  display: flex; align-items: baseline; gap: 20px;
+  margin-bottom: 48px;
+}
+.section-heading h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.6rem; font-weight: 400; color: var(--charcoal);
+}
+.section-heading .line {
+  flex: 1; height: 1px; background: var(--border-light);
+}
+
+/* ─── TIMELINE ─── */
+.timeline { position: relative; padding-left: 40px; margin-bottom: 80px; }
+.timeline::before {
+  content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px;
+  width: 1px; background: var(--border-light);
+}
+.timeline-item {
+  position: relative; margin-bottom: 48px;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -40px; top: 5px;
+  width: 17px; height: 17px; border-radius: 50%;
+  border: 2px solid var(--border-light);
+  background: var(--ivory);
+  display: flex; align-items: center; justify-content: center;
+}
+.timeline-dot.done { background: var(--gold); border-color: var(--gold); }
+.timeline-dot.active { background: var(--ivory); border-color: var(--gold); box-shadow: 0 0 0 4px rgba(201,165,90,.15); }
+.timeline-dot.done::after { content: '✓'; font-size: .5rem; color: #fff; font-weight: 700; }
+.timeline-dot.active::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+
+.timeline-meta {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 8px;
+}
+.timeline-order {
+  font-size: .55rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--stone); font-weight: 500;
+}
+.status-badge {
+  font-size: .52rem; letter-spacing: .15em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px; font-weight: 600;
+}
+.status-badge.done { background: rgba(201,165,90,.12); color: var(--gold2); }
+.status-badge.active { background: rgba(201,165,90,.18); color: var(--gold); border: 1px solid rgba(201,165,90,.3); }
+.status-badge.planned { background: rgba(122,118,112,.1); color: var(--stone); }
+
+.timeline-item h3 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.2rem; font-weight: 400; color: var(--charcoal);
+  margin-bottom: 8px;
+}
+.timeline-item p {
+  font-size: .8rem; line-height: 1.85; color: var(--stone);
+  max-width: 560px; font-weight: 300;
+}
+
+/* ─── IMAGE PLACEHOLDER ─── */
+.img-slot {
+  margin-top: 20px;
+  border: 1px dashed var(--border-light);
+  border-radius: 4px;
+  background: var(--ivory2);
+  min-height: 180px;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+  color: var(--stone); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+  cursor: pointer; transition: border-color .2s, background .2s;
+  position: relative; overflow: hidden;
+}
+.img-slot:hover { border-color: var(--gold2); background: #ede9e0; }
+.img-slot img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; border-radius: 4px;
+}
+.img-slot input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.img-slot-icon { font-size: 1.4rem; opacity: .4; }
+
+/* ─── PROJECT CARDS ─── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 80px;
+}
+.project-card {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
+}
+.project-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.08); transform: translateY(-2px); }
+.card-img {
+  aspect-ratio: 16/9; background: var(--ivory2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--stone); font-size: .65rem; letter-spacing: .15em; text-transform: uppercase;
+  position: relative; overflow: hidden; cursor: pointer;
+}
+.card-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.card-img input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.card-img-icon { font-size: 1.2rem; opacity: .35; }
+.card-body { padding: 20px 22px 24px; }
+.card-tag {
+  font-size: .52rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold2); font-weight: 600; margin-bottom: 8px;
+}
+.card-body h4 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1rem; font-weight: 400; color: var(--charcoal);
+  margin-bottom: 8px;
+}
+.card-body p {
+  font-size: .75rem; line-height: 1.8; color: var(--stone); font-weight: 300;
+}
+
+/* ─── FOOTER ─── */
+.site-footer {
+  background: var(--obsidian);
+  border-top: 1px solid var(--border);
+  padding: 40px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: "Libre Baskerville", serif; font-style: italic;
+  color: rgba(212,184,150,.3); font-size: .85rem; letter-spacing: .06em;
+}
+.footer-logo em { font-style: normal; color: rgba(201,165,90,.4); }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:640px){
+  .site-nav { padding: 0 20px; }
+  .nav-links a { padding: 20px 14px; font-size: .58rem; }
+  .page-hero { padding: 120px 24px 60px; }
+  .content-wrap { padding: 60px 24px; }
+  .progress-bar-section { padding: 30px 24px; }
+  .progress-stats { gap: 24px; }
+  .cards-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-logo"><em>Kristiansandsvägen</em> <span>21</span></a>
+  <div class="nav-links">
+    <a href="index.html#om">Om bostaden</a>
+    <a href="index.html#galleri">Galleri</a>
+    <a href="index.html#pris">Pris</a>
+    <a href="index.html#karta">Karta</a>
+    <a href="index.html#dela">Dela</a>
+    <a href="renovering.html" class="active">Renovering</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">Framtidsplaner</div>
+    <h1>Renoveringsplaner<br><em>steg för steg</em></h1>
+    <p>Här samlar vi allt vi planerar att göra med huset — i den ordning vi tänkt genomföra det. Från stora strukturförändringar till detaljer som lyfter helheten.</p>
+  </div>
+</div>
+
+<!-- ═══ PROGRESS ═══ -->
+<div class="progress-bar-section">
+  <div class="progress-inner">
+    <div class="progress-label">Övergripande framsteg</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-stats">
+      <div class="progress-stat">
+        <div class="num" id="statDone">0</div>
+        <div class="lbl">Klara projekt</div>
+      </div>
+      <div class="progress-stat">
+        <div class="num" id="statActive">0</div>
+        <div class="lbl">Pågående</div>
+      </div>
+      <div class="progress-stat">
+        <div class="num" id="statPlanned">0</div>
+        <div class="lbl">Planerade</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTENT ═══ -->
+<div class="content-wrap">
+
+  <!-- TIDSLINJE -->
+  <div class="section-heading">
+    <h2>Prioritetsordning</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="timeline" id="timeline">
+
+    <div class="timeline-item" data-status="done">
+      <div class="timeline-dot done"></div>
+      <div class="timeline-meta">
+        <span class="timeline-order">Steg 1</span>
+        <span class="status-badge done">Klart</span>
+      </div>
+      <h3>Hemsida — digital visning</h3>
+      <p>Skapade en komplett webbplats med bildgalleri, fakta och karta så att familj och vänner kan ta del av hemmet digitalt.</p>
+    </div>
+
+    <div class="timeline-item" data-status="planned">
+      <div class="timeline-dot planned"></div>
+      <div class="timeline-meta">
+        <span class="timeline-order">Steg 2</span>
+        <span class="status-badge planned">Planerat</span>
+      </div>
+      <h3>Kök — uppfräschning</h3>
+      <p>Nya luckor, bänkskiva och belysning. Behåller befintlig layout men lyfter känslan med modernare material och finish.</p>
+      <div class="img-slot" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadImg(this)">
+        <span class="img-slot-icon">＋</span>
+        <span>Lägg till bild</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-status="planned">
+      <div class="timeline-dot planned"></div>
+      <div class="timeline-meta">
+        <span class="timeline-order">Steg 3</span>
+        <span class="status-badge planned">Planerat</span>
+      </div>
+      <h3>Badrum — helrenovering</h3>
+      <p>Rivning och nybyggnation av badrummet på nedre plan. Ny kakel, golvvärme, dusch och tvättmaskinsutrymme.</p>
+      <div class="img-slot" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadImg(this)">
+        <span class="img-slot-icon">＋</span>
+        <span>Lägg till bild</span>
+      </div>
+    </div>
+
+    <div class="timeline-item" data-status="planned">
+      <div class="timeline-dot planned"></div>
+      <div class="timeline-meta">
+        <span class="timeline-order">Steg 4</span>
+        <span class="status-badge planned">Planerat</span>
+      </div>
+      <h3>Trädgård — gestaltning</h3>
+      <p>Plan för trädgårdens zoner — uteplats, gräsmatta, odling och buskage. Fokus på lågmält underhåll och årstidsväxling.</p>
+      <div class="img-slot" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadImg(this)">
+        <span class="img-slot-icon">＋</span>
+        <span>Lägg till bild</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PROJEKT KORT -->
+  <div class="section-heading">
+    <h2>Detaljerade projekt</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="cards-grid">
+
+    <div class="project-card">
+      <div class="card-img" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadCardImg(this)">
+        <span class="card-img-icon">＋</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Interiör</div>
+        <h4>Nya golv i hall & vardagsrum</h4>
+        <p>Byta ut befintliga golv mot ekparkett i en varm, naturlig ton som binder ihop rummens känsla.</p>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="card-img" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadCardImg(this)">
+        <span class="card-img-icon">＋</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Exteriör</div>
+        <h4>Fasad — ny färgsättning</h4>
+        <p>Justera kulören på fasaden för en mer tidlös och sammanhållen look med taket och trädgårdens gröna inslag.</p>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="card-img" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadCardImg(this)">
+        <span class="card-img-icon">＋</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Teknik</div>
+        <h4>Solpaneler på garagetak</h4>
+        <p>Installation av solceller för att sänka elkostnader och öka husets självförsörjningsgrad.</p>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="card-img" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadCardImg(this)">
+        <span class="card-img-icon">＋</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Trädgård</div>
+        <h4>Uteplats under balkongen</h4>
+        <p>Bygga en tydlig uteplats med plattor, belysning och växtlighet som skapar ett naturligt uterum skyddat av balkongen.</p>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="card-img" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadCardImg(this)">
+        <span class="card-img-icon">＋</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Interiör</div>
+        <h4>Belysningsplan — hela huset</h4>
+        <p>Genomtänkt belysning i varje rum: indirekt ljus i tak, läsljus och accentbelysning för att skapa stämning och funktion.</p>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="card-img" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadCardImg(this)">
+        <span class="card-img-icon">＋</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Garage</div>
+        <h4>Garage — inredning & förvaring</h4>
+        <p>Bygga in ordentlig förvaring, väggfästen för verktyg och ett rent golv som gör garaget till ett fungerande rum.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="site-footer">
+  <div class="footer-logo"><em>Kristiansandsvägen</em> 21 — Renoveringsplaner</div>
+</div>
+
+<script>
+// ─── Progress counter ───
+function updateProgress() {
+  const items = document.querySelectorAll('.timeline-item');
+  let done = 0, active = 0, planned = 0;
+  items.forEach(i => {
+    const s = i.dataset.status;
+    if (s === 'done') done++;
+    else if (s === 'active') active++;
+    else planned++;
+  });
+  const total = items.length;
+  const pct = total ? Math.round((done + active * 0.5) / total * 100) : 0;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statActive').textContent = active;
+  document.getElementById('statPlanned').textContent = planned;
+  setTimeout(() => {
+    document.getElementById('progressFill').style.width = pct + '%';
+  }, 300);
+}
+updateProgress();
+
+// ─── Image upload in timeline ───
+function loadImg(input) {
+  if (!input.files[0]) return;
+  const slot = input.closest('.img-slot');
+  const reader = new FileReader();
+  reader.onload = e => {
+    slot.querySelectorAll('.img-slot-icon, span:not(.img-slot-icon)').forEach(el => el.style.display = 'none');
+    let img = slot.querySelector('img');
+    if (!img) { img = document.createElement('img'); slot.appendChild(img); }
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+// ─── Image upload in cards ───
+function loadCardImg(input) {
+  if (!input.files[0]) return;
+  const card = input.closest('.card-img');
+  const reader = new FileReader();
+  reader.onload = e => {
+    card.querySelector('.card-img-icon').style.display = 'none';
+    let img = card.querySelector('img');
+    if (!img) { img = document.createElement('img'); card.appendChild(img); }
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+// ─── Scroll reveal ───
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.timeline-item, .project-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity .5s ease, transform .5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

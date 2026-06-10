@@ -1130,7 +1130,7 @@ footer {
 
   // Skip loader if already visited this session
   if (sessionStorage.getItem('hasVisited')) {
-    loader.classList.add('hidden');
+    loader.style.cssText = 'display:none !important';
     return;
   }
   sessionStorage.setItem('hasVisited', '1');

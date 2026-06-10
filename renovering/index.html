@@ -24,6 +24,29 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+
+/* ─── PAGE TRANSITION ─── */
+#page-transition {
+  position: fixed; inset: 0; z-index: 9999;
+  pointer-events: none; overflow: hidden;
+}
+#pt-line {
+  position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(105deg,
+    transparent 0%, transparent 38%,
+    rgba(168,135,46,.08) 44%,
+    rgba(201,165,90,.55) 48%,
+    rgba(232,203,128,.92) 50%,
+    rgba(201,165,90,.55) 52%,
+    rgba(168,135,46,.08) 56%,
+    transparent 62%, transparent 100%
+  );
+}
+#pt-line.sweep {
+  animation: ptSweep .65s cubic-bezier(.76,0,.24,1) forwards;
+}
+@keyframes ptSweep { from{left:-100%} to{left:110%} }
 body {
   font-family: "Montserrat", sans-serif;
   background: var(--ivory);
@@ -302,6 +325,8 @@ body {
 </head>
 <body>
 
+<div id="page-transition"><div id="pt-line"></div></div>
+
 <nav class="site-nav">
   <a href="/" class="nav-logo"><em>Kristiansandsvägen</em> <span>21</span></a>
   <div class="nav-links">
@@ -505,6 +530,25 @@ body {
 </div>
 
 <script>
+// ── Page transition — trigger sweep on nav links back to main site ──
+document.querySelectorAll('a[href="/"], a[href="/#om"], a[href="/#galleri"], a[href="/#pris"], a[href="/#karta"], a[href="/#dela"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const dest = this.href;
+    const line = document.getElementById('pt-line');
+    line.classList.remove('sweep');
+    void line.offsetWidth;
+    line.classList.add('sweep');
+    setTimeout(() => { window.location.href = dest; }, 600);
+  });
+});
+
+// ── Sweep in on arrival ──
+window.addEventListener('DOMContentLoaded', () => {
+  const line = document.getElementById('pt-line');
+  setTimeout(() => { line.classList.add('sweep'); }, 80);
+});
+
 // ─── Progress counter ───
 function updateProgress() {
   const items = document.querySelectorAll('.timeline-item');

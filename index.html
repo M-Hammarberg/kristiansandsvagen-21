@@ -1127,6 +1127,13 @@ footer {
   const loader = document.getElementById('loader');
   const bar    = document.getElementById('loaderBar');
   const pct    = document.getElementById('loaderPct');
+
+  // Skip loader if already visited this session
+  if (sessionStorage.getItem('hasVisited')) {
+    loader.classList.add('hidden');
+    return;
+  }
+  sessionStorage.setItem('hasVisited', '1');
   let progress = 0;
 
   // Time-based % counter synced to MIN_TIME (2500ms)

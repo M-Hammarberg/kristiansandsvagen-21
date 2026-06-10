@@ -768,8 +768,8 @@ footer {
 .loader-progress-bar{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(to right,var(--gold2),var(--champagne),var(--gold2));background-size:200% auto;animation:progressFill 2.5s cubic-bezier(.4,0,.2,1) 0s forwards,shimmer 1.5s linear 1s infinite}
 @keyframes progressFill{0%{width:0%}60%{width:75%}100%{width:100%}}
 .loader-pct{font-size:.58rem;letter-spacing:.16em;color:rgba(255,255,255,.2);margin-top:12px;min-width:40px;text-align:center;opacity:0;animation:fadeIn .4s ease 1s forwards;position:relative;z-index:2}
-#loader.dismissing{animation:curtainUp .9s cubic-bezier(.76,0,.24,1) forwards}
-@keyframes curtainUp{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0)}}
+#loader.dismissing{animation:loaderFade .7s ease forwards}
+@keyframes loaderFade{from{opacity:1}to{opacity:0}}
 .loader-num{font-family:"Libre Baskerville",serif;font-style:normal;font-weight:400;color:#fff;letter-spacing:.04em}
 
 /* ═══ DARK MODE OVERRIDES ═══ */

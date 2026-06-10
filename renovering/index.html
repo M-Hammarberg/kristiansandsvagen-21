@@ -26,13 +26,10 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: "Montserrat", sans-serif;
-  background: var(--ivory);
+  background: #0d0d0d;
   color: var(--charcoal);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-}
-body.loaded {
-  background: var(--ivory);
 }
 
 /* ─── NAV ─── */
@@ -665,9 +662,12 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   function dismiss() {
     if (dismissed) return;
     dismissed = true;
-    loader.style.transition = 'opacity 0.6s ease';
+    loader.style.transition = 'opacity 0.8s ease';
     loader.style.opacity = '0';
-    setTimeout(() => { loader.style.display = 'none'; }, 650);
+    document.body.style.transition = 'background 0.8s ease';
+    document.body.style.background = 'var(--ivory)';
+    document.documentElement.style.background = 'var(--ivory)';
+    setTimeout(() => { loader.style.display = 'none'; }, 900);
   }
 
   function frame(ts) {
@@ -720,6 +720,8 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   if (sessionStorage.getItem('hasVisitedReno')) {
     loader.style.display = 'none';
     dismissed = true;
+    document.body.style.background = 'var(--ivory)';
+    document.documentElement.style.background = 'var(--ivory)';
   } else {
     sessionStorage.setItem('hasVisitedReno', '1');
     animId = requestAnimationFrame(frame);

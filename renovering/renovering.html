@@ -326,13 +326,84 @@ body {
 /* ─── RESPONSIVE ─── */
 @media(max-width:640px){
   .site-nav { padding: 0 20px; }
-  .nav-links a { padding: 20px 14px; font-size: .58rem; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
   .page-hero { padding: 120px 24px 60px; }
   .content-wrap { padding: 60px 24px; }
   .progress-bar-section { padding: 30px 24px; }
   .progress-stats { gap: 24px; }
   .cards-grid { grid-template-columns: 1fr; }
 }
+
+/* ─── HAMBURGER ─── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  margin-left: auto;
+}
+.nav-hamburger span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--champagne);
+  transition: transform .3s ease, opacity .3s ease;
+  transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* Mobile fullscreen nav */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(13,13,13,.97);
+  z-index: 300;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.mobile-nav.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+}
+.mobile-nav a {
+  color: rgba(255,255,255,.45);
+  text-decoration: none;
+  font-size: .7rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  font-weight: 400;
+  padding: 18px 40px;
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #2e2c28;
+  transition: color .2s, background .2s;
+}
+.mobile-nav a:first-child { border-top: 1px solid #2e2c28; }
+.mobile-nav a:hover { color: var(--champagne); background: rgba(201,165,90,.06); }
+.mobile-nav a.active { color: var(--gold); }
+.mobile-nav-logo {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1rem; font-style: italic;
+  color: var(--champagne); letter-spacing: .06em;
+  margin-bottom: 48px;
+}
+.mobile-nav-logo em { font-style: normal; color: var(--gold); }
 </style>
 </head>
 <body>
@@ -357,7 +428,21 @@ body {
     <a href="/#dela">Dela</a>
     <a href="/renovering" class="active">Renovering</a>
   </div>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Öppna meny">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile fullscreen nav -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-logo"><em>Kristiansandsvägen</em> 21</div>
+  <a href="/#om">Om bostaden</a>
+  <a href="/#galleri">Galleri</a>
+  <a href="/#pris">Pris</a>
+  <a href="/#karta">Karta</a>
+  <a href="/#dela">Dela</a>
+  <a href="/renovering" class="active">Renovering</a>
+</div>
 
 <!-- ═══ HERO ═══ -->
 <div class="page-hero">
@@ -950,6 +1035,18 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   if (document.readyState === 'complete') mayDismiss();
   else window.addEventListener('load', mayDismiss);
   setTimeout(dismiss, 5000);
+})();
+
+// ─── HAMBURGER MENU ───
+(function() {
+  var btn = document.getElementById('navHamburger');
+  var nav = document.getElementById('mobileNav');
+  if (!btn || !nav) return;
+  function openMenu() { btn.classList.add('open'); nav.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeMenu() { btn.classList.remove('open'); nav.classList.remove('open'); document.body.style.overflow=''; }
+  btn.addEventListener('click', function() { btn.classList.contains('open') ? closeMenu() : openMenu(); });
+  nav.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if(e.key==='Escape') closeMenu(); });
 })();
 </script>
 </body>

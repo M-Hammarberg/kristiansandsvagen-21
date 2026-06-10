@@ -1079,12 +1079,12 @@ footer {
   <div class="share-inner">
     <div>
       <div class="eyebrow">En hälsning</div>
-      <h2 class="h2">Visa hemmet för<br><em>familj och vänner</em></h2>
+      <h2 class="h2">Dela hemmet med<br><em>familj och vänner</em></h2>
       <br>
       <p class="body-copy">Vi har samlat allt om Kristiansandsvägen 21 på ett ställe — bilder, fakta och läget — så att ni som är nära oss enkelt kan ta del av detta hem. Skicka länken och låt dem utforska det precis som om de vore på plats.</p>
     </div>
     <div class="share-cards">
-      <div class="share-card"><div class="share-icon">🏡</div><div><h4>35 bilder i galleriet</h4><p>Utsida, trädgård och alla interiöra rum</p></div></div>
+      <div class="share-card"><div class="share-icon">🏡</div><div><h4>46 bilder i galleriet</h4><p>Utsida, trädgård och alla interiöra rum</p></div></div>
       <div class="share-card"><div class="share-icon">📍</div><div><h4>Skogshöjden, Trollhättan</h4><p>Lugnt naturnära område med skogen inpå knuten</p></div></div>
       <div class="share-card"><div class="share-icon">🌿</div><div><h4>885 m² privat trädgård</h4><p>Formklippta buskar, bastu och uteplats under balkongen</p></div></div>
       <div class="share-card"><div class="share-icon">🛁</div><div><h4>Bastu &amp; spa-rum</h4><p>Privat avkoppling utan att lämna hemmet</p></div></div>
@@ -1603,7 +1603,13 @@ window.addEventListener('scroll', () => {
   btn.onmouseleave = () => { btn.style.background='transparent'; btn.style.borderColor='rgba(168,135,46,.5)'; };
   btn.onclick = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      const url = window.location.href;
+      try { await navigator.clipboard.writeText(url); } catch(e) {
+        const ta = document.createElement("textarea"); ta.value = url;
+        ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        document.execCommand("copy"); document.body.removeChild(ta);
+      }
     } catch(e) {}
     const txt = document.getElementById('copyText');
     const ico = document.getElementById('copyIcon');

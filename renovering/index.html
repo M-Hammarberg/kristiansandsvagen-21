@@ -288,6 +288,41 @@ body {
 }
 @keyframes shimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
 
+/* ─── COST TAG ─── */
+.cost-tag {
+  margin-top: 12px;
+  font-size: .75rem; color: var(--stone);
+  font-weight: 300;
+}
+.cost-tag strong { color: var(--gold2); font-weight: 600; }
+.cost-note { font-size: .7rem; color: var(--stone); opacity: .7; }
+
+/* ─── COST SUMMARY ─── */
+.cost-summary {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 32px 36px;
+  margin-bottom: 80px;
+  max-width: 640px;
+}
+.cost-rows { margin-bottom: 4px; }
+.cost-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 10px 0;
+  font-size: .8rem; color: var(--stone); font-weight: 300;
+  border-bottom: 1px solid var(--ivory2);
+}
+.cost-row span:last-child { font-weight: 500; color: var(--charcoal); white-space: nowrap; margin-left: 16px; }
+.cost-divider { height: 1px; background: var(--border-light); margin: 8px 0; }
+.cost-total { font-weight: 500 !important; color: var(--charcoal) !important; border-bottom: none; }
+.cost-total span:last-child { color: var(--charcoal) !important; font-size: .9rem; }
+.cost-saving { color: var(--charcoal) !important; border-bottom: none; }
+.cost-saving span:last-child { color: #2e7d32 !important; font-size: .85rem; }
+.cost-grand { padding-top: 14px; border-bottom: none; }
+.cost-grand span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: var(--charcoal); }
+.cost-grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.1rem; color: var(--gold2) !important; font-weight: 400; }
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:640px){
   .site-nav { padding: 0 20px; }
@@ -368,7 +403,7 @@ body {
 
   <div class="timeline" id="timeline">
 
-    <div class="timeline-item" data-status="done">
+    <div class="timeline-item" data-status="done" data-cost="0">
       <div class="timeline-dot done"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 1</span>
@@ -376,9 +411,10 @@ body {
       </div>
       <h3>Hemsida — digital visning</h3>
       <p>Komplett webbplats med bildgalleri, fakta och karta så att familj och vänner kan ta del av hemmet digitalt.</p>
+      <div class="cost-tag">Kostnad: <strong>0 kr</strong></div>
     </div>
 
-    <div class="timeline-item" data-status="active">
+    <div class="timeline-item" data-status="active" data-cost="0">
       <div class="timeline-dot active"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 2</span>
@@ -386,14 +422,14 @@ body {
       </div>
       <h3>CAD-ritningar & renoveringsplan</h3>
       <p>Tar fram CAD-ritningar över hela huset för att planera renoveringen i detalj — planlösningar, mått och förändringar visualiseras innan byggstart.</p>
+      <div class="cost-tag">Kostnad: <strong>0 kr</strong> <span class="cost-note">— görs i egen regi</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="15000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 3</span>
@@ -401,14 +437,14 @@ body {
       </div>
       <h3>Elbilsladdare</h3>
       <p>Installation av laddbox i garaget. Praktisk förberedelse inför framtida elbil och ett mervärde för fastigheten.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>15 000 kr</strong> <span class="cost-note">— laddbox + el-material</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="25000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 4</span>
@@ -416,14 +452,14 @@ body {
       </div>
       <h3>Nytt golv och tapet i hall nere</h3>
       <p>Fräscha upp entrén med nytt golv och ny tapet. Första intrycket av hemmet sätts här — det ska kännas välkomnande och genomtänkt.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>25 000 kr</strong> <span class="cost-note">— parkettgolv + tapet + underlag</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="35000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 5</span>
@@ -431,14 +467,14 @@ body {
       </div>
       <h3>Nytt golv och tapet i vardagsrum uppe</h3>
       <p>Vardagsrummet får nytt golv och tapet för en mer sammanhållen och modern känsla i husets hjärta.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>35 000 kr</strong> <span class="cost-note">— parkettgolv + tapet + underlag</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="40000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 6</span>
@@ -446,14 +482,14 @@ body {
       </div>
       <h3>Fixa toa nere</h3>
       <p>Renovering av toaletten på nedre plan — ny kakel, ytskikt och inredning för ett fräscht och funktionellt resultat.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>40 000 kr</strong> <span class="cost-note">— kakel, wc, handfat, blandare</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="45000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 7</span>
@@ -461,73 +497,112 @@ body {
       </div>
       <h3>Stenplattor uteplats & ingång framsida</h3>
       <p>Lägg stenplattor på uteplatsen och fixa en snygg ingång på framsidan. Ger ett ordnat och välkomnande yttre.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>45 000 kr</strong> <span class="cost-note">— plattor, sand, kantsten, markarbete</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="120000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 8</span>
         <span class="status-badge planned">Planerat</span>
       </div>
-      <h3>Trall ute & utekök</h3>
-      <p>Bygga trall och ett utekök för att skapa ett naturligt uterum. Perfekt för sommarkvällar och middagar utomhus.</p>
+      <h3>Bygga inglasat uterum på framsida</h3>
+      <p>Bygger ett inglasat uterum på framsidan som fungerar som ett extra rum — en ljus och skyddad zon att njuta av oavsett väder.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>120 000 kr</strong> <span class="cost-note">— stomme, glas, grund, fönster & dörrar</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="55000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 9</span>
         <span class="status-badge planned">Planerat</span>
       </div>
-      <h3>Nytt kakel i relax & bygga om bastu</h3>
-      <p>Relaxavdelningen får nytt kakel och bastun byggs om för en mer modern och lyxig känsla.</p>
+      <h3>Trall ute & utekök</h3>
+      <p>Bygga trall och ett utekök för att skapa ett naturligt uterum. Perfekt för sommarkvällar och middagar utomhus.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>55 000 kr</strong> <span class="cost-note">— trallvirke, utekök, belysning</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="80000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 10</span>
         <span class="status-badge planned">Planerat</span>
       </div>
-      <h3>Riva köksvägg för öppen planlösning</h3>
-      <p>Ta bort väggen mellan kök och vardagsrum för en öppen och luftig planlösning som binder ihop husets sociala ytor.</p>
+      <h3>Nytt kakel i relax & bygga om bastu</h3>
+      <p>Relaxavdelningen får nytt kakel och bastun byggs om för en mer modern och lyxig känsla.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>80 000 kr</strong> <span class="cost-note">— kakel, bastuaggregat, träpanel, inredning</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
-    <div class="timeline-item" data-status="planned">
+    <div class="timeline-item" data-status="planned" data-cost="20000">
       <div class="timeline-dot planned"></div>
       <div class="timeline-meta">
         <span class="timeline-order">Steg 11</span>
         <span class="status-badge planned">Planerat</span>
       </div>
-      <h3>Renovera kök</h3>
-      <p>Hela köket renoveras med nya skåp, bänkskivor, vitvaror och belysning. Kronan på verket efter den öppna planlösningen.</p>
+      <h3>Riva köksvägg för öppen planlösning</h3>
+      <p>Ta bort väggen mellan kök och vardagsrum för en öppen och luftig planlösning som binder ihop husets sociala ytor.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>20 000 kr</strong> <span class="cost-note">— rivning, bärande balk, spackling, målning</span></div>
       <div class="img-slot" onclick="this.querySelector('input').click()">
         <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span>
-        <span>Lägg till bild</span>
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
       </div>
     </div>
 
+    <div class="timeline-item" data-status="planned" data-cost="150000">
+      <div class="timeline-dot planned"></div>
+      <div class="timeline-meta">
+        <span class="timeline-order">Steg 12</span>
+        <span class="status-badge planned">Planerat</span>
+      </div>
+      <h3>Renovera kök</h3>
+      <p>Hela köket renoveras med nya skåp, bänkskivor, vitvaror och belysning. Kronan på verket efter den öppna planlösningen.</p>
+      <div class="cost-tag">Beräknad kostnad: <strong>150 000 kr</strong> <span class="cost-note">— köksinredning, bänkskiva, vitvaror, belysning</span></div>
+      <div class="img-slot" onclick="this.querySelector('input').click()">
+        <input type="file" accept="image/*" onchange="loadImg(this)">
+        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KOSTNADSAMMANSTÄLLNING -->
+  <div class="section-heading" style="margin-top: 80px;">
+    <h2>Kostnadsammanställning</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="cost-summary">
+    <div class="cost-rows" id="costRows"></div>
+    <div class="cost-divider"></div>
+    <div class="cost-row cost-total">
+      <span>Total materialkostnad</span>
+      <span id="costTotal"></span>
+    </div>
+    <div class="cost-row cost-saving">
+      <span>Besparing — eget arbete <span class="cost-note">(vs. hantverkare)</span></span>
+      <span id="costSaving"></span>
+    </div>
+    <div class="cost-divider"></div>
+    <div class="cost-row cost-grand">
+      <span>Totalt värde tillfört fastigheten</span>
+      <span id="costGrand"></span>
+    </div>
   </div>
 
   <!-- PROJEKT KORT -->
@@ -620,7 +695,42 @@ body {
 </div>
 
 <script>
-// ─── Progress counter ───
+// ── Cost summary ──
+(function() {
+  const projects = [
+    { name: 'CAD-ritningar & renoveringsplan',        material: 0,      labor: 0       },
+    { name: 'Elbilsladdare',                           material: 15000,  labor: 12000   },
+    { name: 'Nytt golv och tapet i hall nere',         material: 25000,  labor: 30000   },
+    { name: 'Nytt golv och tapet i vardagsrum uppe',   material: 35000,  labor: 40000   },
+    { name: 'Fixa toa nere',                           material: 40000,  labor: 50000   },
+    { name: 'Stenplattor uteplats & ingång framsida',  material: 45000,  labor: 55000   },
+    { name: 'Inglasat uterum på framsida',             material: 120000, labor: 180000  },
+    { name: 'Trall ute & utekök',                      material: 55000,  labor: 65000   },
+    { name: 'Nytt kakel i relax & bygga om bastu',     material: 80000,  labor: 100000  },
+    { name: 'Riva köksvägg för öppen planlösning',     material: 20000,  labor: 35000   },
+    { name: 'Renovera kök',                            material: 150000, labor: 220000  },
+  ];
+
+  const fmt = n => n.toLocaleString('sv-SE') + ' kr';
+  const rows = document.getElementById('costRows');
+  let totalMaterial = 0, totalLabor = 0;
+
+  projects.forEach(p => {
+    if (p.material === 0) return;
+    totalMaterial += p.material;
+    totalLabor += p.labor;
+    const row = document.createElement('div');
+    row.className = 'cost-row';
+    row.innerHTML = `<span>${p.name}</span><span>${fmt(p.material)}</span>`;
+    rows.appendChild(row);
+  });
+
+  document.getElementById('costTotal').textContent = fmt(totalMaterial);
+  document.getElementById('costSaving').textContent = '~' + fmt(totalLabor);
+  document.getElementById('costGrand').textContent = fmt(totalMaterial + totalLabor);
+})();
+
+// ── Progress counter ──
 function updateProgress() {
   const items = document.querySelectorAll('.timeline-item');
   let done = 0, active = 0, planned = 0;

@@ -325,6 +325,16 @@ body {
 </head>
 <body>
 
+<!-- ═══ WAVE LOADER ═══ -->
+<div id="reno-loader" style="position:fixed;inset:0;z-index:9998;background:#0d0d0d;overflow:hidden;">
+  <canvas id="reno-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none;">
+    <div id="rl-ey" style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(201,165,90,0);transform:translateY(12px);transition:color .9s ease,transform .9s cubic-bezier(.22,1,.36,1);">Framtidsplaner</div>
+    <div id="rl-title" style="display:flex;align-items:baseline;font-family:'Libre Baskerville',Georgia,serif;font-size:clamp(1.6rem,5.5vw,3rem);font-weight:400;font-style:italic;white-space:nowrap;"></div>
+    <div id="rl-sub" style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,184,150,0);transform:translateY(10px);transition:color .9s ease,transform .9s cubic-bezier(.22,1,.36,1);margin-top:4px;">Steg för steg</div>
+  </div>
+</div>
+
 <div id="page-transition"><div id="pt-line"></div></div>
 
 <nav class="site-nav">
@@ -646,6 +656,127 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   if(i % 3 === 2) el.classList.add('reveal-delay-2');
   revealIO.observe(el);
 });
+</script>
+
+<script>
+(function() {
+  const loader = document.getElementById('reno-loader');
+  const canvas = document.getElementById('reno-canvas');
+  const ctx = canvas.getContext('2d');
+  const eyEl = document.getElementById('rl-ey');
+  const subEl = document.getElementById('rl-sub');
+  const titleRow = document.getElementById('rl-title');
+
+  const TEXT = 'Renoveringsplaner';
+  const GOLD_FROM = 11;
+
+  // Build letter spans
+  TEXT.split('').forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.id = 'rlch' + i;
+    span.style.cssText = 'display:inline-block;opacity:0;transform:translateY(18px);transition:opacity .35s ease,transform .35s cubic-bezier(.22,1,.36,1);color:' + (i >= GOLD_FROM ? '#c9a55a' : '#e8d5bb') + ';';
+    span.textContent = ch === ' ' ? '\u00a0' : ch;
+    titleRow.appendChild(span);
+  });
+
+  const waves = [
+    { yf:.13, amp:36, freq:.011, speed:.50, phase:0.0, lw:2.2, r:232,g:203,b:128, a:.80 },
+    { yf:.22, amp:20, freq:.017, speed:.80, phase:1.4, lw:1.4, r:201,g:165,b:90,  a:.55 },
+    { yf:.31, amp:48, freq:.008, speed:.38, phase:2.8, lw:1.0, r:212,g:184,b:150, a:.35 },
+    { yf:.42, amp:24, freq:.014, speed:1.05,phase:0.6, lw:.7,  r:201,g:165,b:90,  a:.28 },
+    { yf:.53, amp:38, freq:.009, speed:.45, phase:4.2, lw:1.6, r:232,g:203,b:128, a:.60 },
+    { yf:.62, amp:16, freq:.022, speed:1.30,phase:1.9, lw:.6,  r:168,g:135,b:46,  a:.25 },
+    { yf:.71, amp:44, freq:.007, speed:.30, phase:3.1, lw:.9,  r:212,g:184,b:150, a:.38 },
+    { yf:.80, amp:22, freq:.016, speed:.90, phase:0.3, lw:1.2, r:201,g:165,b:90,  a:.50 },
+    { yf:.89, amp:30, freq:.012, speed:.60, phase:5.5, lw:.8,  r:232,g:203,b:128, a:.32 },
+  ];
+
+  let W, H, animId, startTime, t = 0, shownLetters = -1, dismissed = false;
+  const INTRO_MS = 2600, MIN_MS = 2800, LETTER_START = .55, LETTER_END = .88;
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function easeOut(x) { return 1 - Math.pow(1-x, 3); }
+
+  function dismiss() {
+    if (dismissed) return;
+    dismissed = true;
+    loader.style.transition = 'opacity .7s ease';
+    loader.style.opacity = '0';
+    setTimeout(() => { loader.style.display = 'none'; }, 750);
+  }
+
+  function frame(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = ts - startTime;
+    t += 0.013;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#0d0d0d';
+    ctx.fillRect(0, 0, W, H);
+
+    const introProg = Math.min(elapsed / INTRO_MS, 1);
+
+    waves.forEach((w, wi) => {
+      const stagger = wi / waves.length * 0.5;
+      const sweepRaw = Math.min(Math.max((introProg - stagger) / (1 - stagger * .5), 0), 1);
+      const sweep = easeOut(sweepRaw);
+      if (sweep <= .01) return;
+      const endX = sweep * W, baseY = w.yf * H;
+      ctx.beginPath();
+      ctx.lineWidth = w.lw;
+      const grd = ctx.createLinearGradient(0, 0, endX+1, 0);
+      grd.addColorStop(0,                        `rgba(${w.r},${w.g},${w.b},${w.a*.35})`);
+      grd.addColorStop(Math.max(0,sweep-.20),    `rgba(${w.r},${w.g},${w.b},${w.a})`);
+      grd.addColorStop(Math.max(0,sweep-.04),    `rgba(${w.r},${w.g},${w.b},${Math.min(w.a*1.4,1)})`);
+      grd.addColorStop(sweep,                     `rgba(${w.r},${w.g},${w.b},0)`);
+      ctx.strokeStyle = grd;
+      ctx.moveTo(0, baseY + Math.sin(w.phase + t*w.speed)*w.amp);
+      for (let x = 3; x <= endX; x += 3)
+        ctx.lineTo(x, baseY + Math.sin(w.freq*x + w.phase + t*w.speed)*w.amp);
+      ctx.stroke();
+    });
+
+    if (introProg > .48) { eyEl.style.color='rgba(201,165,90,.75)'; eyEl.style.transform='translateY(0)'; }
+    if (introProg >= LETTER_START) {
+      const lp = (introProg - LETTER_START) / (LETTER_END - LETTER_START);
+      const show = Math.floor(lp * TEXT.length);
+      for (let i = shownLetters+1; i <= show && i < TEXT.length; i++) {
+        const el = document.getElementById('rlch'+i);
+        if (el) { el.style.opacity='1'; el.style.transform='translateY(0)'; }
+        shownLetters = i;
+      }
+    }
+    if (introProg > .92) { subEl.style.color='rgba(212,184,150,.35)'; subEl.style.transform='translateY(0)'; }
+
+    if (!dismissed) animId = requestAnimationFrame(frame);
+  }
+
+  // Skip loader if already visited renovation page this session
+  if (sessionStorage.getItem('hasVisitedReno')) {
+    loader.style.display = 'none';
+    dismissed = true;
+  } else {
+    sessionStorage.setItem('hasVisitedReno', '1');
+    animId = requestAnimationFrame(frame);
+  }
+
+  // Dismiss after min time + page load
+  function mayDismiss() {
+    const elapsed = Date.now() - perfStart;
+    const wait = Math.max(0, MIN_MS - elapsed);
+    setTimeout(dismiss, wait);
+  }
+  const perfStart = Date.now();
+  if (document.readyState === 'complete') mayDismiss();
+  else window.addEventListener('load', mayDismiss);
+  setTimeout(dismiss, 5000);
+})();
 </script>
 </body>
 </html>

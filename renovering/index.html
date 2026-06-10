@@ -258,6 +258,36 @@ body {
 }
 .footer-logo em { font-style: normal; color: rgba(201,165,90,.4); }
 
+/* ─── REVEAL ANIMATIONS ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .12s; }
+.reveal-delay-2 { transition-delay: .24s; }
+.reveal-delay-3 { transition-delay: .36s; }
+.reveal-delay-4 { transition-delay: .48s; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn  { from{opacity:0} to{opacity:1} }
+
+.page-hero .eyebrow { opacity: 0; animation: fadeUp .9s ease .3s forwards; }
+.page-hero h1       { opacity: 0; animation: fadeUp .9s ease .5s forwards; }
+.page-hero p        { opacity: 0; animation: fadeUp .9s ease .7s forwards; }
+
+/* Gold shimmer on italic */
+.page-hero h1 em {
+  background: linear-gradient(90deg, var(--gold2) 0%, var(--gold) 40%, #e8cb80 60%, var(--gold2) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 5s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:640px){
   .site-nav { padding: 0 20px; }
@@ -524,21 +554,53 @@ function loadCardImg(input) {
   reader.readAsDataURL(input.files[0]);
 }
 
-// ─── Scroll reveal ───
-const observer = new IntersectionObserver(entries => {
+// ── Intersection Observer — reveal ──
+const revealIO = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.style.opacity = '1';
-      e.target.style.transform = 'translateY(0)';
-    }
+    if(e.isIntersecting) { e.target.classList.add('visible'); revealIO.unobserve(e.target); }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.12 });
 
-document.querySelectorAll('.timeline-item, .project-card').forEach(el => {
+// Timeline items — staggered
+document.querySelectorAll('.timeline-item').forEach((el, i) => {
   el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'opacity .5s ease, transform .5s ease';
-  observer.observe(el);
+  el.style.transform = 'translateY(40px)';
+  el.style.transition = `opacity .9s cubic-bezier(.22,1,.36,1) ${i * 0.1}s, transform .9s cubic-bezier(.22,1,.36,1) ${i * 0.1}s`;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  io.observe(el);
+});
+
+// Project cards — staggered
+document.querySelectorAll('.project-card').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(40px)';
+  el.style.transition = `opacity .9s cubic-bezier(.22,1,.36,1) ${i * 0.08}s, transform .9s cubic-bezier(.22,1,.36,1) ${i * 0.08}s`;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  io.observe(el);
+});
+
+// Section headings, progress, hero inner
+document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner').forEach((el, i) => {
+  el.classList.add('reveal');
+  if(i % 3 === 1) el.classList.add('reveal-delay-1');
+  if(i % 3 === 2) el.classList.add('reveal-delay-2');
+  revealIO.observe(el);
 });
 </script>
 </body>

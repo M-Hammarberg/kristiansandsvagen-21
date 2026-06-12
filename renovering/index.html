@@ -199,6 +199,7 @@ body {
   position: relative; overflow: hidden;
 }
 .img-slot:hover { background: #ede9e0; }
+.timeline-item:hover .cost-tag strong { animation: shake .4s ease; color: var(--gold); }
 .img-slot img {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; border-radius: 4px;
@@ -302,22 +303,33 @@ body {
 
 /* ─── COST TAG ─── */
 .cost-tag {
-  margin-top: 12px;
-  font-size: .75rem; color: var(--stone);
+  margin-top: 14px;
+  background: #2a2720;
+  border: 1px solid rgba(201,165,90,.28);
+  border-radius: 5px;
+  padding: 12px 18px;
+  font-size: .75rem; color: rgba(212,184,150,.8);
   font-weight: 300;
+  display: inline-flex; align-items: baseline; gap: 8px;
 }
-.cost-tag strong { color: var(--gold2); font-weight: 600; }
-.cost-note { font-size: .7rem; color: var(--stone); opacity: .7; }
+.cost-tag strong { color: var(--gold); font-weight: 600; font-size: .85rem; }
+.cost-note { font-size: .68rem; color: rgba(212,184,150,.5); }
 
 /* ─── COST SUMMARY ─── */
+@keyframes shake {
+  0%,100%{ transform: translateX(0); }
+  20%     { transform: translateX(-3px) rotate(-1deg); }
+  40%     { transform: translateX(3px) rotate(1deg); }
+  60%     { transform: translateX(-2px); }
+  80%     { transform: translateX(2px); }
+}
 .cost-summary {
   position: relative;
-  background: #111109;
-  border: 1px solid rgba(201,165,90,.3);
+  background: #2a2720;
+  border: 1px solid rgba(201,165,90,.35);
   border-radius: 6px;
   padding: 36px 40px;
   margin-bottom: 80px;
-  max-width: 640px;
   overflow: hidden;
 }
 .cost-summary-canvas {
@@ -329,18 +341,31 @@ body {
 .cost-row {
   display: flex; justify-content: space-between; align-items: baseline;
   padding: 10px 0;
-  font-size: .8rem; color: rgba(212,184,150,.75); font-weight: 300;
+  font-size: .8rem; color: rgba(212,184,150,.9); font-weight: 300;
   border-bottom: 1px solid rgba(201,165,90,.12);
+  cursor: default;
 }
-.cost-row span:last-child { font-weight: 500; color: var(--champagne2); white-space: nowrap; margin-left: 16px; }
+.cost-row:hover { background: rgba(201,165,90,.04); }
+.cost-row span:last-child {
+  font-weight: 500; color: var(--champagne2); white-space: nowrap; margin-left: 16px;
+  display: inline-block;
+  transition: color .2s;
+}
+.cost-row:hover span:last-child {
+  animation: shake .4s ease;
+  color: var(--gold);
+}
 .cost-divider { height: 1px; background: rgba(201,165,90,.25); margin: 8px 0; }
-.cost-total { font-weight: 500 !important; color: var(--champagne2) !important; border-bottom: none; }
-.cost-total span:last-child { color: var(--champagne2) !important; font-size: .9rem; }
-.cost-saving { color: var(--champagne2) !important; border-bottom: none; }
-.cost-saving span:last-child { color: #81c784 !important; font-size: .85rem; }
-.cost-grand { padding-top: 14px; border-bottom: none; }
+.cost-total { font-weight: 500 !important; color: var(--champagne2) !important; border-bottom: none; cursor: default; }
+.cost-total span:last-child { color: var(--champagne2) !important; font-size: .9rem; display: inline-block; }
+.cost-total:hover span:last-child { animation: shake .4s ease; color: var(--gold) !important; }
+.cost-saving { color: var(--champagne2) !important; border-bottom: none; cursor: default; }
+.cost-saving span:last-child { color: #81c784 !important; font-size: .85rem; display: inline-block; }
+.cost-saving:hover span:last-child { animation: shake .4s ease; }
+.cost-grand { padding-top: 14px; border-bottom: none; cursor: default; }
 .cost-grand span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: var(--champagne2); }
-.cost-grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.1rem; color: var(--gold) !important; font-weight: 400; }
+.cost-grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.1rem; color: var(--gold) !important; font-weight: 400; display: inline-block; }
+.cost-grand:hover span:last-child { animation: shake .4s ease; }
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:640px){
@@ -1095,38 +1120,48 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   const canvas = document.getElementById('costCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const waves = [
-    { yf:.2,  amp:22, freq:.016, speed:.30, phase:0.0, lw:1.5, r:201,g:165,b:90,  a:.9 },
-    { yf:.38, amp:30, freq:.011, speed:.20, phase:2.1, lw:1.0, r:232,g:203,b:128, a:.6 },
-    { yf:.58, amp:18, freq:.020, speed:.38, phase:1.3, lw:1.3, r:168,g:135,b:46,  a:.7 },
-    { yf:.76, amp:24, freq:.014, speed:.25, phase:3.7, lw:.9,  r:201,g:165,b:90,  a:.5 },
-    { yf:.90, amp:14, freq:.024, speed:.42, phase:5.1, lw:.7,  r:232,g:203,b:128, a:.4 },
-  ];
-  let W, H, t = 0;
+  let W, H;
   function resize() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    W = canvas.width = rect.width;
-    H = canvas.height = rect.height;
+    const r = canvas.parentElement.getBoundingClientRect();
+    W = canvas.width = r.width;
+    H = canvas.height = r.height;
   }
   resize();
   window.addEventListener('resize', resize);
+
+  // Floating particles
+  const GOLD = [[201,165,90],[232,203,128],[168,135,46],[212,184,150]];
+  const particles = Array.from({length: 38}, () => {
+    const col = GOLD[Math.floor(Math.random()*GOLD.length)];
+    return {
+      x: Math.random(),
+      y: Math.random(),
+      r: .8 + Math.random() * 2.2,
+      speed: .00018 + Math.random() * .00025,
+      drift: (Math.random() - .5) * .00012,
+      opacity: .08 + Math.random() * .22,
+      col,
+      phase: Math.random() * Math.PI * 2,
+    };
+  });
+
   function frame() {
-    t += 0.010;
     ctx.clearRect(0, 0, W, H);
-    waves.forEach(w => {
+    particles.forEach(p => {
+      p.y -= p.speed;
+      p.x += p.drift + Math.sin(p.phase + p.y * 8) * .00008;
+      p.phase += .012;
+      if (p.y < -0.05) { p.y = 1.05; p.x = Math.random(); }
+      if (p.x < 0) p.x = 1;
+      if (p.x > 1) p.x = 0;
+      const px = p.x * W, py = p.y * H;
+      const grd = ctx.createRadialGradient(px, py, 0, px, py, p.r * 2.5);
+      grd.addColorStop(0,   `rgba(${p.col},${p.opacity})`);
+      grd.addColorStop(1,   `rgba(${p.col},0)`);
       ctx.beginPath();
-      ctx.lineWidth = w.lw;
-      const grd = ctx.createLinearGradient(0,0,W,0);
-      grd.addColorStop(0,   `rgba(${w.r},${w.g},${w.b},0)`);
-      grd.addColorStop(.1,  `rgba(${w.r},${w.g},${w.b},${w.a})`);
-      grd.addColorStop(.9,  `rgba(${w.r},${w.g},${w.b},${w.a})`);
-      grd.addColorStop(1,   `rgba(${w.r},${w.g},${w.b},0)`);
-      ctx.strokeStyle = grd;
-      const baseY = w.yf * H;
-      ctx.moveTo(0, baseY + Math.sin(w.phase + t*w.speed)*w.amp);
-      for (let x = 3; x <= W; x += 3)
-        ctx.lineTo(x, baseY + Math.sin(w.freq*x + w.phase + t*w.speed)*w.amp);
-      ctx.stroke();
+      ctx.arc(px, py, p.r * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
+      ctx.fill();
     });
     requestAnimationFrame(frame);
   }

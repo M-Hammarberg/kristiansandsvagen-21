@@ -1223,35 +1223,44 @@ footer {
   }
   sessionStorage.setItem('hasVisited', '1');
 
-  // Split loader-title into letter spans for staggered animation
-  let lIdx = 0;
-  function wrapLoaderLetters(el) {
-    Array.from(el.childNodes).forEach(function(node) {
+  // Animate loader-title letters one by one
+  (function() {
+    var el = document.querySelector('.loader-title');
+    if (!el) return;
+    var idx = 0, S = 1.2, G = 0.07, R = 0.45;
+    function letSpan(ch) {
+      var d1 = (S + idx * G).toFixed(2);
+      var d2 = (S + idx * G + R).toFixed(2);
+      idx++;
+      return '<span class="loader-letter" style="animation-delay:' + d1 + 's,' + d2 + 's">' + ch + '</span>';
+    }
+    var html = '';
+    var nodes = el.childNodes;
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
       if (node.nodeType === 3) {
-        var frag = document.createDocumentFragment();
-        for (var i = 0; i < node.textContent.length; i++) {
-          var ch = node.textContent[i];
-          var s = document.createElement('span');
-          if (ch === ' ' || ch === ' ') {
-            s.style.cssText = 'display:inline-block;width:.28em';
-            s.textContent = ' ';
-            lIdx++;
+        var txt = node.textContent;
+        for (var j = 0; j < txt.length; j++) {
+          var ch = txt.charAt(j);
+          if (ch === ' ') {
+            html += '<span style="display:inline-block;width:.28em">&nbsp;</span>';
+            idx++;
           } else {
-            s.className = 'loader-letter';
-            var d = +(1.2 + lIdx * 0.07).toFixed(2);
-            s.style.animationDelay = d + 's,' + (d + 0.45).toFixed(2) + 's';
-            s.textContent = ch;
-            lIdx++;
+            html += letSpan(ch);
           }
-          frag.appendChild(s);
         }
-        node.parentNode.replaceChild(frag, node);
       } else if (node.nodeType === 1) {
-        wrapLoaderLetters(node);
+        var cls = node.className;
+        var inner = '';
+        var t = node.textContent;
+        for (var k = 0; k < t.length; k++) {
+          inner += letSpan(t.charAt(k));
+        }
+        html += '<span class="' + cls + '">' + inner + '</span>';
       }
-    });
-  }
-  wrapLoaderLetters(document.querySelector('.loader-title'));
+    }
+    el.innerHTML = html;
+  }());
 
   let progress = 0;
 

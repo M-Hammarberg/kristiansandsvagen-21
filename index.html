@@ -1222,10 +1222,10 @@ footer {
   sessionStorage.setItem('hasVisited', '1');
   let progress = 0;
 
-  // Time-based % counter synced to MIN_TIME (2500ms)
+  // Time-based % counter synced to MIN_TIME (3000ms)
   const progressStart = Date.now();
   function tick() {
-    if(dismissed) return;
+    if(dismissing) return;
     const elapsed = Date.now() - progressStart;
     const pct_val = Math.min(Math.round((elapsed / MIN_TIME) * 100), 99);
     progress = pct_val;
@@ -1234,97 +1234,219 @@ footer {
   }
   requestAnimationFrame(tick);
 
+  let dismissing = false;
   function dismiss() {
-    if(dismissed) return;
-    dismissed = true;
+    if(dismissing) return;
+    dismissing = true;
     pct.textContent = '100%';
-    // short pause then curtain up
     setTimeout(() => {
-      loader.classList.add('dismissing');
-      loader.addEventListener('animationend', () => {
-        loader.classList.add('hidden');
-      }, {once: true});
-    }, 320);
+      const fadeStart = Date.now();
+      const FADE_DUR = 900;
+      function fadeStep() {
+        const p = Math.min((Date.now() - fadeStart) / FADE_DUR, 1);
+        canvas.style.opacity = 1 - p;
+        if(p < 1) {
+          requestAnimationFrame(fadeStep);
+        } else {
+          dismissed = true; // stop animation loop only now
+          loader.classList.add('dismissing');
+          loader.addEventListener('animationend', () => {
+            loader.classList.add('hidden');
+          }, {once: true});
+        }
+      }
+      requestAnimationFrame(fadeStep);
+    }, 300);
   }
 
 
-  // ── Canvas animated background ──
+  // ── Canvas animated background — EXTREME ──
   const canvas = document.getElementById('loaderCanvas');
   const ctx    = canvas.getContext('2d');
   let dismissed = false;
+  let T = 0;
+  const W0 = window.innerWidth, H0 = window.innerHeight;
   function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
-  const G = 'rgba(168,135,46,', C = 'rgba(212,184,150,';
-  const orbs = Array.from({length:40}, () => ({
-    x: Math.random()*window.innerWidth,
-    y: Math.random()*window.innerHeight,
-    r: 1.5 + Math.random()*3.5,
-    vx: (Math.random()-.5)*.32,
-    vy: (Math.random()-.5)*.32,
-    a: .07 + Math.random()*.2,
-    col: Math.random()>.5 ? G : C,
-    ph: Math.random()*Math.PI*2,
-    ps: .007+Math.random()*.013,
+  // Central sun — the anchor of everything
+  const SUN = { x: .5, y: .46 };
+
+  // God rays from sun — 14 thick shafts fanning out
+  const rays = Array.from({length: 14}, (_, i) => ({
+    ang: (i / 14) * Math.PI * 2,
+    len: .55 + Math.random() * .35,
+    w:  22 + Math.random() * 40,
+    a:  .18 + Math.random() * .22,
+    ph: Math.random() * Math.PI * 2,
+    ps: .006 + Math.random() * .008,
   }));
-  const lines = Array.from({length:14}, () => ({
-    x: Math.random()*window.innerWidth*1.6 - window.innerWidth*.3,
-    y: -80,
-    len: 70 + Math.random()*130,
-    sp: .28 + Math.random()*.4,
-    ang: Math.PI/4 + (Math.random()-.5)*.28,
-    a: .04 + Math.random()*.07,
-    col: Math.random()>.5 ? G : C,
+
+  // Spiral vortex particles around sun
+  const vortex = Array.from({length: 200}, (_, i) => ({
+    ang: (i / 200) * Math.PI * 2 * 3 + Math.random() * .5,
+    dist: .04 + Math.random() * .48,
+    spd: (.004 + Math.random() * .006) * (Math.random() > .5 ? 1 : -1),
+    r: .8 + Math.random() * 3.5,
+    a: .4 + Math.random() * .6,
+    ph: Math.random() * Math.PI * 2,
+    ps: .02 + Math.random() * .04,
+    col: Math.random() > .3 ? '255,220,100' : '255,255,200',
   }));
+
+  // Massive sweeping aurora curtains — 4 tall bands
+  const curtains = [
+    { yc: .22, h: .55, col: '201,150,30',  a: .70, freq: .0014, ph: 0   },
+    { yc: .50, h: .65, col: '255,190,50',  a: .55, freq: .0011, ph: 1.8 },
+    { yc: .75, h: .50, col: '160,110,10',  a: .60, freq: .0017, ph: 3.5 },
+  ];
+
+  // Large glowing orbs drifting slowly
+  const orbs = Array.from({length: 7}, () => ({
+    x: Math.random(), y: Math.random(),
+    vx: (Math.random() - .5) * .00035, vy: (Math.random() - .5) * .00035,
+    r: .12 + Math.random() * .18,
+    a: .28 + Math.random() * .32,
+    ph: Math.random() * Math.PI * 2,
+    ps: .008 + Math.random() * .01,
+    col: Math.random() > .5 ? '220,165,35' : '255,210,80',
+  }));
+
+  // Pulse shockwaves
+  const shocks = Array.from({length: 5}, (_, i) => ({ t: i / 5, spd: .0028 }));
 
   function frame(){
+    T += 1;
     const W = canvas.width, H = canvas.height;
+    const sx = SUN.x * W, sy = SUN.y * H;
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
     ctx.clearRect(0,0,W,H);
-    // rich dark bg
-    const bg = ctx.createRadialGradient(W*.5,H*.5,0, W*.5,H*.5,W*.8);
-    bg.addColorStop(0,  'rgba(26,21,16,1)');
-    bg.addColorStop(.5, 'rgba(16,13,10,1)');
-    bg.addColorStop(1,  'rgba(7,6,5,1)');
-    ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
 
-    // flowing diagonal lines
-    lines.forEach(l => {
-      const x2 = l.x + Math.cos(l.ang)*l.len, y2 = l.y + Math.sin(l.ang)*l.len;
-      const lg = ctx.createLinearGradient(l.x,l.y,x2,y2);
-      lg.addColorStop(0, l.col+'0)'); lg.addColorStop(.5,l.col+l.a+')'); lg.addColorStop(1,l.col+'0)');
-      ctx.beginPath(); ctx.strokeStyle=lg; ctx.lineWidth=.7;
-      ctx.moveTo(l.x,l.y); ctx.lineTo(x2,y2); ctx.stroke();
-      l.y+=l.sp; l.x+=l.sp*.55;
-      if(l.y > H+100){ l.y=-100; l.x=Math.random()*W*1.6-W*.3; }
+    // ── Absolute black base ──
+    ctx.fillStyle = '#030201';
+    ctx.fillRect(0,0,W,H);
+
+    // ── Aurora curtains — massive full-width bands ──
+    curtains.forEach(c => {
+      const cy = (c.yc + Math.sin(T * c.freq + c.ph) * .1) * H;
+      const bh  = c.h * H;
+      const pulse = .7 + .3 * Math.sin(T * c.freq * 1.8 + c.ph);
+      const g = ctx.createLinearGradient(0, cy - bh * .5, 0, cy + bh * .5);
+      g.addColorStop(0,    `rgba(${c.col},0)`);
+      g.addColorStop(.2,   `rgba(${c.col},${(c.a * .25 * pulse).toFixed(3)})`);
+      g.addColorStop(.5,   `rgba(${c.col},${(c.a * pulse).toFixed(3)})`);
+      g.addColorStop(.8,   `rgba(${c.col},${(c.a * .25 * pulse).toFixed(3)})`);
+      g.addColorStop(1,    `rgba(${c.col},0)`);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, cy - bh * .5, W, bh);
+      // blazing bright core line
+      ctx.fillStyle = `rgba(255,240,150,${(c.a * .55 * pulse).toFixed(3)})`;
+      ctx.fillRect(0, cy - 2, W, 4);
     });
 
-    // glowing orbs
+    // ── Large glowing orbs ──
     orbs.forEach(o => {
       o.ph += o.ps;
-      const a = o.a*(.65+.35*Math.sin(o.ph));
-      const g = ctx.createRadialGradient(o.x,o.y,0, o.x,o.y,o.r*4.5);
-      g.addColorStop(0, o.col+a+')');
-      g.addColorStop(.45, o.col+(a*.35)+')');
-      g.addColorStop(1, o.col+'0)');
-      ctx.beginPath(); ctx.fillStyle=g;
-      ctx.arc(o.x,o.y,o.r*4.5,0,Math.PI*2); ctx.fill();
-      o.x+=o.vx; o.y+=o.vy;
-      if(o.x<-20) o.x=W+20; if(o.x>W+20) o.x=-20;
-      if(o.y<-20) o.y=H+20; if(o.y>H+20) o.y=-20;
+      o.x += o.vx; o.y += o.vy;
+      if(o.x < -.2) o.x = 1.2; if(o.x > 1.2) o.x = -.2;
+      if(o.y < -.2) o.y = 1.2; if(o.y > 1.2) o.y = -.2;
+      const pulse = .6 + .4 * Math.sin(o.ph);
+      const ox = o.x * W, oy = o.y * H, rad = o.r * Math.min(W,H);
+      const g = ctx.createRadialGradient(ox,oy,0, ox,oy,rad);
+      g.addColorStop(0,   `rgba(${o.col},${(o.a * pulse).toFixed(3)})`);
+      g.addColorStop(.4,  `rgba(${o.col},${(o.a * .4 * pulse).toFixed(3)})`);
+      g.addColorStop(1,   `rgba(${o.col},0)`);
+      ctx.beginPath(); ctx.fillStyle = g;
+      ctx.arc(ox, oy, rad, 0, Math.PI*2); ctx.fill();
     });
 
-    // vignette
-    const vig = ctx.createRadialGradient(W*.5,H*.5,H*.15, W*.5,H*.5,H*.95);
-    vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,0,.5)');
-    ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
+    // ── God rays from central sun ──
+    ctx.save(); ctx.globalCompositeOperation = 'screen';
+    rays.forEach(r => {
+      r.ph += r.ps;
+      const pulse = .5 + .5 * Math.sin(r.ph);
+      const ang = r.ang + T * .0003;
+      const ex = sx + Math.cos(ang) * r.len * Math.max(W,H);
+      const ey = sy + Math.sin(ang) * r.len * Math.max(W,H);
+      const g = ctx.createLinearGradient(sx, sy, ex, ey);
+      const a = r.a * pulse;
+      g.addColorStop(0,   `rgba(255,230,120,${a.toFixed(3)})`);
+      g.addColorStop(.25, `rgba(220,175,50,${(a*.6).toFixed(3)})`);
+      g.addColorStop(.6,  `rgba(180,130,20,${(a*.2).toFixed(3)})`);
+      g.addColorStop(1,   'rgba(140,90,5,0)');
+      // draw as wide triangle
+      const perp = ang + Math.PI * .5;
+      const hw = r.w * pulse;
+      ctx.beginPath();
+      ctx.moveTo(sx + Math.cos(perp)*hw*.3, sy + Math.sin(perp)*hw*.3);
+      ctx.lineTo(sx - Math.cos(perp)*hw*.3, sy - Math.sin(perp)*hw*.3);
+      ctx.lineTo(ex - Math.cos(perp)*hw, ey - Math.sin(perp)*hw);
+      ctx.lineTo(ex + Math.cos(perp)*hw, ey + Math.sin(perp)*hw);
+      ctx.closePath();
+      ctx.fillStyle = g; ctx.fill();
+    });
+    ctx.restore();
+
+    // ── Central sun glow ──
+    const sunPulse = .7 + .3 * Math.sin(T * .022);
+    const sunG = ctx.createRadialGradient(sx,sy,0, sx,sy, Math.min(W,H) * .32 * sunPulse);
+    sunG.addColorStop(0,   `rgba(255,255,220,${(.85*sunPulse).toFixed(3)})`);
+    sunG.addColorStop(.05, `rgba(255,230,120,${(.75*sunPulse).toFixed(3)})`);
+    sunG.addColorStop(.15, `rgba(220,170,40,${(.45*sunPulse).toFixed(3)})`);
+    sunG.addColorStop(.35, `rgba(180,120,15,${(.18*sunPulse).toFixed(3)})`);
+    sunG.addColorStop(.6,  `rgba(120,75,5,${(.06*sunPulse).toFixed(3)})`);
+    sunG.addColorStop(1,   'rgba(60,35,2,0)');
+    ctx.fillStyle = sunG; ctx.fillRect(0,0,W,H);
+
+    // ── Vortex particles spiralling around sun ──
+    vortex.forEach(p => {
+      p.ph += p.ps;
+      p.ang += p.spd;
+      const wobble = 1 + .08 * Math.sin(p.ph * 2.3);
+      const px = sx + Math.cos(p.ang) * p.dist * Math.min(W,H) * wobble;
+      const py = sy + Math.sin(p.ang) * p.dist * Math.min(W,H) * wobble * .6;
+      const a = p.a * (.5 + .5 * Math.sin(p.ph));
+      const distFactor = 1 - p.dist * .6;
+      // glow
+      const gr = ctx.createRadialGradient(px,py,0, px,py,p.r*4*distFactor+1);
+      gr.addColorStop(0,  `rgba(${p.col},${(a).toFixed(3)})`);
+      gr.addColorStop(.5, `rgba(${p.col},${(a*.3).toFixed(3)})`);
+      gr.addColorStop(1,  `rgba(${p.col},0)`);
+      ctx.beginPath(); ctx.fillStyle = gr;
+      ctx.arc(px,py,(p.r*4*distFactor+1),0,Math.PI*2); ctx.fill();
+      // bright core
+      ctx.beginPath(); ctx.fillStyle=`rgba(255,250,200,${(a*.9).toFixed(3)})`;
+      ctx.arc(px,py,p.r*distFactor,0,Math.PI*2); ctx.fill();
+    });
+
+    // ── Shockwave rings ──
+    shocks.forEach(s => {
+      s.t += s.spd;
+      if(s.t > 1) s.t = 0;
+      const rad = s.t * Math.max(W,H) * .85;
+      const a = (1 - s.t) * .5;
+      ctx.beginPath();
+      ctx.arc(sx, sy, rad, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(255,210,80,${a.toFixed(3)})`;
+      ctx.lineWidth = (1 - s.t) * 3;
+      ctx.stroke();
+    });
+
+    // ── Vignette ──
+    const vig = ctx.createRadialGradient(sx,sy,H*.05, sx,sy,H*.95);
+    vig.addColorStop(0,  'rgba(0,0,0,0)');
+    vig.addColorStop(.5, 'rgba(0,0,0,.1)');
+    vig.addColorStop(1,  'rgba(0,0,0,.9)');
+    ctx.fillStyle = vig; ctx.fillRect(0,0,W,H);
 
     if(!dismissed) requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 
   // Dismiss when page is loaded AND minimum time has passed
-  const MIN_TIME = 2500; // ms
+  const MIN_TIME = 3000; // ms
   const startTime = Date.now();
 
   function mayDismiss() {
@@ -1333,15 +1455,14 @@ footer {
     setTimeout(dismiss, wait);
   }
 
-  // Hard max — never show loader more than 6s no matter what
-  setTimeout(dismiss, 6000);
+  // Hard max
+  setTimeout(dismiss, 7000);
 
   if(document.readyState === 'complete') {
     mayDismiss();
   } else {
     window.addEventListener('load', mayDismiss);
-    // Fallback: force dismiss after 5s no matter what
-    setTimeout(dismiss, 4000);
+    setTimeout(dismiss, 5500);
   }
 })();
 

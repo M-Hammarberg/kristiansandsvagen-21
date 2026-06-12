@@ -13,7 +13,7 @@
   --charcoal: #1a1917;
   --champagne: #d4b896;
   --champagne2: #e8d5bb;
-  --ivory: #e0d8cc;
+  --ivory: #f7f3ee;
   --ivory2: #ede8e1;
   --stone: #7a7670;
   --cream: #f2ece4;
@@ -26,7 +26,7 @@
 html { scroll-behavior: smooth; overscroll-behavior: none; }
 body {
   font-family: "Montserrat", sans-serif;
-  background: #0d0d0d;
+  background: transparent;
   color: var(--charcoal);
   overflow-x: hidden;
   overscroll-behavior-y: none;
@@ -360,14 +360,14 @@ body {
 }
 .cost-divider { height: 1px; background: rgba(201,165,90,.25); margin: 8px 0; }
 .cost-total { font-weight: 600 !important; color: #1a1917 !important; border-bottom: none; cursor: default; }
-.cost-total span:last-child { color: var(--gold2) !important; font-size: .9rem; display: inline-block; }
+.cost-total span:last-child { color: #8a6f2e !important; font-size: .9rem; display: inline-block; }
 .cost-total:hover span:last-child { animation: shake .4s ease; color: var(--gold2) !important; }
 .cost-saving { color: #1a1917 !important; border-bottom: none; cursor: default; }
 .cost-saving span:last-child { color: #81c784 !important; font-size: .85rem; display: inline-block; }
 .cost-saving:hover span:last-child { animation: shake .4s ease; }
 .cost-grand { padding-top: 14px; border-bottom: none; cursor: default; }
 .cost-grand span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: #1a1917; }
-.cost-grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.1rem; color: var(--gold2) !important; font-weight: 700; display: inline-block; }
+.cost-grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.1rem; color: #8a6f2e !important; font-weight: 700; display: inline-block; }
 .cost-grand:hover span:last-child { animation: shake .4s ease; }
 
 /* ─── RESPONSIVE ─── */
@@ -464,7 +464,7 @@ body {
 <body>
 
 <!-- ═══ BG CANVAS ═══ -->
-<canvas id="bgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:1;"></canvas>
+<canvas id="bgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:1;will-change:transform;transform:translateZ(0);"></canvas>
 
 <!-- ═══ WAVE LOADER ═══ -->
 <div id="reno-loader" style="position:fixed;inset:0;z-index:9998;background:#0d0d0d;overflow:hidden;">
@@ -691,9 +691,8 @@ body {
       <h3>Nytt kakel i relax & bygga om bastu</h3>
       <p>Relaxavdelningen får nytt kakel och bastun byggs om för en mer modern och lyxig känsla.</p>
       <div class="cost-tag">Beräknad kostnad: <strong>80 000 kr</strong> <span class="cost-note">— kakel, bastuaggregat, träpanel, inredning</span></div>
-      <div class="img-slot" onclick="this.querySelector('input').click()">
-        <input type="file" accept="image/*" onchange="loadImg(this)">
-        <span class="img-slot-icon">＋</span><span>Lägg till bild</span>
+      <div class="img-slot">
+        <img src="../images/renovering/steg10.png" alt="Kakel och bastu">
         <div class="img-slot-frame"></div>
       </div>
     </div>
@@ -933,53 +932,9 @@ function loadCardImg(input) {
   reader.readAsDataURL(input.files[0]);
 }
 
-// ── Intersection Observer — reveal ──
-const revealIO = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if(e.isIntersecting) { e.target.classList.add('visible'); revealIO.unobserve(e.target); }
-  });
-}, { threshold: 0.12 });
-
-// Timeline items — staggered
-document.querySelectorAll('.timeline-item').forEach((el, i) => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(40px)';
-  el.style.transition = `opacity .9s cubic-bezier(.22,1,.36,1) ${i * 0.1}s, transform .9s cubic-bezier(.22,1,.36,1) ${i * 0.1}s`;
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if(e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  io.observe(el);
-});
-
-// Project cards — staggered
-document.querySelectorAll('.project-card').forEach((el, i) => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(40px)';
-  el.style.transition = `opacity .9s cubic-bezier(.22,1,.36,1) ${i * 0.08}s, transform .9s cubic-bezier(.22,1,.36,1) ${i * 0.08}s`;
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if(e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  io.observe(el);
-});
-
-// Section headings, progress, hero inner
-document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner').forEach((el, i) => {
-  el.classList.add('reveal');
-  if(i % 3 === 1) el.classList.add('reveal-delay-1');
-  if(i % 3 === 2) el.classList.add('reveal-delay-2');
-  revealIO.observe(el);
+// All elements always visible — no scroll reveal
+document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner').forEach(el => {
+  el.classList.add('reveal', 'visible');
 });
 </script>
 
@@ -1034,8 +989,8 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     loader.style.transition = 'opacity 0.8s ease';
     loader.style.opacity = '0';
     document.body.style.transition = 'background 0.8s ease';
-    document.body.style.background = 'var(--ivory)';
-    document.documentElement.style.background = 'var(--ivory)';
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
     setTimeout(() => { loader.style.display = 'none'; }, 900);
   }
 
@@ -1089,8 +1044,8 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   if (sessionStorage.getItem('hasVisitedReno')) {
     loader.style.display = 'none';
     dismissed = true;
-    document.body.style.background = 'var(--ivory)';
-    document.documentElement.style.background = 'var(--ivory)';
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
   } else {
     sessionStorage.setItem('hasVisitedReno', '1');
     animId = requestAnimationFrame(frame);
@@ -1192,11 +1147,11 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   const blobs = Array.from({length: 6}, (_, i) => ({
     x: Math.random(),
     y: Math.random(),
-    r: 180 + Math.random() * 220,
+    r: 200 + Math.random() * 280,
     vx: (Math.random() - .5) * .00012,
     vy: (Math.random() - .5) * .00008,
-    hue: i % 2 === 0 ? [195,175,145] : [210,195,170],
-    a: .10 + Math.random() * .08,
+    hue: i % 2 === 0 ? [210,190,160] : [225,210,185],
+    a: .30 + Math.random() * .20,
     phase: Math.random() * Math.PI * 2,
   }));
 
@@ -1208,10 +1163,19 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     phase: Math.random() * Math.PI * 2,
   }));
 
-  let t = 0;
+  let t = 0, scrolling = false, scrollTimer;
+  window.addEventListener('scroll', () => {
+    scrolling = true;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => { scrolling = false; }, 150);
+  }, { passive: true });
   function frame() {
-    t += 0.003;
+    if (!scrolling) t += 0.003;
     ctx.clearRect(0, 0, W, H);
+
+    // Draw ivory base
+    ctx.fillStyle = '#f7f3ee';
+    ctx.fillRect(0, 0, W, H);
 
     blobs.forEach(b => {
       b.x += b.vx + Math.sin(b.phase + t * .4) * .00005;

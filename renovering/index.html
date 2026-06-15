@@ -1479,9 +1479,11 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   // En ny "tick" — lugn slumpvandring som drar mot CENTER (oftast strax upp)
   function tick(){
     const last = pts[N - 1];
-    const noise = (Math.random() - .5) * BASE * 0.0026;  // ~±0,13 %, mjukt
-    let next = last + (CENTER - last) * 0.05 + noise;     // mean reversion mot CENTER
-    next = Math.max(LOW, Math.min(HIGH, next));           // håll inom −1 % .. +3 %
+    const noise = (Math.random() - .5) * BASE * 0.0013;  // litet brus
+    let delta = (CENTER - last) * 0.05 + noise;          // mean reversion mot CENTER
+    const maxStep = BASE * 0.001;                        // max ±0,1 % per steg
+    delta = Math.max(-maxStep, Math.min(maxStep, delta));
+    let next = Math.max(LOW, Math.min(HIGH, last + delta));
     const dir = next >= last ? 'up' : 'down';
     pts.push(next); pts.shift();
     draw();
@@ -1495,7 +1497,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
       drawProgress = Math.min((now - t0) / 1100, 1);
       draw();
       if (drawProgress < 1) requestAnimationFrame(anim);
-      else { updateReadout(); setInterval(tick, 30000); }
+      else { updateReadout(); setInterval(tick, 10000); }
     })(t0);
   }
 

@@ -397,6 +397,16 @@ body {
 .cost-value > span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.25rem; color: #2e7d4f !important; font-weight: 700; display: inline-block; }
 .cost-value:hover > span:last-child { animation: shake .4s ease; }
 
+/* ─── CAD / 3D-video ─── */
+.cad-section { margin-bottom: 80px; }
+.cad-intro { font-size: .82rem; line-height: 1.6; color: rgba(40,36,30,.8); max-width: 640px; margin: 0 0 22px; }
+.cad-video { position: relative; border: 1px solid rgba(201,165,90,.4); border-radius: 6px; overflow: hidden; background: #0d0d0d; aspect-ratio: 16 / 9; }
+.cad-video video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cad-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 20px;
+  color: rgba(255,255,255,.55); font-family: "Montserrat", sans-serif; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+  background: radial-gradient(circle at center, rgba(201,165,90,.08), #0d0d0d 70%); }
+.cad-ph-icon { width: 62px; height: 62px; border: 1.5px solid rgba(201,165,90,.5); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--gold); padding-left: 4px; }
+
 /* ─── Interaktiva planerade rader (klicka för att räkna med/utan) ─── */
 .cost-hint { font-family: "Montserrat", sans-serif; font-size: .55rem; letter-spacing: .12em; text-transform: none; color: var(--stone); font-weight: 400; margin-left: 10px; }
 .planned-row { cursor: pointer; user-select: none; transition: opacity .25s ease; }
@@ -694,10 +704,6 @@ body {
       <h3>Elbilsladdare</h3>
       <p>Installation av laddbox i garaget. Praktisk förberedelse inför framtida elbil och ett mervärde för fastigheten.</p>
       <div class="cost-tag">Beräknad kostnad: <strong>8 000 kr</strong> <span class="cost-note">— laddbox + el-material</span></div>
-      <div class="img-slot">
-        <img src="../images/renovering/steg3.png" alt="Elbilsladdare">
-        <div class="img-slot-frame"></div>
-      </div>
     </div>
 
     <div class="timeline-item" data-status="planned" data-cost="12000">
@@ -873,6 +879,25 @@ body {
       <div class="cost-row cost-value">
         <span>Beräknat slutvärde <span class="cost-note">(utgångspris + tillfört värde)</span></span>
         <span id="costValue"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAD / 3D-RITNING -->
+  <div class="section-heading" style="margin-top: 80px;">
+    <h2>CAD &amp; 3D-ritning</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="cad-section">
+    <p class="cad-intro">Hela huset har modellerats i 3D för att planera renoveringen i detalj. Här är en genomgång av planlösning och de förändringar som planeras.</p>
+    <div class="cad-video" id="cadVideo">
+      <video controls preload="metadata" playsinline>
+        <source src="../images/renovering/cad-tour.mp4" type="video/mp4">
+      </video>
+      <div class="cad-placeholder" id="cadPlaceholder">
+        <span class="cad-ph-icon">▶</span>
+        <span>3D-genomgång läggs in inom kort</span>
       </div>
     </div>
   </div>
@@ -1395,6 +1420,20 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     requestAnimationFrame(frame);
   }
   frame();
+})();
+</script>
+
+<script>
+// ── CAD-video: visa spelaren när filen finns, annars platshållaren ──
+(function(){
+  const wrap = document.getElementById('cadVideo');
+  if (!wrap) return;
+  const video = wrap.querySelector('video');
+  const ph = document.getElementById('cadPlaceholder');
+  video.style.display = 'none';
+  video.addEventListener('loadeddata', () => { video.style.display = 'block'; ph.style.display = 'none'; });
+  video.addEventListener('error', () => { video.style.display = 'none'; ph.style.display = 'flex'; });
+  video.load();
 })();
 </script>
 

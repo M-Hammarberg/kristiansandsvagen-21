@@ -876,12 +876,12 @@ body {
       </div>
       <div class="ticker-change" id="tickerChange">
         <span class="tc-arrow">▲</span><span id="tcPct">+0,0 %</span>
-        <div class="tc-sub">senaste 12 mån</div>
+        <div class="tc-sub">vs. dagens värde</div>
       </div>
     </div>
     <canvas class="ticker-canvas" id="tickerCanvas"></canvas>
     <div class="ticker-foot">
-      <span class="tf-range">Senaste 12 månaderna</span>
+      <span class="tf-range">Live · idag</span>
       <span class="ticker-note">Indikativ utveckling i linje med bostadsprisindex — ej en mäklarvärdering</span>
     </div>
   </div>
@@ -1368,21 +1368,28 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   const elChange = document.getElementById('tickerChange');
   const elPct = document.getElementById('tcPct');
 
-  const CURRENT = 4500000;        // dagens indikativa värde (utgångspris/värdering)
-  const YEAR_GROWTH = 0.058;      // ~+5,8 % senaste 12 mån (marknaden går bra)
-  const N = 70;                   // antal punkter i fönstret
   const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
 
-  // Bygg en startserie: trend uppåt med brus, slutar på ~CURRENT
-  const start = CURRENT / (1 + YEAR_GROWTH);
-  let pts = [];
-  for (let i = 0; i < N; i++){
-    const t = i / (N - 1);
-    const trend = start + (CURRENT - start) * t;
-    const noise = Math.sin(i * 0.7) * trend * 0.006 + (Math.random() - .5) * trend * 0.008;
-    pts.push(trend + noise);
+  // Basvärde = beräknat slutvärde (läses live från kostnadsöversikten)
+  function readBase(){
+    const t = (document.getElementById('costValue') || {}).textContent || '';
+    const n = parseInt(t.replace(/\D/g, ''), 10);
+    return n && n > 0 ? n : 5821000;
   }
-  pts[N - 1] = CURRENT;
+  const BASE = readBase();           // dagens värde (= 100 %)
+  const N = 70;                      // antal punkter i fönstret
+  const HIGH = BASE * 1.03;          // tak: +3 %
+  const LOW  = BASE * 0.99;          // golv: −1 %
+  const CENTER = BASE * 1.009;       // ligger oftast strax över dagens värde
+
+  // Startserie: mjuk slumpvandring runt CENTER inom bandet
+  let pts = [];
+  let v = CENTER;
+  for (let i = 0; i < N; i++){
+    v += (CENTER - v) * 0.06 + (Math.random() - .5) * BASE * 0.0028;
+    v = Math.max(LOW, Math.min(HIGH, v));
+    pts.push(v);
+  }
 
   let W, H, DPR;
   function resize(){
@@ -1399,7 +1406,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     const range = (max - min) || 1;
     const x = i => (i / (N - 1)) * (W - pad * 2) + pad;
     const y = v => H - pad - ((v - min) / range) * (H - pad * 2);
-    const up = pts[N - 1] >= pts[0];
+    const up = pts[N - 1] >= BASE;
     const line = up ? '#2e7d4f' : '#b5483b';
 
     ctx.clearRect(0, 0, W, H);
@@ -1433,7 +1440,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
 
   function updateReadout(flash){
     const cur = pts[N - 1];
-    const pct = (cur / pts[0] - 1) * 100;
+    const pct = (cur / BASE - 1) * 100;            // relativt dagens värde
     elVal.textContent = fmt(cur);
     const neg = pct < 0;
     elChange.classList.toggle('neg', neg);
@@ -1442,18 +1449,16 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
       elVal.classList.remove('up', 'down');
       void elVal.offsetWidth;
       elVal.classList.add(flash);
-      setTimeout(() => elVal.classList.remove(flash), 260);
+      setTimeout(() => elVal.classList.remove(flash), 400);
     }
   }
 
-  // En ny "tick" — random walk med svag positiv drift
+  // En ny "tick" — lugn slumpvandring som drar mot CENTER (oftast strax upp)
   function tick(){
     const last = pts[N - 1];
-    const drift = 0.0004;                          // svag uppåttrend
-    const noise = (Math.random() - .5) * 0.006;    // ±0,3 %
-    let next = last * (1 + drift + noise);
-    // håll den nära CURRENT så den inte driver iväg
-    next += (CURRENT - next) * 0.03;
+    const noise = (Math.random() - .5) * BASE * 0.0026;  // ~±0,13 %, mjukt
+    let next = last + (CENTER - last) * 0.05 + noise;     // mean reversion mot CENTER
+    next = Math.max(LOW, Math.min(HIGH, next));           // håll inom −1 % .. +3 %
     const dir = next >= last ? 'up' : 'down';
     pts.push(next); pts.shift();
     draw();
@@ -1467,7 +1472,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
       drawProgress = Math.min((now - t0) / 1100, 1);
       draw();
       if (drawProgress < 1) requestAnimationFrame(anim);
-      else { updateReadout(); setInterval(tick, 900); }
+      else { updateReadout(); setInterval(tick, 2200); }
     })(t0);
   }
 

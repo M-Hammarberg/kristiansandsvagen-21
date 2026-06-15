@@ -45,16 +45,26 @@ body {
 /* Ken Burns on the real photo */
 .hero-bg {
   position: absolute; inset: 0;
-  background-image: url("images/utsida/ext_front.jpg");
+  overflow: hidden;
+}
+/* Cinematic drone-style slideshow — crossfade + slow pan/zoom */
+.hero-slide {
+  position: absolute; inset: 0;
   background-size: cover;
-  background-position: center 30%;
-  animation: kenBurns 18s ease-in-out infinite alternate;
+  background-position: center 35%;
+  opacity: 0;
+  transition: opacity 2.4s ease-in-out;
+  transform: scale(1.05);
   transform-origin: center center;
+  will-change: opacity, transform;
+}
+.hero-slide.active {
+  opacity: 1;
+  animation: kenBurns 9s ease-out forwards;
 }
 @keyframes kenBurns {
-  0%   { transform: scale(1)    translateX(0)    translateY(0); }
-  50%  { transform: scale(1.07) translateX(-1%)  translateY(-1%); }
-  100% { transform: scale(1.12) translateX(1%)   translateY(0.5%); }
+  0%   { transform: scale(1.05) translateX(0)     translateY(0); }
+  100% { transform: scale(1.14) translateX(-1.5%) translateY(-1%); }
 }
 
 /* Layered overlays for cinematic depth */
@@ -1026,7 +1036,12 @@ footer {
 
 <!-- ═══ HERO ═══ -->
 <header class="hero" id="topp">
-  <div class="hero-bg"></div>
+  <div class="hero-bg" id="heroBg">
+    <div class="hero-slide active" style="background-image:url('images/utsida/ext_drone2.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/utsida/ext_drone1.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/tradgard/garden_drone.jpg')"></div>
+    <div class="hero-slide" style="background-image:url('images/utsida/ext_front2.jpg')"></div>
+  </div>
   <div class="hero-overlay-1"></div>
   <div class="hero-overlay-2"></div>
   <div class="hero-grain"></div>
@@ -1054,6 +1069,24 @@ footer {
     <span>Utforska</span>
   </div>
 </header>
+<script>
+// Hero drone-style slideshow — crossfade between exterior shots
+(function(){
+  const slides = document.querySelectorAll('#heroBg .hero-slide');
+  if (slides.length < 2) return;
+  let i = 0;
+  // Preload images so transitions are smooth
+  slides.forEach(s => {
+    const m = s.style.backgroundImage.match(/url\(['"]?(.+?)['"]?\)/);
+    if (m) { const img = new Image(); img.src = m[1]; }
+  });
+  setInterval(() => {
+    slides[i].classList.remove('active');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('active');
+  }, 6000);
+})();
+</script>
 
 <!-- ═══ NAV ═══ -->
 <nav class="site-nav">

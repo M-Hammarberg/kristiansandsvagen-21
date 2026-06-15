@@ -1467,7 +1467,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     elVal.textContent = fmt(cur);
     const neg = pct < 0;
     elChange.classList.toggle('neg', neg);
-    elPct.textContent = (neg ? '−' : '+') + Math.abs(pct).toFixed(1).replace('.', ',') + ' %';
+    elPct.textContent = (neg ? '−' : '+') + Math.abs(pct).toFixed(2).replace('.', ',') + ' %';
     if (flash){
       elVal.classList.remove('up', 'down');
       void elVal.offsetWidth;

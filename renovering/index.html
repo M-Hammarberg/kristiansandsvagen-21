@@ -39,8 +39,8 @@ body {
 .site-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center;
-  padding: 0 40px;
-  height: 64px;
+  padding: env(safe-area-inset-top, 0px) 40px 0;
+  height: calc(64px + env(safe-area-inset-top, 0px));
   background: rgba(13,13,13,.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -1202,7 +1202,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     loader.style.opacity = '0';
     document.body.style.transition = 'background 0.8s ease';
     document.body.style.background = 'transparent';
-    document.documentElement.style.background = 'transparent';
+    document.documentElement.style.background = '#0d0d0d';
     setTimeout(() => { loader.style.display = 'none'; }, 900);
   }
 
@@ -1257,7 +1257,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     loader.style.display = 'none';
     dismissed = true;
     document.body.style.background = 'transparent';
-    document.documentElement.style.background = 'transparent';
+    document.documentElement.style.background = '#0d0d0d';
   } else {
     sessionStorage.setItem('hasVisitedReno', '1');
     animId = requestAnimationFrame(frame);

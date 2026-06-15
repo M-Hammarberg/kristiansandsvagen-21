@@ -823,8 +823,13 @@ body {
         <span id="costSaving"></span>
       </div>
       <div class="cost-divider"></div>
+      <div class="cost-row cost-grand">
+        <span>Totalt tillfört värde <span class="cost-note">(utfört + planerat)</span></span>
+        <span id="costGrand"></span>
+      </div>
+      <div class="cost-divider"></div>
       <div class="cost-row cost-value">
-        <span>Beräknat slutvärde <span class="cost-note">(värdering + utförda investeringar)</span></span>
+        <span>Beräknat slutvärde <span class="cost-note">(utgångspris + tillfört värde)</span></span>
         <span id="costValue"></span>
       </div>
     </div>
@@ -963,11 +968,13 @@ body {
 
   document.getElementById('costTotal').textContent = fmt(totalMaterial);
 
-  // Estimated final value = valuation + completed investments,
-  // minus the part already baked into the 4,5 Mkr valuation (100k)
+  // Total value added to the property = planned (material + labor) + already invested
+  const addedValue = totalMaterial + totalLabor + doneTotal;
+  document.getElementById('costGrand').textContent = fmt(addedValue);
+
+  // Estimated final value = asking-price valuation + total value added
   const VALUATION = 4500000;
-  const ALREADY_IN_VALUATION = 100000;
-  document.getElementById('costValue').textContent = fmt(VALUATION + doneTotal - ALREADY_IN_VALUATION);
+  document.getElementById('costValue').textContent = fmt(VALUATION + addedValue);
 })();
 
 // ── Progress counter ──

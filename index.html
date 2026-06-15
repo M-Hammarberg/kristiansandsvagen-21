@@ -1312,11 +1312,11 @@ footer {
   const blobs = Array.from({length: 6}, (_, i) => ({
     x: Math.random(),
     y: Math.random(),
-    r: 200 + Math.random() * 300,
+    r: 260 + Math.random() * 340,
     vx: (Math.random() - .5) * .00012,
     vy: (Math.random() - .5) * .00008,
-    hue: i % 2 === 0 ? '214,184,130' : '190,160,110',
-    a:  .16 + Math.random() * .12,
+    hue: i % 2 === 0 ? '224,190,128' : '198,166,112',
+    a:  .42 + Math.random() * .22,
     phase: Math.random() * Math.PI * 2,
   }));
 
@@ -1377,7 +1377,7 @@ footer {
     // ── Gentle vignette for depth ──
     const vig = ctx.createRadialGradient(W * .5, H * .5, H * .2, W * .5, H * .5, H * .88);
     vig.addColorStop(0, 'rgba(0,0,0,0)');
-    vig.addColorStop(1, 'rgba(0,0,0,.55)');
+    vig.addColorStop(1, 'rgba(0,0,0,.35)');
     ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H);
 
     if(!dismissed) requestAnimationFrame(frame);

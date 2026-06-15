@@ -1352,6 +1352,15 @@ footer {
       b.y += b.vy + Math.cos(b.phase + t * .3) * .00004;
       if (b.x < -.3) b.x = 1.3; if (b.x > 1.3) b.x = -.3;
       if (b.y < -.3) b.y = 1.3; if (b.y > 1.3) b.y = -.3;
+      // Keep blobs out of the central text zone — push them toward the edges
+      const EX = .36, EY = .30;
+      let dx = b.x - .5, dy = b.y - .5;
+      const e = (dx / EX) * (dx / EX) + (dy / EY) * (dy / EY);
+      if (e < 1) {
+        if (dx === 0 && dy === 0) { dx = (Math.random() - .5) || .01; }
+        const s = 1 / Math.sqrt(e || 1e-4);
+        b.x = .5 + dx * s; b.y = .5 + dy * s;
+      }
       const px = b.x * W, py = b.y * H;
       const breathe = .8 + .2 * Math.sin(b.phase + t);
       const g = ctx.createRadialGradient(px, py, 0, px, py, b.r);

@@ -397,6 +397,33 @@ body {
 .cost-value > span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.25rem; color: #2e7d4f !important; font-weight: 700; display: inline-block; }
 .cost-value:hover > span:last-child { animation: shake .4s ease; }
 
+/* ─── Live value ticker ─── */
+.ticker-card {
+  position: relative; background: rgba(242,236,228,.92);
+  border: 1px solid rgba(201,165,90,.4); border-radius: 6px;
+  padding: 28px 32px; margin-bottom: 80px; overflow: hidden;
+}
+.ticker-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 16px; }
+.ticker-label { font-family: "Montserrat", sans-serif; font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: #8a6f2e; font-weight: 600; margin-bottom: 8px; }
+.ticker-value { font-family: "Libre Baskerville", serif; font-size: 2rem; color: #1a1917; font-weight: 700; letter-spacing: .01em; transition: color .25s ease; }
+.ticker-value.up { color: #2e7d4f; } .ticker-value.down { color: #b5483b; }
+.ticker-change { text-align: right; font-family: "Montserrat", sans-serif; font-weight: 600; color: #2e7d4f; white-space: nowrap; }
+.ticker-change.neg { color: #b5483b; }
+.ticker-change .tc-arrow { font-size: .7rem; margin-right: 4px; display: inline-block; transition: transform .25s ease; }
+.ticker-change.neg .tc-arrow { transform: rotate(180deg); }
+.ticker-change #tcPct { font-size: 1.15rem; }
+.tc-sub { font-size: .55rem; letter-spacing: .18em; text-transform: uppercase; color: var(--stone); margin-top: 3px; font-weight: 500; }
+.ticker-canvas { display: block; width: 100%; height: 150px; }
+.ticker-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 16px; }
+.ticker-foot .tf-range { font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--stone); }
+.ticker-note { font-size: .62rem; color: rgba(80,75,68,.55); text-align: right; }
+@media(max-width:768px){
+  .ticker-card { padding: 22px 20px; }
+  .ticker-value { font-size: 1.5rem; }
+  .ticker-foot { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .ticker-note { text-align: left; }
+}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:640px){
   .site-nav { padding: 0 20px; }
@@ -832,6 +859,30 @@ body {
         <span>Beräknat slutvärde <span class="cost-note">(utgångspris + tillfört värde)</span></span>
         <span id="costValue"></span>
       </div>
+    </div>
+  </div>
+
+  <!-- VÄRDEUTVECKLING -->
+  <div class="section-heading" style="margin-top: 80px;">
+    <h2>Värdeutveckling</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="ticker-card">
+    <div class="ticker-head">
+      <div>
+        <div class="ticker-label">Indikativt marknadsvärde</div>
+        <div class="ticker-value" id="tickerValue">—</div>
+      </div>
+      <div class="ticker-change" id="tickerChange">
+        <span class="tc-arrow">▲</span><span id="tcPct">+0,0 %</span>
+        <div class="tc-sub">senaste 12 mån</div>
+      </div>
+    </div>
+    <canvas class="ticker-canvas" id="tickerCanvas"></canvas>
+    <div class="ticker-foot">
+      <span class="tf-range">Senaste 12 månaderna</span>
+      <span class="ticker-note">Indikativ utveckling i linje med bostadsprisindex — ej en mäklarvärdering</span>
     </div>
   </div>
 
@@ -1304,6 +1355,130 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     requestAnimationFrame(frame);
   }
   frame();
+})();
+</script>
+
+<script>
+// ── Live value ticker — indikativ värdeutveckling (aktie-känsla) ──
+(function(){
+  const canvas = document.getElementById('tickerCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const elVal = document.getElementById('tickerValue');
+  const elChange = document.getElementById('tickerChange');
+  const elPct = document.getElementById('tcPct');
+
+  const CURRENT = 4500000;        // dagens indikativa värde (utgångspris/värdering)
+  const YEAR_GROWTH = 0.058;      // ~+5,8 % senaste 12 mån (marknaden går bra)
+  const N = 70;                   // antal punkter i fönstret
+  const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
+
+  // Bygg en startserie: trend uppåt med brus, slutar på ~CURRENT
+  const start = CURRENT / (1 + YEAR_GROWTH);
+  let pts = [];
+  for (let i = 0; i < N; i++){
+    const t = i / (N - 1);
+    const trend = start + (CURRENT - start) * t;
+    const noise = Math.sin(i * 0.7) * trend * 0.006 + (Math.random() - .5) * trend * 0.008;
+    pts.push(trend + noise);
+  }
+  pts[N - 1] = CURRENT;
+
+  let W, H, DPR;
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  let drawProgress = 0;   // 0..1 inritning vid start
+  function draw(){
+    const pad = 6;
+    const min = Math.min(...pts), max = Math.max(...pts);
+    const range = (max - min) || 1;
+    const x = i => (i / (N - 1)) * (W - pad * 2) + pad;
+    const y = v => H - pad - ((v - min) / range) * (H - pad * 2);
+    const up = pts[N - 1] >= pts[0];
+    const line = up ? '#2e7d4f' : '#b5483b';
+
+    ctx.clearRect(0, 0, W, H);
+    const shown = Math.max(2, Math.floor(N * drawProgress));
+
+    // area fill
+    ctx.beginPath();
+    ctx.moveTo(x(0), y(pts[0]));
+    for (let i = 1; i < shown; i++) ctx.lineTo(x(i), y(pts[i]));
+    const lastX = x(shown - 1);
+    ctx.lineTo(lastX, H); ctx.lineTo(x(0), H); ctx.closePath();
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, 'rgba(201,165,90,.28)');
+    g.addColorStop(1, 'rgba(201,165,90,0)');
+    ctx.fillStyle = g; ctx.fill();
+
+    // line
+    ctx.beginPath();
+    ctx.moveTo(x(0), y(pts[0]));
+    for (let i = 1; i < shown; i++) ctx.lineTo(x(i), y(pts[i]));
+    ctx.strokeStyle = line; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // glowing last dot
+    const dx = x(shown - 1), dy = y(pts[shown - 1]);
+    ctx.beginPath(); ctx.arc(dx, dy, 8, 0, Math.PI * 2);
+    ctx.fillStyle = (up ? 'rgba(46,125,79,.18)' : 'rgba(181,72,59,.18)'); ctx.fill();
+    ctx.beginPath(); ctx.arc(dx, dy, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = line; ctx.fill();
+  }
+
+  function updateReadout(flash){
+    const cur = pts[N - 1];
+    const pct = (cur / pts[0] - 1) * 100;
+    elVal.textContent = fmt(cur);
+    const neg = pct < 0;
+    elChange.classList.toggle('neg', neg);
+    elPct.textContent = (neg ? '−' : '+') + Math.abs(pct).toFixed(1).replace('.', ',') + ' %';
+    if (flash){
+      elVal.classList.remove('up', 'down');
+      void elVal.offsetWidth;
+      elVal.classList.add(flash);
+      setTimeout(() => elVal.classList.remove(flash), 260);
+    }
+  }
+
+  // En ny "tick" — random walk med svag positiv drift
+  function tick(){
+    const last = pts[N - 1];
+    const drift = 0.0004;                          // svag uppåttrend
+    const noise = (Math.random() - .5) * 0.006;    // ±0,3 %
+    let next = last * (1 + drift + noise);
+    // håll den nära CURRENT så den inte driver iväg
+    next += (CURRENT - next) * 0.03;
+    const dir = next >= last ? 'up' : 'down';
+    pts.push(next); pts.shift();
+    draw();
+    updateReadout(dir);
+  }
+
+  function startIntro(){
+    resize();
+    const t0 = performance.now();
+    (function anim(now){
+      drawProgress = Math.min((now - t0) / 1100, 1);
+      draw();
+      if (drawProgress < 1) requestAnimationFrame(anim);
+      else { updateReadout(); setInterval(tick, 900); }
+    })(t0);
+  }
+
+  window.addEventListener('resize', () => { resize(); draw(); });
+
+  // starta när grafen scrollas in
+  let started = false;
+  const obs = new IntersectionObserver(es => {
+    if (es[0].isIntersecting && !started){ started = true; obs.disconnect(); startIntro(); }
+  }, { rootMargin: '120px' });
+  obs.observe(canvas);
 })();
 </script>
 </body>

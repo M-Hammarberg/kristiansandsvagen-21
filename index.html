@@ -1308,7 +1308,19 @@ footer {
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
-  // Fine, slowly drifting dust motes — the only "movement"
+  // Slow drifting blobs — soft warm "kluttar" that glow on the dark base
+  const blobs = Array.from({length: 6}, (_, i) => ({
+    x: Math.random(),
+    y: Math.random(),
+    r: 200 + Math.random() * 300,
+    vx: (Math.random() - .5) * .00012,
+    vy: (Math.random() - .5) * .00008,
+    hue: i % 2 === 0 ? '214,184,130' : '190,160,110',
+    a:  .16 + Math.random() * .12,
+    phase: Math.random() * Math.PI * 2,
+  }));
+
+  // Fine, slowly drifting dust motes for extra life
   const dust = Array.from({length: 64}, () => ({
     x: Math.random(), y: Math.random(),
     r: .4 + Math.random() * 1.1,
@@ -1331,15 +1343,25 @@ footer {
     base.addColorStop(1,   '#070605');
     ctx.fillStyle = base; ctx.fillRect(0, 0, W, H);
 
-    // ── Single soft, slowly breathing champagne glow ──
-    const gx = W * .5, gy = H * .42;
-    const breathe = .85 + .15 * Math.sin(T * .010);
-    const rad = Math.max(W, H) * .58 * breathe;
-    const glow = ctx.createRadialGradient(gx, gy, 0, gx, gy, rad);
-    glow.addColorStop(0,   `rgba(214,184,130,${(.13 * breathe).toFixed(3)})`);
-    glow.addColorStop(.35, `rgba(190,160,110,${(.05 * breathe).toFixed(3)})`);
-    glow.addColorStop(1,   'rgba(190,160,110,0)');
-    ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+    // ── Drifting blobs (additive glow on the dark base) ──
+    const t = T * .003;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    blobs.forEach(b => {
+      b.x += b.vx + Math.sin(b.phase + t * .4) * .00005;
+      b.y += b.vy + Math.cos(b.phase + t * .3) * .00004;
+      if (b.x < -.3) b.x = 1.3; if (b.x > 1.3) b.x = -.3;
+      if (b.y < -.3) b.y = 1.3; if (b.y > 1.3) b.y = -.3;
+      const px = b.x * W, py = b.y * H;
+      const breathe = .8 + .2 * Math.sin(b.phase + t);
+      const g = ctx.createRadialGradient(px, py, 0, px, py, b.r);
+      g.addColorStop(0, `rgba(${b.hue},${(b.a * breathe).toFixed(3)})`);
+      g.addColorStop(1, `rgba(${b.hue},0)`);
+      ctx.beginPath();
+      ctx.arc(px, py, b.r, 0, Math.PI * 2);
+      ctx.fillStyle = g; ctx.fill();
+    });
+    ctx.restore();
 
     // ── Drifting dust motes ──
     dust.forEach(p => {

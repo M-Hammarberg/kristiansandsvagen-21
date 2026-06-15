@@ -341,6 +341,17 @@ body {
 }
 .cost-summary-inner { position: relative; z-index: 1; }
 .cost-rows { margin-bottom: 4px; }
+.cost-sublabel {
+  font-family: "Montserrat", sans-serif; font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; color: #8a6f2e; font-weight: 600;
+  margin: 4px 0 10px;
+}
+.cost-sublabel:not(:first-child) { margin-top: 20px; }
+.cost-row.done-row span:first-child::before {
+  content: '✓'; color: #81c784; font-weight: 700; margin-right: 8px; font-size: .72rem;
+}
+.cost-done-total { font-weight: 600 !important; color: #1a1917 !important; border-bottom: none; }
+.cost-done-total span:last-child { color: #8a6f2e !important; font-size: .88rem; }
 .cost-row {
   display: flex; justify-content: space-between; align-items: baseline;
   padding: 10px 0;
@@ -777,6 +788,14 @@ body {
   <div class="cost-summary">
     <canvas class="cost-summary-canvas" id="costCanvas"></canvas>
     <div class="cost-summary-inner">
+      <div class="cost-sublabel">Redan betalt &amp; klart</div>
+      <div class="cost-rows" id="costDoneRows"></div>
+      <div class="cost-row cost-done-total">
+        <span>Summa redan investerat</span>
+        <span id="costDoneTotal"></span>
+      </div>
+      <div class="cost-divider"></div>
+      <div class="cost-sublabel">Planerade renoveringar</div>
       <div class="cost-rows" id="costRows"></div>
       <div class="cost-divider"></div>
       <div class="cost-row cost-total">
@@ -912,6 +931,21 @@ body {
   document.getElementById('costTotal').textContent = fmt(totalMaterial);
   document.getElementById('costSaving').textContent = '~' + fmt(totalLabor);
   document.getElementById('costGrand').textContent = fmt(totalMaterial + totalLabor);
+
+  // Already completed & paid — built from the "done" timeline steps with a cost
+  const doneRows = document.getElementById('costDoneRows');
+  let doneTotal = 0;
+  document.querySelectorAll('.timeline-item[data-status="done"]').forEach(item => {
+    const cost = parseInt(item.dataset.cost, 10) || 0;
+    if (!cost) return;
+    doneTotal += cost;
+    const name = item.querySelector('h3').textContent.trim();
+    const row = document.createElement('div');
+    row.className = 'cost-row done-row';
+    row.innerHTML = `<span>${name}</span><span>${fmt(cost)}</span>`;
+    doneRows.appendChild(row);
+  });
+  document.getElementById('costDoneTotal').textContent = fmt(doneTotal);
 })();
 
 // ── Progress counter ──

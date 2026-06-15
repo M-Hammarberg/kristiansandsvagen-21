@@ -106,7 +106,7 @@ body {
   border-radius: 2px; overflow: hidden;
 }
 .progress-fill {
-  position: relative; height: 100%;
+  position: relative; height: 100%; overflow: hidden;
   background: linear-gradient(90deg, var(--gold2), var(--gold), var(--gold2));
   background-size: 200% 100%;
   border-radius: 2px;
@@ -970,9 +970,11 @@ body {
   document.getElementById('costTotal').textContent = fmt(totalMaterial);
   document.getElementById('costGrand').textContent = fmt(totalMaterial + totalLabor + doneTotal);
 
-  // Estimated current market value = valuation (asking price) + completed investments
+  // Estimated current market value = valuation + completed investments,
+  // minus the part already baked into the 4,5 Mkr valuation (100k)
   const VALUATION = 4500000;
-  document.getElementById('costValue').textContent = fmt(VALUATION + doneTotal);
+  const ALREADY_IN_VALUATION = 100000;
+  document.getElementById('costValue').textContent = fmt(VALUATION + doneTotal - ALREADY_IN_VALUATION);
 })();
 
 // ── Progress counter ──

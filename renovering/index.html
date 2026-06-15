@@ -1495,7 +1495,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
       drawProgress = Math.min((now - t0) / 1100, 1);
       draw();
       if (drawProgress < 1) requestAnimationFrame(anim);
-      else { updateReadout(); setInterval(tick, 2200); }
+      else { updateReadout(); setInterval(tick, 30000); }
     })(t0);
   }
 

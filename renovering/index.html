@@ -397,6 +397,26 @@ body {
 .cost-value > span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.25rem; color: #2e7d4f !important; font-weight: 700; display: inline-block; }
 .cost-value:hover > span:last-child { animation: shake .4s ease; }
 
+/* ─── ROI / värdekalkylator ─── */
+.roi-card { background: rgba(242,236,228,.92); border: 1px solid rgba(201,165,90,.4); border-radius: 6px; padding: 30px 34px; margin-bottom: 80px; }
+.roi-intro { font-size: .82rem; line-height: 1.6; color: rgba(40,36,30,.8); margin: 0 0 22px; max-width: 640px; }
+.roi-list { display: flex; flex-direction: column; }
+.roi-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(201,165,90,.14); cursor: pointer; user-select: none; transition: opacity .25s ease; }
+.roi-item.off { opacity: .42; }
+.roi-check { flex-shrink: 0; width: 20px; height: 20px; border-radius: 4px; border: 1.5px solid var(--gold2); background: transparent; position: relative; transition: all .2s ease; }
+.roi-item.on .roi-check { background: var(--gold2); border-color: var(--gold2); }
+.roi-check::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: .7rem; font-weight: 700; opacity: 0; transform: scale(.6); transition: all .2s ease; }
+.roi-item.on .roi-check::after { opacity: 1; transform: scale(1); }
+.roi-name { flex: 1; font-size: .82rem; color: #1a1917; }
+.roi-cost { font-size: .78rem; font-weight: 500; color: #8a6f2e; white-space: nowrap; }
+.roi-result { margin-top: 22px; padding-top: 4px; }
+.roi-stat { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0; font-size: .82rem; color: rgba(40,36,30,.85); border-bottom: 1px solid rgba(201,165,90,.12); }
+.roi-stat .rv { font-weight: 600; color: #8a6f2e; white-space: nowrap; }
+.roi-final { padding-top: 16px; border-bottom: none; }
+.roi-final .rl { font-family: "Libre Baskerville", serif; font-size: .9rem; color: #1a1917; }
+.roi-final .rv { font-family: "Libre Baskerville", serif; font-size: 1.3rem; color: #2e7d4f; font-weight: 700; }
+@media(max-width:768px){ .roi-card { padding: 22px 20px; } .roi-name { font-size: .76rem; } }
+
 /* ─── Live value ticker ─── */
 .ticker-card {
   position: relative; background: rgba(242,236,228,.92);
@@ -866,6 +886,22 @@ body {
         <span>Beräknat slutvärde <span class="cost-note">(utgångspris + tillfört värde)</span></span>
         <span id="costValue"></span>
       </div>
+    </div>
+  </div>
+
+  <!-- ROI / VÄRDEKALKYLATOR -->
+  <div class="section-heading" style="margin-top: 80px;">
+    <h2>Räkna på värdet</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="roi-card">
+    <p class="roi-intro">Bocka i de renoveringar du vill räkna med — tillfört värde och beräknat slutvärde uppdateras direkt. Redan utförda investeringar (tak &amp; bergvärme) är alltid medräknade.</p>
+    <div class="roi-list" id="roiList"></div>
+    <div class="roi-result">
+      <div class="roi-stat"><span class="rl">Vald materialkostnad</span><span class="rv" id="roiMaterial">—</span></div>
+      <div class="roi-stat"><span class="rl">Totalt tillfört värde</span><span class="rv" id="roiAdded">—</span></div>
+      <div class="roi-stat roi-final"><span class="rl">Beräknat slutvärde</span><span class="rv" id="roiFinal">—</span></div>
     </div>
   </div>
 
@@ -1362,6 +1398,77 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     requestAnimationFrame(frame);
   }
   frame();
+})();
+</script>
+
+<script>
+// ── ROI / värdekalkylator ──
+(function(){
+  const list = document.getElementById('roiList');
+  if (!list) return;
+
+  const VALUATION = 4500000;
+  // utförda (betalda) investeringar från tidslinjens klara steg
+  let DONE = 0;
+  document.querySelectorAll('.timeline-item[data-status="done"]').forEach(i => {
+    DONE += parseInt(i.dataset.cost, 10) || 0;
+  });
+
+  // Planerade renoveringar: material (utlägg) + arbete (= tillfört värde)
+  const projects = [
+    { name: 'Elbilsladdare',                          material: 8000,   labor: 8000   },
+    { name: 'Nytt golv och tapet i hall nere',        material: 12000,  labor: 15000  },
+    { name: 'Nytt golv och tapet i vardagsrum uppe',  material: 18000,  labor: 20000  },
+    { name: 'Fixa badrum nere',                       material: 22000,  labor: 25000  },
+    { name: 'Stenplattor uteplats & ingång framsida', material: 18000,  labor: 20000  },
+    { name: 'Inglasat uterum på framsida',            material: 150000, labor: 180000 },
+    { name: 'Trall ute & utekök',                     material: 50000,  labor: 60000  },
+    { name: 'Nytt kakel i relax & bygga om bastu',    material: 55000,  labor: 65000  },
+    { name: 'Riva köksvägg för öppen planlösning',    material: 10000,  labor: 15000  },
+    { name: 'Renovera kök',                           material: 150000, labor: 220000 },
+  ];
+
+  const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
+  const elMat = document.getElementById('roiMaterial');
+  const elAdd = document.getElementById('roiAdded');
+  const elFin = document.getElementById('roiFinal');
+
+  projects.forEach((p, i) => {
+    p.on = true;
+    const row = document.createElement('div');
+    row.className = 'roi-item on';
+    row.innerHTML = `<span class="roi-check"></span><span class="roi-name">${p.name}</span><span class="roi-cost">+ ${fmt(p.material + p.labor)}</span>`;
+    row.addEventListener('click', () => {
+      p.on = !p.on;
+      row.classList.toggle('on', p.on);
+      row.classList.toggle('off', !p.on);
+      recalc();
+    });
+    list.appendChild(row);
+  });
+
+  // animerad uppräkning
+  function animateTo(el, to){
+    const from = parseInt((el.dataset.v || '0'), 10);
+    el.dataset.v = to;
+    const t0 = performance.now(), dur = 450;
+    (function step(now){
+      const k = Math.min((now - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(from + (to - from) * e);
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+
+  function recalc(){
+    let selMaterial = 0, selAdded = 0;
+    projects.forEach(p => { if (p.on){ selMaterial += p.material; selAdded += p.material + p.labor; } });
+    const tillfort = DONE + selAdded;
+    animateTo(elMat, selMaterial);
+    animateTo(elAdd, tillfort);
+    animateTo(elFin, VALUATION + tillfort);
+  }
+  recalc();
 })();
 </script>
 

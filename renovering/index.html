@@ -1406,8 +1406,8 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
 
   let drawProgress = 0;   // 0..1 inritning vid start
   function draw(){
-    const padX = 6, padTop = 10, padBot = 18;
-    const x = i => (i / (N - 1)) * (W - padX * 2) + padX;
+    const padX = 6, padTop = 10, padBot = 18, padR = 42;
+    const x = i => (i / (N - 1)) * (W - padX - padR) + padX;
     const y = v => {
       const p = Math.max(PMIN, Math.min(PMAX, pctOf(v)));
       return padTop + (PMAX - p) / (PMAX - PMIN) * (H - padTop - padBot);
@@ -1426,13 +1426,13 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
       const zero = p === 0;
       ctx.beginPath();
       ctx.setLineDash(zero ? [] : [3, 4]);
-      ctx.moveTo(padX, gy); ctx.lineTo(W - 34, gy);
+      ctx.moveTo(padX, gy); ctx.lineTo(W - padR + 4, gy);
       ctx.strokeStyle = zero ? 'rgba(80,75,68,.35)' : 'rgba(80,75,68,.12)';
       ctx.lineWidth = 1; ctx.stroke();
       ctx.setLineDash([]);
       ctx.fillStyle = zero ? 'rgba(80,75,68,.7)' : 'rgba(80,75,68,.45)';
       ctx.textAlign = 'left';
-      ctx.fillText((p > 0 ? '+' : '') + p + ' %', W - 30, gy);
+      ctx.fillText((p > 0 ? '+' : '') + p + ' %', W - padR + 10, gy);
     });
 
     // area fill (ner till nolllinjen = dagens värde)

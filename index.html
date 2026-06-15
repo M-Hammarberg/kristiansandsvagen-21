@@ -28,8 +28,6 @@
 <meta name="twitter:description" content="Välskött villa från 1988 i naturnära Skogshöjden, Trollhättan. 171 m² · 6 rum · 885 m² tomt.">
 <meta name="twitter:image" content="https://xn--kristiansandsvgen21-twb.se/images/utsida/hero.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
 <style>
 :root {
   --obsidian: #0d0d0d;
@@ -517,52 +515,9 @@ body {
 .pbox-val.neg { color: #b87070; }
 
 /* ─── MAP ─── */
-.map-section { position: relative; background: var(--charcoal); padding: 100px 0 0; border-top: 1px solid var(--border); }
+.map-section { position: relative; }
 .map-wrap { height: 480px; }
 .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; filter: grayscale(.4) contrast(1.1) brightness(.95); }
-
-/* ─── Interactive route map ─── */
-.map-head { max-width: 1280px; margin: 0 auto; padding: 0 64px 28px; }
-.map-dests { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
-.map-dest {
-  font-family: "Montserrat", sans-serif; font-size: .68rem; font-weight: 500;
-  letter-spacing: .14em; text-transform: uppercase; color: var(--champagne);
-  background: rgba(255,255,255,.03); border: 1px solid rgba(201,165,90,.35);
-  padding: 11px 22px; border-radius: 2px; cursor: pointer;
-  transition: all .35s ease; display: inline-flex; align-items: center; gap: 9px;
-}
-.map-dest:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,165,90,.08); }
-.map-dest.active { background: var(--gold); border-color: var(--gold); color: #14110b; }
-.map-dest .md-time { font-size: .62rem; opacity: .8; letter-spacing: .08em; }
-.map-canvas-wrap { position: relative; height: 520px; }
-#routeMap { width: 100%; height: 100%; background: #0d0d0d; z-index: 0; }
-.leaflet-tile { filter: grayscale(.5) contrast(1.05) brightness(.92); }
-.map-info {
-  position: absolute; left: 24px; bottom: 24px; z-index: 500;
-  background: rgba(13,13,13,.86); backdrop-filter: blur(8px);
-  border: 1px solid rgba(201,165,90,.3); border-radius: 3px;
-  padding: 18px 24px; min-width: 210px; max-width: calc(100% - 48px);
-  color: var(--cream); pointer-events: none;
-}
-.map-info .mi-to { font-family: "Montserrat", sans-serif; font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; color: var(--champagne); opacity: .75; }
-.map-info .mi-dest { font-family: "Libre Baskerville", serif; font-style: italic; font-size: 1.3rem; margin: 4px 0 12px; }
-.map-info .mi-stats { display: flex; gap: 26px; }
-.map-info .mi-stat .v { font-size: 1.35rem; font-weight: 300; color: #fff; }
-.map-info .mi-stat .l { font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; opacity: .6; }
-.map-info.loading .mi-stats { opacity: .4; }
-.map-info .mi-hint { margin-top: 12px; font-family: "Montserrat", sans-serif; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--champagne); opacity: .65; }
-.map-pin {
-  width: 26px; height: 26px; border-radius: 50% 50% 50% 0;
-  background: var(--gold); transform: rotate(-45deg);
-  border: 2px solid #fff; box-shadow: 0 3px 10px rgba(0,0,0,.5);
-}
-.map-pin.dest { background: #fff; border-color: var(--gold); }
-@media(max-width:768px){
-  .map-head { padding: 0 24px 22px; }
-  .map-canvas-wrap { height: 440px; }
-  .map-info { left: 12px; bottom: 12px; right: 12px; padding: 14px 18px; min-width: 0; }
-  .map-info .mi-stats { gap: 18px; }
-}
 
 /* ─── SHARE ─── */
 .share-band { background: var(--ivory2); padding: 100px 0; border-top: 1px solid var(--border-light); }
@@ -943,9 +898,10 @@ footer {
   .price-section { background: #1a1917 !important; }
   .price-section * { color: inherit !important; }
   
-  /* Map section — keep dark/cinematic */
-  .map-section { background: var(--charcoal) !important; }
-
+  /* Map section */
+  .map-section { background: #f7f3ee !important; }
+  .map-section h2, .map-section p { color: #1a1917 !important; }
+  
   /* Share section */
   .share-section { background: #f7f3ee !important; }
   .share-section h2, .share-section p, .share-text { color: #1a1917 !important; }
@@ -1223,134 +1179,10 @@ footer {
 
 <!-- ═══ MAP ═══ -->
 <div class="map-section" id="karta">
-  <div class="map-head">
-    <div class="eyebrow" style="color:var(--gold)">Läget</div>
-    <h2 class="h2 h2-light">Avstånd från <em>hemmet</em></h2>
-    <div class="map-dests" id="mapDests"></div>
-  </div>
-  <div class="map-canvas-wrap">
-    <div id="routeMap"></div>
-    <div class="map-info" id="mapInfo">
-      <div class="mi-to" id="miTo">Utgångspunkt</div>
-      <div class="mi-dest" id="miDest">Kristiansandsvägen 21</div>
-      <div class="mi-stats">
-        <div class="mi-stat"><div class="v" id="miTime">—</div><div class="l">Restid (bil)</div></div>
-        <div class="mi-stat"><div class="v" id="miDist">—</div><div class="l">Avstånd</div></div>
-      </div>
-      <div class="mi-hint" id="miHint">Välj ett mål ovan för vägbeskrivning</div>
-    </div>
+  <div class="map-wrap">
+    <iframe src="https://maps.google.com/maps?q=Kristiansandsv%C3%A4gen+21,+Trollh%C3%A4ttan,+Sverige&output=embed&z=15" title="Karta" loading="lazy"></iframe>
   </div>
 </div>
-<script>
-// ── Interactive route map: Kristiansandsvägen 21 → destinations ──
-window.addEventListener('DOMContentLoaded', function(){
-  const ORIGIN_Q = 'Kristiansandsvägen 21, 461 65 Trollhättan, Sverige';
-  // Destinations geocoded client-side; specific queries for accuracy
-  const DESTS = [
-    { label: 'Centrum',  q: 'Drottningtorget, Trollhättan, Sverige' },
-    { label: 'Överby',   q: 'Överby köpcentrum, Trollhättan, Sverige' },
-    { label: 'Golf',     q: 'Onsjö Golfklubb, Trollhättan, Sverige' },
-  ];
-  const FALLBACK_ORIGIN = [58.2640, 12.3360]; // approx Skogshöjden if geocode fails
-
-  const mapEl = document.getElementById('routeMap');
-  if (!mapEl || typeof L === 'undefined') return;
-
-  const cache = {};
-  async function geocode(q){
-    if (cache[q]) return cache[q];
-    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=se&q=' + encodeURIComponent(q);
-    const r = await fetch(url, { headers: { 'Accept-Language': 'sv' } });
-    const j = await r.json();
-    if (!j.length) throw new Error('no geocode for ' + q);
-    const p = [parseFloat(j[0].lat), parseFloat(j[0].lon)];
-    cache[q] = p; return p;
-  }
-
-  async function route(a, b){
-    const url = `https://router.project-osrm.org/route/v1/driving/${a[1]},${a[0]};${b[1]},${b[0]}?overview=full&geometries=geojson`;
-    const r = await fetch(url);
-    const j = await r.json();
-    if (!j.routes || !j.routes.length) throw new Error('no route');
-    const rt = j.routes[0];
-    return {
-      coords: rt.geometry.coordinates.map(c => [c[1], c[0]]),
-      duration: rt.duration, // seconds
-      distance: rt.distance, // metres
-    };
-  }
-
-  function pin(cls){ return L.divIcon({ className: '', html: `<div class="map-pin ${cls}"></div>`, iconSize: [26,26], iconAnchor: [13,31] }); }
-  function fmtTime(s){ const m = Math.round(s/60); return m < 60 ? m + ' min' : Math.floor(m/60) + ' h ' + (m%60) + ' min'; }
-  function fmtDist(m){ return (m/1000).toFixed(m < 10000 ? 1 : 0).replace('.', ',') + ' km'; }
-
-  const map = L.map(mapEl, { scrollWheelZoom: false, attributionControl: true });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19,
-  }).addTo(map);
-  map.setView(FALLBACK_ORIGIN, 13);
-
-  const info = document.getElementById('mapInfo');
-  const elDest = document.getElementById('miDest'), elTime = document.getElementById('miTime'), elDist = document.getElementById('miDist');
-  let originLatLng = null, originMarker = null, routeLine = null, destMarker = null;
-
-  // Build buttons
-  const wrap = document.getElementById('mapDests');
-  DESTS.forEach((d, i) => {
-    const b = document.createElement('button');
-    b.className = 'map-dest'; b.type = 'button';
-    b.innerHTML = `<span>${d.label}</span>`;
-    b.addEventListener('click', () => show(i));
-    d.btn = b; wrap.appendChild(b);
-  });
-
-  async function show(i){
-    const d = DESTS[i];
-    DESTS.forEach(x => x.btn.classList.remove('active'));
-    d.btn.classList.add('active');
-    info.classList.add('loading');
-    document.getElementById('miTo').textContent = 'Vägbeskrivning till';
-    document.getElementById('miHint').style.display = 'none';
-    elDest.textContent = d.label;
-    elTime.textContent = '…'; elDist.textContent = '…';
-    try {
-      const dest = await geocode(d.q);
-      const r = await route(originLatLng, dest);
-      if (routeLine) map.removeLayer(routeLine);
-      if (destMarker) map.removeLayer(destMarker);
-      // Soft route: a wide translucent casing under a smooth golden line
-      const casing = L.polyline(r.coords, { color: '#c9a55a', weight: 11, opacity: .18, lineJoin: 'round', lineCap: 'round', smoothFactor: 2.5 });
-      const main   = L.polyline(r.coords, { color: '#e3c477', weight: 4.5, opacity: .95, lineJoin: 'round', lineCap: 'round', smoothFactor: 2.5 });
-      routeLine = L.layerGroup([casing, main]).addTo(map);
-      destMarker = L.marker(dest, { icon: pin('dest') }).addTo(map).bindPopup(d.label);
-      map.fitBounds(main.getBounds(), { padding: [70, 70] });
-      elTime.textContent = fmtTime(r.duration);
-      elDist.textContent = fmtDist(r.distance);
-      info.classList.remove('loading');
-      // keep label as time on button
-      d.btn.innerHTML = `<span>${d.label}</span><span class="md-time">· ${fmtTime(r.duration)}</span>`;
-    } catch(e){
-      elTime.textContent = '—'; elDist.textContent = 'Kunde inte hämta';
-      info.classList.remove('loading');
-    }
-  }
-
-  async function init(){
-    try { originLatLng = await geocode(ORIGIN_Q); }
-    catch(e){ originLatLng = FALLBACK_ORIGIN; }
-    originMarker = L.marker(originLatLng, { icon: pin('') }).addTo(map).bindPopup('Kristiansandsvägen 21').openPopup();
-    map.setView(originLatLng, 15);
-    // Start with just the home location — no route until a destination is chosen
-  }
-
-  // Init when the section scrolls near view (saves API calls on load)
-  let started = false;
-  const obs = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting && !started){ started = true; obs.disconnect(); setTimeout(() => { map.invalidateSize(); init(); }, 100); }
-  }, { rootMargin: '200px' });
-  obs.observe(document.getElementById('karta'));
-});
-</script>
 
 <!-- ═══ SHARE ═══ -->
 <div class="share-band" id="dela">

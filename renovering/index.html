@@ -43,12 +43,11 @@ body::before {
 
 /* ─── NAV ─── */
 .site-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  position: sticky; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center;
   padding: env(safe-area-inset-top, 0px) 40px 0;
   height: calc(64px + env(safe-area-inset-top, 0px));
-  background: rgba(13,13,13,.92);
-  backdrop-filter: blur(12px);
+  background: var(--obsidian);
   border-bottom: 1px solid var(--border);
 }
 .nav-logo {
@@ -74,7 +73,7 @@ body::before {
 .page-hero {
   position: relative; z-index: 1;
   background: rgba(26,25,23,.92);
-  padding: 140px 40px 80px;
+  padding: calc(64px + env(safe-area-inset-top, 0px)) 40px 80px;
   border-bottom: 1px solid var(--border);
 }
 .page-hero-inner { max-width: 900px; margin: 0 auto; }
@@ -463,10 +462,10 @@ body::before {
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:640px){
-  .site-nav { padding: 0 20px; }
+  .site-nav { padding: env(safe-area-inset-top, 0px) 20px 0; }
   .nav-links { display: none; }
   .nav-hamburger { display: flex; }
-  .page-hero { padding: 110px 20px 50px; }
+  .page-hero { padding: calc(52px + env(safe-area-inset-top, 0px)) 20px 50px; }
   .page-hero h1 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
   .page-hero p { font-size: .8rem; max-width: 100%; }
   .content-wrap { padding: 48px 20px; }
@@ -584,6 +583,15 @@ body::before {
   </div>
 </div>
 
+<!-- ═══ HERO ═══ -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">Framtidsplaner</div>
+    <h1>Renoveringsplaner<br><em>steg för steg</em></h1>
+    <p>Här samlar vi allt vi planerar att göra med huset — i den ordning vi tänkt genomföra det. Från stora strukturförändringar till detaljer som lyfter helheten.</p>
+  </div>
+</div>
+
 <nav class="site-nav">
   <a href="/" class="nav-logo"><em>Kristiansandsvägen</em> <span>21</span></a>
   <div class="nav-links">
@@ -613,15 +621,6 @@ body::before {
   <a href="/#karta">Karta</a>
   <a href="/#dela">Dela</a>
   <a href="/renovering" class="active">Renovering</a>
-</div>
-
-<!-- ═══ HERO ═══ -->
-<div class="page-hero">
-  <div class="page-hero-inner">
-    <div class="eyebrow">Framtidsplaner</div>
-    <h1>Renoveringsplaner<br><em>steg för steg</em></h1>
-    <p>Här samlar vi allt vi planerar att göra med huset — i den ordning vi tänkt genomföra det. Från stora strukturförändringar till detaljer som lyfter helheten.</p>
-  </div>
 </div>
 
 <!-- ═══ PROGRESS ═══ -->

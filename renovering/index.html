@@ -404,7 +404,14 @@ body {
   padding: 28px 32px; margin-bottom: 80px; overflow: hidden;
 }
 .ticker-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 16px; }
-.ticker-label { font-family: "Montserrat", sans-serif; font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: #8a6f2e; font-weight: 600; margin-bottom: 8px; }
+.ticker-label { font-family: "Montserrat", sans-serif; font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: #8a6f2e; font-weight: 600; margin-bottom: 8px; display: inline-flex; align-items: center; }
+.live-badge { display: inline-flex; align-items: center; gap: 5px; margin-left: 10px; color: #2e7d4f; font-size: .55rem; letter-spacing: .16em; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #2e7d4f; box-shadow: 0 0 0 0 rgba(46,125,79,.55); animation: livePulse 1.5s ease-out infinite; }
+@keyframes livePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(46,125,79,.55); }
+  70%  { box-shadow: 0 0 0 7px rgba(46,125,79,0); }
+  100% { box-shadow: 0 0 0 0 rgba(46,125,79,0); }
+}
 .ticker-value { font-family: "Libre Baskerville", serif; font-size: 2rem; color: #1a1917; font-weight: 700; letter-spacing: .01em; transition: color .25s ease; }
 .ticker-value.up { color: #2e7d4f; } .ticker-value.down { color: #b5483b; }
 .ticker-change { text-align: right; font-family: "Montserrat", sans-serif; font-weight: 600; color: #2e7d4f; white-space: nowrap; }
@@ -871,7 +878,7 @@ body {
   <div class="ticker-card">
     <div class="ticker-head">
       <div>
-        <div class="ticker-label">Indikativt marknadsvärde</div>
+        <div class="ticker-label">Indikativt marknadsvärde <span class="live-badge"><span class="live-dot"></span>Live</span></div>
         <div class="ticker-value" id="tickerValue">—</div>
       </div>
       <div class="ticker-change" id="tickerChange">
@@ -1453,11 +1460,14 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     ctx.strokeStyle = line; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.stroke();
 
-    // glowing last dot
+    // pulsing live dot
     const dx = x(shown - 1), dy = y(pts[shown - 1]);
+    const pulse = (Math.sin(performance.now() / 420) + 1) / 2;   // 0..1
+    ctx.beginPath(); ctx.arc(dx, dy, 7 + pulse * 7, 0, Math.PI * 2);
+    ctx.fillStyle = (up ? 'rgba(46,125,79,' : 'rgba(181,72,59,') + (0.22 - pulse * 0.16) + ')'; ctx.fill();
     ctx.beginPath(); ctx.arc(dx, dy, 8, 0, Math.PI * 2);
-    ctx.fillStyle = (up ? 'rgba(46,125,79,.18)' : 'rgba(181,72,59,.18)'); ctx.fill();
-    ctx.beginPath(); ctx.arc(dx, dy, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = (up ? 'rgba(46,125,79,.15)' : 'rgba(181,72,59,.15)'); ctx.fill();
+    ctx.beginPath(); ctx.arc(dx, dy, 3.8, 0, Math.PI * 2);
     ctx.fillStyle = line; ctx.fill();
   }
 
@@ -1476,18 +1486,29 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     }
   }
 
-  // En ny "tick" — lugn slumpvandring som drar mot CENTER (oftast strax upp)
+  // Var 5:e sekund: skjut in en ny punkt och sätt ett nytt mål (max ±0,1 %)
+  let target = pts[N - 1];
   function tick(){
+    pts.push(pts[N - 1]); pts.shift();   // scrolla fönstret
     const last = pts[N - 1];
-    const noise = (Math.random() - .5) * BASE * 0.0013;  // litet brus
-    let delta = (CENTER - last) * 0.05 + noise;          // mean reversion mot CENTER
-    const maxStep = BASE * 0.001;                        // max ±0,1 % per steg
+    const noise = (Math.random() - .5) * BASE * 0.0013;
+    let delta = (CENTER - last) * 0.05 + noise;
+    const maxStep = BASE * 0.001;        // max ±0,1 % per steg
     delta = Math.max(-maxStep, Math.min(maxStep, delta));
-    let next = Math.max(LOW, Math.min(HIGH, last + delta));
-    const dir = next >= last ? 'up' : 'down';
-    pts.push(next); pts.shift();
+    target = Math.max(LOW, Math.min(HIGH, last + delta));
+    pendingFlash = target >= last ? 'up' : 'down';
+  }
+
+  // Kontinuerlig loop: mjuk glidning mot målet + pulserande punkt
+  let pendingFlash = null;
+  function render(){
+    const last = pts[N - 1];
+    if (Math.abs(target - last) > 1) pts[N - 1] = last + (target - last) * 0.05;
+    else pts[N - 1] = target;
     draw();
-    updateReadout(dir);
+    updateReadout(pendingFlash);
+    pendingFlash = null;
+    requestAnimationFrame(render);
   }
 
   function startIntro(){
@@ -1497,7 +1518,7 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
       drawProgress = Math.min((now - t0) / 1100, 1);
       draw();
       if (drawProgress < 1) requestAnimationFrame(anim);
-      else { updateReadout(); setInterval(tick, 10000); }
+      else { updateReadout(); requestAnimationFrame(render); setInterval(tick, 5000); }
     })(t0);
   }
 

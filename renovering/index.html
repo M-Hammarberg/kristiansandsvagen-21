@@ -1377,11 +1377,15 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
 
   const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
 
-  // Basvärde = beräknat slutvärde (läses live från kostnadsöversikten)
+  // Basvärde = utgångspris/värdering + redan utförda (betalda) investeringar.
+  // Planerade renoveringar räknas INTE in — de är inte gjorda än.
   function readBase(){
-    const t = (document.getElementById('costValue') || {}).textContent || '';
-    const n = parseInt(t.replace(/\D/g, ''), 10);
-    return n && n > 0 ? n : 5821000;
+    const VALUATION = 4500000;
+    let done = 0;
+    document.querySelectorAll('.timeline-item[data-status="done"]').forEach(i => {
+      done += parseInt(i.dataset.cost, 10) || 0;
+    });
+    return VALUATION + done;          // 4 500 000 + utfört
   }
   const BASE = readBase();           // dagens värde (= 100 %)
   const N = 70;                      // antal punkter i fönstret

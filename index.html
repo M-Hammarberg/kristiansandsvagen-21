@@ -1309,14 +1309,14 @@ footer {
   window.addEventListener('resize', resizeCanvas);
 
   // Slow drifting blobs — soft warm "kluttar" that glow on the dark base
-  const blobs = Array.from({length: 12}, (_, i) => ({
+  const blobs = Array.from({length: 7}, (_, i) => ({
     x: Math.random(),
     y: Math.random(),
-    r: 140 + Math.random() * 190,
+    r: 170 + Math.random() * 220,
     vx: (Math.random() - .5) * .00012,
     vy: (Math.random() - .5) * .00008,
     hue: i % 2 === 0 ? '224,190,128' : '198,166,112',
-    a:  .42 + Math.random() * .22,
+    a:  .34 + Math.random() * .18,
     phase: Math.random() * Math.PI * 2,
   }));
 

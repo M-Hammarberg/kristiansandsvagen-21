@@ -363,7 +363,7 @@ body {
   content: '✓'; color: #81c784; font-weight: 700; margin-right: 8px; font-size: .72rem;
 }
 .cost-done-total { font-weight: 600 !important; color: #1a1917 !important; border-bottom: none; }
-.cost-done-total span:last-child { color: #8a6f2e !important; font-size: .88rem; }
+.cost-done-total > span:last-child { color: #8a6f2e !important; font-size: .88rem; }
 .cost-row {
   display: flex; justify-content: space-between; align-items: baseline;
   padding: 10px 0;
@@ -372,30 +372,30 @@ body {
   cursor: default;
 }
 .cost-row:hover { background: rgba(201,165,90,.04); }
-.cost-row span:last-child {
+.cost-row > span:last-child {
   font-weight: 500; color: var(--champagne2); white-space: nowrap; margin-left: 16px;
   display: inline-block;
   transition: color .2s;
 }
-.cost-row:hover span:last-child {
+.cost-row:hover > span:last-child {
   animation: shake .4s ease;
   color: var(--gold);
 }
 .cost-divider { height: 1px; background: rgba(201,165,90,.25); margin: 8px 0; }
 .cost-total { font-weight: 600 !important; color: #1a1917 !important; border-bottom: none; cursor: default; }
-.cost-total span:last-child { color: #8a6f2e !important; font-size: .9rem; display: inline-block; }
-.cost-total:hover span:last-child { animation: shake .4s ease; color: var(--gold2) !important; }
+.cost-total > span:last-child { color: #8a6f2e !important; font-size: .9rem; display: inline-block; }
+.cost-total:hover > span:last-child { animation: shake .4s ease; color: var(--gold2) !important; }
 .cost-saving { color: #1a1917 !important; border-bottom: none; cursor: default; }
-.cost-saving span:last-child { color: #81c784 !important; font-size: .85rem; display: inline-block; }
-.cost-saving:hover span:last-child { animation: shake .4s ease; }
+.cost-saving > span:last-child { color: #81c784 !important; font-size: .85rem; display: inline-block; }
+.cost-saving:hover > span:last-child { animation: shake .4s ease; }
 .cost-grand { padding-top: 14px; border-bottom: none; cursor: default; }
-.cost-grand span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: #1a1917; }
-.cost-grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.1rem; color: #8a6f2e !important; font-weight: 700; display: inline-block; }
-.cost-grand:hover span:last-child { animation: shake .4s ease; }
+.cost-grand > span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: #1a1917; }
+.cost-grand > span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.1rem; color: #8a6f2e !important; font-weight: 700; display: inline-block; }
+.cost-grand:hover > span:last-child { animation: shake .4s ease; }
 .cost-value { padding-top: 14px; border-bottom: none; cursor: default; }
-.cost-value span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: #1a1917; }
-.cost-value span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.25rem; color: #2e7d4f !important; font-weight: 700; display: inline-block; }
-.cost-value:hover span:last-child { animation: shake .4s ease; }
+.cost-value > span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: #1a1917; }
+.cost-value > span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.25rem; color: #2e7d4f !important; font-weight: 700; display: inline-block; }
+.cost-value:hover > span:last-child { animation: shake .4s ease; }
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:640px){
@@ -418,8 +418,8 @@ body {
   .cost-tag { font-size: .7rem; padding: 10px 14px; flex-wrap: wrap; gap: 4px; }
   .cost-summary { padding: 24px 20px; }
   .cost-row { font-size: .72rem; flex-direction: column; gap: 2px; padding: 8px 0; }
-  .cost-row span:last-child { margin-left: 0; }
-  .cost-grand span:last-child { font-size: .95rem !important; }
+  .cost-row > span:last-child { margin-left: 0; }
+  .cost-grand > span:last-child { font-size: .95rem !important; }
   .cards-grid { grid-template-columns: 1fr; gap: 16px; }
   .card-body { padding: 16px 18px 20px; }
   .card-body h4 { font-size: .9rem; }
@@ -823,13 +823,8 @@ body {
         <span id="costSaving"></span>
       </div>
       <div class="cost-divider"></div>
-      <div class="cost-row cost-grand">
-        <span>Total renoveringsinvestering <span class="cost-note">(utfört + planerat · material + arbete)</span></span>
-        <span id="costGrand"></span>
-      </div>
-      <div class="cost-divider"></div>
       <div class="cost-row cost-value">
-        <span>Uppskattat marknadsvärde idag <span class="cost-note">(värdering + endast utförda investeringar — planerat ej inräknat)</span></span>
+        <span>Beräknat slutvärde <span class="cost-note">(värdering + utförda investeringar)</span></span>
         <span id="costValue"></span>
       </div>
     </div>
@@ -966,11 +961,9 @@ body {
   });
   document.getElementById('costDoneTotal').textContent = fmt(doneTotal);
 
-  // Total value added = planned (material + labor) + already invested
   document.getElementById('costTotal').textContent = fmt(totalMaterial);
-  document.getElementById('costGrand').textContent = fmt(totalMaterial + totalLabor + doneTotal);
 
-  // Estimated current market value = valuation + completed investments,
+  // Estimated final value = valuation + completed investments,
   // minus the part already baked into the 4,5 Mkr valuation (100k)
   const VALUATION = 4500000;
   const ALREADY_IN_VALUATION = 100000;

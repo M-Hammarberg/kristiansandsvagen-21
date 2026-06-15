@@ -833,8 +833,10 @@ footer {
 @keyframes diamondPop{from{transform:rotate(45deg) scale(0);opacity:0}to{transform:rotate(45deg) scale(1);opacity:1}}
 .loader-address{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--champagne);margin-bottom:14px;white-space:nowrap;opacity:0;animation:typeIn 1.2s cubic-bezier(.22,1,.36,1) 1s forwards;position:relative;z-index:2;text-align:center}
 @keyframes typeIn{from{opacity:0}to{opacity:1}}
-.loader-title{font-family:"Libre Baskerville",serif;font-size:clamp(1.8rem,7vw,6rem);font-weight:400;font-style:italic;color:#fff;line-height:1.05;text-align:center;opacity:0;padding:0 16px;word-break:break-word;transform:translateY(16px);animation:titleRise 1s cubic-bezier(.22,1,.36,1) 1.2s forwards;position:relative;z-index:2}
-@keyframes titleRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.loader-title{font-family:"Libre Baskerville",serif;font-size:clamp(1.8rem,7vw,6rem);font-weight:400;font-style:italic;color:#fff;line-height:1.05;text-align:center;opacity:1;padding:0 16px;word-break:break-word;position:relative;z-index:2}
+.loader-title .lt{display:inline-block;opacity:0;transform:translateY(22px);animation:letterRise .7s cubic-bezier(.22,1,.36,1) forwards}
+.loader-title .lt.sp{width:.28em}
+@keyframes letterRise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 .loader-sub{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:10px;opacity:0;animation:fadeIn .8s ease 1.5s forwards;position:relative;z-index:2}
 .loader-progress-wrap{width:160px;height:1px;background:rgba(255,255,255,.1);margin-top:28px;overflow:hidden;position:relative;z-index:2}
 .loader-progress-bar{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(to right,var(--gold2),var(--champagne),var(--gold2));background-size:200% auto;animation:progressFill 2.5s cubic-bezier(.4,0,.2,1) 0s forwards,shimmer 1.5s linear 1s infinite}
@@ -842,7 +844,9 @@ footer {
 .loader-pct{font-size:.58rem;letter-spacing:.16em;color:rgba(255,255,255,.2);margin-top:12px;min-width:40px;text-align:center;opacity:0;animation:fadeIn .4s ease 1s forwards;position:relative;z-index:2}
 #loader.dismissing{animation:loaderFade .7s ease forwards}
 @keyframes loaderFade{from{opacity:1}to{opacity:0}}
-.loader-num{font-family:"Libre Baskerville",serif;font-style:normal;font-weight:400;color:#fff;letter-spacing:.04em}
+.loader-num{font-family:"Libre Baskerville",serif;font-style:normal;font-weight:400;color:var(--champagne,#f0e0c0);letter-spacing:.04em;text-shadow:0 0 18px rgba(240,224,192,.85),0 0 40px rgba(212,175,110,.55)}
+.loader-num .lt{animation:letterRise .7s cubic-bezier(.22,1,.36,1) forwards,numGlow 2.4s ease-in-out infinite}
+@keyframes numGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.55)}}
 
 /* ═══ DARK MODE OVERRIDES ═══ */
 @media (prefers-color-scheme: dark) {
@@ -1207,6 +1211,35 @@ footer {
 </div>
 
 <script>
+
+// ── Loader title: split into letters for staggered reveal ──
+(function() {
+  const title = document.querySelector('.loader-title');
+  if (!title) return;
+  let i = 0;
+  const STEP = 70, BASE = 600; // ms — starts after address fades in
+  const wrap = (text, parent) => {
+    [...text].forEach(ch => {
+      const s = document.createElement('span');
+      s.className = ch === ' ' ? 'lt sp' : 'lt';
+      if (ch !== ' ') s.textContent = ch;
+      s.style.animationDelay = (BASE + i * STEP) + 'ms';
+      i++;
+      parent.appendChild(s);
+    });
+  };
+  [...title.childNodes].forEach(node => {
+    if (node.nodeType === 3) {            // plain text
+      const frag = document.createElement('span');
+      wrap(node.textContent, frag);
+      node.replaceWith(...frag.childNodes);
+    } else if (node.classList && node.classList.contains('loader-num')) {
+      const txt = node.textContent;
+      node.textContent = '';
+      wrap(txt, node);
+    }
+  });
+})();
 
 // ── Loading screen ──
 (function() {

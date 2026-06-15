@@ -106,11 +106,23 @@ body {
   border-radius: 2px; overflow: hidden;
 }
 .progress-fill {
-  height: 100%; background: linear-gradient(90deg, var(--gold2), var(--gold));
+  position: relative; height: 100%;
+  background: linear-gradient(90deg, var(--gold2), var(--gold), var(--gold2));
+  background-size: 200% 100%;
   border-radius: 2px;
   transition: width 1.2s cubic-bezier(.4,0,.2,1);
   width: 0;
+  animation: progressFlow 4s linear infinite;
 }
+/* Sweeping highlight so the bar always feels "alive" */
+.progress-fill::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  width: 40%; border-radius: 2px;
+  animation: progressSweep 2.8s ease-in-out infinite;
+}
+@keyframes progressFlow { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+@keyframes progressSweep { 0% { transform: translateX(-120%); } 60%,100% { transform: translateX(360%); } }
 .progress-stats {
   display: flex; gap: 40px; margin-top: 20px;
 }
@@ -380,6 +392,10 @@ body {
 .cost-grand span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: #1a1917; }
 .cost-grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.1rem; color: #8a6f2e !important; font-weight: 700; display: inline-block; }
 .cost-grand:hover span:last-child { animation: shake .4s ease; }
+.cost-value { padding-top: 14px; border-bottom: none; cursor: default; }
+.cost-value span:first-child { font-family: "Libre Baskerville", serif; font-size: .85rem; color: #1a1917; }
+.cost-value span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.25rem; color: #2e7d4f !important; font-weight: 700; display: inline-block; }
+.cost-value:hover span:last-child { animation: shake .4s ease; }
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:640px){
@@ -811,6 +827,11 @@ body {
         <span>Totalt värde tillfört fastigheten</span>
         <span id="costGrand"></span>
       </div>
+      <div class="cost-divider"></div>
+      <div class="cost-row cost-value">
+        <span>Uppskattat marknadsvärde idag <span class="cost-note">(senaste pris + utförda investeringar)</span></span>
+        <span id="costValue"></span>
+      </div>
     </div>
   </div>
 
@@ -928,9 +949,7 @@ body {
     rows.appendChild(row);
   });
 
-  document.getElementById('costTotal').textContent = fmt(totalMaterial);
   document.getElementById('costSaving').textContent = '~' + fmt(totalLabor);
-  document.getElementById('costGrand').textContent = fmt(totalMaterial + totalLabor);
 
   // Already completed & paid — built from the "done" timeline steps with a cost
   const doneRows = document.getElementById('costDoneRows');
@@ -946,6 +965,14 @@ body {
     doneRows.appendChild(row);
   });
   document.getElementById('costDoneTotal').textContent = fmt(doneTotal);
+
+  // Total value added = planned (material + labor) + already invested
+  document.getElementById('costTotal').textContent = fmt(totalMaterial);
+  document.getElementById('costGrand').textContent = fmt(totalMaterial + totalLabor + doneTotal);
+
+  // Estimated current market value = latest sale price + completed investments
+  const LATEST_PRICE = 3900000;
+  document.getElementById('costValue').textContent = fmt(LATEST_PRICE + doneTotal);
 })();
 
 // ── Progress counter ──

@@ -829,7 +829,7 @@ body {
       </div>
       <div class="cost-divider"></div>
       <div class="cost-row cost-value">
-        <span>Uppskattat marknadsvärde idag <span class="cost-note">(senaste pris + utförda investeringar)</span></span>
+        <span>Uppskattat marknadsvärde idag <span class="cost-note">(värdering + utförda investeringar)</span></span>
         <span id="costValue"></span>
       </div>
     </div>
@@ -970,9 +970,9 @@ body {
   document.getElementById('costTotal').textContent = fmt(totalMaterial);
   document.getElementById('costGrand').textContent = fmt(totalMaterial + totalLabor + doneTotal);
 
-  // Estimated current market value = latest sale price + completed investments
-  const LATEST_PRICE = 3900000;
-  document.getElementById('costValue').textContent = fmt(LATEST_PRICE + doneTotal);
+  // Estimated current market value = valuation (asking price) + completed investments
+  const VALUATION = 4500000;
+  document.getElementById('costValue').textContent = fmt(VALUATION + doneTotal);
 })();
 
 // ── Progress counter ──

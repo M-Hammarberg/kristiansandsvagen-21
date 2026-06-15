@@ -550,6 +550,7 @@ body {
 .map-info .mi-stat .v { font-size: 1.35rem; font-weight: 300; color: #fff; }
 .map-info .mi-stat .l { font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; opacity: .6; }
 .map-info.loading .mi-stats { opacity: .4; }
+.map-info .mi-hint { margin-top: 12px; font-family: "Montserrat", sans-serif; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--champagne); opacity: .65; }
 .map-pin {
   width: 26px; height: 26px; border-radius: 50% 50% 50% 0;
   background: var(--gold); transform: rotate(-45deg);
@@ -1229,13 +1230,14 @@ footer {
   </div>
   <div class="map-canvas-wrap">
     <div id="routeMap"></div>
-    <div class="map-info loading" id="mapInfo">
-      <div class="mi-to">Vägbeskrivning till</div>
-      <div class="mi-dest" id="miDest">—</div>
+    <div class="map-info" id="mapInfo">
+      <div class="mi-to" id="miTo">Utgångspunkt</div>
+      <div class="mi-dest" id="miDest">Kristiansandsvägen 21</div>
       <div class="mi-stats">
         <div class="mi-stat"><div class="v" id="miTime">—</div><div class="l">Restid (bil)</div></div>
         <div class="mi-stat"><div class="v" id="miDist">—</div><div class="l">Avstånd</div></div>
       </div>
+      <div class="mi-hint" id="miHint">Välj ett mål ovan för vägbeskrivning</div>
     </div>
   </div>
 </div>
@@ -1247,7 +1249,7 @@ window.addEventListener('DOMContentLoaded', function(){
   const DESTS = [
     { label: 'Centrum',  q: 'Drottningtorget, Trollhättan, Sverige' },
     { label: 'Överby',   q: 'Överby köpcentrum, Trollhättan, Sverige' },
-    { label: 'Golf',     q: 'Trollhättans Golfklubb, Sverige' },
+    { label: 'Golf',     q: 'Onsjö Golfklubb, Trollhättan, Sverige' },
   ];
   const FALLBACK_ORIGIN = [58.2640, 12.3360]; // approx Skogshöjden if geocode fails
 
@@ -1278,7 +1280,7 @@ window.addEventListener('DOMContentLoaded', function(){
     };
   }
 
-  function pin(cls){ return L.divIcon({ className: '', html: `<div class="map-pin ${cls}"></div>`, iconSize: [26,26], iconAnchor: [13,26] }); }
+  function pin(cls){ return L.divIcon({ className: '', html: `<div class="map-pin ${cls}"></div>`, iconSize: [26,26], iconAnchor: [13,31] }); }
   function fmtTime(s){ const m = Math.round(s/60); return m < 60 ? m + ' min' : Math.floor(m/60) + ' h ' + (m%60) + ' min'; }
   function fmtDist(m){ return (m/1000).toFixed(m < 10000 ? 1 : 0).replace('.', ',') + ' km'; }
 
@@ -1307,6 +1309,8 @@ window.addEventListener('DOMContentLoaded', function(){
     DESTS.forEach(x => x.btn.classList.remove('active'));
     d.btn.classList.add('active');
     info.classList.add('loading');
+    document.getElementById('miTo').textContent = 'Vägbeskrivning till';
+    document.getElementById('miHint').style.display = 'none';
     elDest.textContent = d.label;
     elTime.textContent = '…'; elDist.textContent = '…';
     try {
@@ -1314,9 +1318,12 @@ window.addEventListener('DOMContentLoaded', function(){
       const r = await route(originLatLng, dest);
       if (routeLine) map.removeLayer(routeLine);
       if (destMarker) map.removeLayer(destMarker);
-      routeLine = L.polyline(r.coords, { color: '#c9a55a', weight: 4, opacity: .9 }).addTo(map);
+      // Soft route: a wide translucent casing under a smooth golden line
+      const casing = L.polyline(r.coords, { color: '#c9a55a', weight: 11, opacity: .18, lineJoin: 'round', lineCap: 'round', smoothFactor: 2.5 });
+      const main   = L.polyline(r.coords, { color: '#e3c477', weight: 4.5, opacity: .95, lineJoin: 'round', lineCap: 'round', smoothFactor: 2.5 });
+      routeLine = L.layerGroup([casing, main]).addTo(map);
       destMarker = L.marker(dest, { icon: pin('dest') }).addTo(map).bindPopup(d.label);
-      map.fitBounds(routeLine.getBounds(), { padding: [60, 60] });
+      map.fitBounds(main.getBounds(), { padding: [70, 70] });
       elTime.textContent = fmtTime(r.duration);
       elDist.textContent = fmtDist(r.distance);
       info.classList.remove('loading');
@@ -1331,9 +1338,9 @@ window.addEventListener('DOMContentLoaded', function(){
   async function init(){
     try { originLatLng = await geocode(ORIGIN_Q); }
     catch(e){ originLatLng = FALLBACK_ORIGIN; }
-    originMarker = L.marker(originLatLng, { icon: pin('') }).addTo(map).bindPopup('Kristiansandsvägen 21');
-    map.setView(originLatLng, 14);
-    show(0); // default: route to first destination
+    originMarker = L.marker(originLatLng, { icon: pin('') }).addTo(map).bindPopup('Kristiansandsvägen 21').openPopup();
+    map.setView(originLatLng, 15);
+    // Start with just the home location — no route until a destination is chosen
   }
 
   // Init when the section scrolls near view (saves API calls on load)

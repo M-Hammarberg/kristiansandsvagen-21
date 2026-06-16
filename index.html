@@ -1341,10 +1341,13 @@ footer {
     return;
   }
   sessionStorage.setItem('hasVisited', '1');
-  // Lås scroll medan loadern är igång
+  // Lås scroll medan loadern är igång (även touch på mobil)
   window.scrollTo(0, 0);
   document.documentElement.style.overflow = 'hidden';
   document.body.style.overflow = 'hidden';
+  const blockScroll = e => e.preventDefault();
+  window.addEventListener('touchmove', blockScroll, { passive: false });
+  window.addEventListener('wheel', blockScroll, { passive: false });
   let progress = 0;
 
   // Time-based % counter synced to MIN_TIME (3000ms)
@@ -1375,6 +1378,8 @@ footer {
         } else {
           dismissed = true; // stop animation loop only now
           // Lås upp scroll och börja från toppen
+          window.removeEventListener('touchmove', blockScroll, { passive: false });
+          window.removeEventListener('wheel', blockScroll, { passive: false });
           window.scrollTo(0, 0);
           document.documentElement.style.overflow = '';
           document.body.style.overflow = '';

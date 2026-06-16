@@ -1158,10 +1158,13 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
 <script>
 (function() {
   const loader = document.getElementById('reno-loader');
-  // Lås scroll medan loadern är igång
+  // Lås scroll medan loadern är igång (även touch på mobil)
   window.scrollTo(0, 0);
   document.documentElement.style.overflow = 'hidden';
   document.body.style.overflow = 'hidden';
+  const blockScroll = e => e.preventDefault();
+  window.addEventListener('touchmove', blockScroll, { passive: false });
+  window.addEventListener('wheel', blockScroll, { passive: false });
   const canvas = document.getElementById('reno-canvas');
   const ctx = canvas.getContext('2d');
   const eyEl = document.getElementById('rl-ey');
@@ -1208,6 +1211,8 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
     if (dismissed) return;
     dismissed = true;
     // Lås upp scroll och börja från toppen
+    window.removeEventListener('touchmove', blockScroll, { passive: false });
+    window.removeEventListener('wheel', blockScroll, { passive: false });
     window.scrollTo(0, 0);
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';

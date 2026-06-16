@@ -413,27 +413,11 @@ body {
   font-family: "Libre Baskerville", serif; font-size: 2.6rem; font-style: italic;
   color: rgba(201,165,90,.12); line-height: 1;
 }
-/* Animerad ornament-rad under höjdpunkterna */
-.hl-flourish { display: flex; align-items: center; justify-content: center; margin-top: 60px; }
-.hf-line {
-  flex: 1; max-width: 280px; height: 2px; position: relative; overflow: hidden; border-radius: 2px;
-  background: linear-gradient(90deg, transparent, rgba(201,165,90,.75), transparent);
-}
-.hf-line::after {
-  content: ''; position: absolute; top: 0; left: -50%; width: 50%; height: 100%;
-  background: linear-gradient(90deg, transparent, #fff7e8, transparent);
-  animation: hfSweep 4s linear infinite;
-}
-.hf-diamond {
-  width: 13px; height: 13px; margin: 0 22px; background: var(--gold); transform: rotate(45deg);
-  box-shadow: 0 0 14px rgba(201,165,90,.7);
-  animation: hfPulse 2.4s ease-in-out infinite;
-}
-@keyframes hfSweep { 0% { left: -50%; } 100% { left: 150%; } }
-@keyframes hfPulse {
-  0%, 100% { box-shadow: 0 0 12px rgba(201,165,90,.6), 0 0 0 0 rgba(201,165,90,.55); transform: rotate(45deg) scale(1); }
-  50%      { box-shadow: 0 0 20px rgba(201,165,90,.9), 0 0 0 13px rgba(201,165,90,0); transform: rotate(45deg) scale(1.25); }
-}
+/* Rullande nyckelords-rad under höjdpunkterna */
+.hl-marquee { margin-top: 64px; }
+.hl-marquee .marquee-track { animation-duration: 32s; }
+.hl-marquee .marquee-track span:not(.dot) { color: rgba(255,255,255,.32); }
+.hl-marquee .marquee-track span.dot { color: var(--gold); }
 
 /* ─── GALLERY ─── */
 .gallery-band { background: var(--obsidian); padding-bottom: 8px; }
@@ -1282,12 +1266,8 @@ footer {
     <div class="eyebrow" style="color:var(--gold)">Höjdpunkter</div>
     <h2 class="h2 h2-light">Det som gör detta hem <em>unikt</em></h2>
     <div class="hl-grid" id="hlGrid"></div>
-    <div class="hl-flourish" aria-hidden="true">
-      <span class="hf-line"></span>
-      <span class="hf-diamond"></span>
-      <span class="hf-line"></span>
-    </div>
   </div>
+  <div class="marquee-band hl-marquee"><div class="marquee-track" id="hlMarquee"></div></div>
 </div>
 
 <!-- ═══ GALLERY ═══ -->
@@ -1725,6 +1705,15 @@ const track = document.getElementById('mTrack');
 let mHtml = '';
 for(let r=0; r<2; r++) mItems.forEach(t => { mHtml += `<span>${t}</span><span class="dot">◆</span>`; });
 track.innerHTML = mHtml;
+
+// Nyckelords-rad under höjdpunkterna
+const hlItems = ['Bergvärme','Golvvärme i alla rum','Bastu','Relax & spa','885 m² trädgård','Dubbelgarage','Balkong & altan','Mansardtak','Skogshöjden'];
+const hlTrack = document.getElementById('hlMarquee');
+if (hlTrack) {
+  let h = '';
+  for(let r=0; r<2; r++) hlItems.forEach(t => { h += `<span>${t}</span><span class="dot">◆</span>`; });
+  hlTrack.innerHTML = h;
+}
 
 // ── Intersection Observer — reveal ──
 const revealIO = new IntersectionObserver((entries) => {

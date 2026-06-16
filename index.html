@@ -516,30 +516,45 @@ body {
 .pbox-note { font-size: .76rem; color: rgba(255,255,255,.28); margin-top: 10px; }
 .pbox-val.neg { color: #b87070; }
 
-/* Pris dolt tills man klickar */
+/* Pris dolt tills man klickar — diskret & lyxigt */
 .price-reveal { position: relative; }
-.price-reveal .price-row { transition: filter .55s ease; }
-.price-reveal.locked .price-row { filter: blur(12px); pointer-events: none; user-select: none; }
+.price-reveal .price-row { transition: filter .6s ease, opacity .6s ease; }
+.price-reveal.locked .price-row { filter: blur(14px); opacity: .7; pointer-events: none; user-select: none; }
+.price-reveal:not(.locked) .pbox-val { animation: priceIn .8s cubic-bezier(.22,1,.36,1) both; }
+.price-reveal:not(.locked) .pbox:nth-child(2) .pbox-val { animation-delay: .08s; }
+.price-reveal:not(.locked) .pbox:nth-child(3) .pbox-val { animation-delay: .16s; }
+@keyframes priceIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 .price-lock {
-  position: absolute; inset: 0; z-index: 3;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-  background: none; border: none; cursor: pointer;
-  color: var(--champagne); font-family: "Montserrat", sans-serif;
-  font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
-  transition: opacity .3s ease;
+  position: absolute; inset: 0; z-index: 3; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: radial-gradient(ellipse at center, rgba(26,25,23,.30), rgba(26,25,23,.08));
+  -webkit-backdrop-filter: blur(1.5px); backdrop-filter: blur(1.5px);
+  border: none; transition: opacity .45s ease, visibility .45s ease;
 }
-.price-reveal:not(.locked) .price-lock { opacity: 0; pointer-events: none; }
+.price-reveal:not(.locked) .price-lock { opacity: 0; visibility: hidden; pointer-events: none; }
 .price-lock .lock-ic {
-  width: 52px; height: 52px; border-radius: 50%;
-  border: 1px solid rgba(201,165,90,.5); display: flex; align-items: center; justify-content: center;
-  font-size: 1.2rem; color: var(--gold); transition: all .3s ease;
+  width: 60px; height: 60px; border-radius: 50%; color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(201,165,90,.45);
+  background: linear-gradient(160deg, rgba(201,165,90,.14), rgba(201,165,90,.02));
+  box-shadow: 0 10px 34px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.06);
+  transition: all .45s cubic-bezier(.22,1,.36,1);
 }
-.price-lock:hover .lock-ic { background: rgba(201,165,90,.1); border-color: var(--gold); }
+.price-lock:hover .lock-ic { transform: translateY(-3px); border-color: var(--gold); box-shadow: 0 14px 40px rgba(201,165,90,.28), inset 0 1px 0 rgba(255,255,255,.08); }
+.price-lock .lock-label { font-family: "Libre Baskerville", serif; font-style: italic; font-size: 1.15rem; color: var(--champagne2); }
+.price-lock .lock-sub {
+  display: flex; align-items: center; gap: 10px;
+  font-family: "Montserrat", sans-serif; font-size: .56rem; letter-spacing: .3em;
+  text-transform: uppercase; color: rgba(201,165,90,.75);
+}
+.price-lock .lock-sub::before, .price-lock .lock-sub::after { content: ''; width: 16px; height: 1px; background: rgba(201,165,90,.4); }
 .price-hide {
-  display: inline-block; margin-top: 28px; background: none; border: none; cursor: pointer;
-  color: rgba(255,255,255,.4); font-family: "Montserrat", sans-serif;
-  font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; transition: color .25s ease;
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 30px;
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,.35); font-family: "Montserrat", sans-serif;
+  font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; transition: color .25s ease;
 }
+.price-hide::before { content: ''; width: 14px; height: 1px; background: currentColor; }
 .price-hide:hover { color: var(--champagne); }
 .price-reveal.locked .price-hide { display: none; }
 
@@ -1206,10 +1221,17 @@ footer {
         <div class="pbox"><span class="pbox-lbl">Prisskillnad</span><div class="pbox-val neg">− 600 000 kr</div><div class="pbox-note">−13 % under utgångspris</div></div>
       </div>
       <button class="price-lock" id="priceLockBtn" type="button" aria-label="Visa pris">
-        <span class="lock-ic">🔒</span>
-        <span>Klicka för att visa pris</span>
+        <span class="lock-ic">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/>
+            <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/>
+            <circle cx="12" cy="15.3" r="1.3"/>
+          </svg>
+        </span>
+        <span class="lock-label">Diskret pris</span>
+        <span class="lock-sub">Klicka för att visa</span>
       </button>
-      <button class="price-hide" id="priceHideBtn" type="button">Dölj pris igen</button>
+      <button class="price-hide" id="priceHideBtn" type="button">Dölj pris</button>
     </div>
   </div>
 </div>

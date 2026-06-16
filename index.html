@@ -461,10 +461,15 @@ body {
 .gtab:hover { color: var(--champagne); border-color: rgba(201,165,90,.4); }
 .gtab.on { background: var(--gold2); color: #fff; border-color: var(--gold2); }
 
-.group-section { max-width: 1260px; margin: 0 auto; padding: 0 8px 8px; }
+#groupsContainer { padding: 0 24px; }
+.group-section {
+  max-width: 1212px; margin: 0 auto 26px; padding: 4px 18px 18px;
+  border: 1px solid rgba(201,165,90,.22); border-radius: 12px;
+  background: linear-gradient(180deg, rgba(201,165,90,.05), rgba(255,255,255,.012));
+}
 .group-section.hidden { display: none; }
 .group-label-bar {
-  padding: 24px 8px 16px;
+  padding: 20px 4px 16px;
   display: flex; align-items: center; gap: 18px;
 }
 .glabel { font-size: .6rem; letter-spacing: .28em; text-transform: uppercase; color: var(--champagne); }
@@ -717,7 +722,8 @@ footer {
 @media(max-width:1024px){
   .section,.hl-inner,.price-inner,.share-inner{padding-left:40px;padding-right:40px}
   .gallery-intro{padding:60px 40px 40px}
-  .group-section{padding:0 4px 4px}
+  #groupsContainer{padding:0 14px}
+  .group-section{padding:4px 12px 14px;margin-bottom:20px}
   .site-nav,.footer{padding-left:40px;padding-right:40px}
   .ornament{padding:0 40px}
 }

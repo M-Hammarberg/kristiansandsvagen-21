@@ -567,6 +567,16 @@ body {
 .map-inner .eyebrow::after { background: var(--gold); }
 .map-wrap { position: relative; height: 520px; margin-top: 44px; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.45); }
 .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; filter: grayscale(.55) contrast(1.05) brightness(.9); }
+/* Street view (gatuvy) under kartan */
+.sv-wrap { height: 440px; margin-top: 16px; }
+.sv-wrap iframe { filter: grayscale(.25) contrast(1.03) brightness(.95); }
+.sv-badge {
+  position: absolute; top: 8px; left: 8px; z-index: 3;
+  background: rgba(13,13,13,.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid rgba(201,165,90,.35); border-radius: 4px;
+  color: var(--champagne); font-family: "Montserrat", sans-serif;
+  font-size: .55rem; letter-spacing: .26em; text-transform: uppercase; padding: 9px 16px;
+}
 /* themed frame overlay (vignette + gold inner border) */
 .map-frame {
   position: absolute; inset: 0; pointer-events: none; border-radius: 8px; z-index: 2;
@@ -598,6 +608,7 @@ body {
   .map-section { padding: 64px 0; }
   .map-inner { padding: 0 24px; }
   .map-wrap { height: 440px; }
+  .sv-wrap { height: 320px; margin-top: 12px; }
   .map-card { top: 8px; left: 8px; right: auto; width: 230px; max-width: calc(100% - 16px); padding: 11px 13px; border-radius: 4px; }
   .map-card .mc-ey { font-size: .46rem; letter-spacing: .2em; }
   .map-card .mc-title { font-size: .92rem; margin: 3px 0 1px; }
@@ -1304,6 +1315,11 @@ footer {
           <a class="mc-ghost" href="https://www.google.com/maps/search/?api=1&query=Kristiansandsv%C3%A4gen+21,+461+73+Trollh%C3%A4ttan" target="_blank" rel="noopener">Öppna i Maps ↗</a>
         </div>
       </div>
+    </div>
+    <div class="map-wrap sv-wrap">
+      <iframe src="https://www.google.com/maps?q=&layer=c&cbll=58.3243681,12.2752206&cbp=12,56.49,0,0,0&output=svembed" title="Gatuvy — Kristiansandsvägen 21" loading="lazy"></iframe>
+      <div class="map-frame"></div>
+      <div class="sv-badge">Gatuvy</div>
     </div>
   </div>
 </div>

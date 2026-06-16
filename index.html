@@ -567,15 +567,22 @@ body {
 .map-inner .eyebrow::after { background: var(--gold); }
 .map-wrap { position: relative; height: 520px; margin-top: 44px; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.45); }
 .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; filter: grayscale(.55) contrast(1.05) brightness(.9); }
-/* Street view (gatuvy) under kartan */
-.sv-wrap { height: 440px; margin-top: 16px; }
-.sv-wrap iframe { filter: grayscale(.25) contrast(1.03) brightness(.95); }
+/* Street view (gatuvy) under kartan — infällbar */
+.sv-wrap { height: 440px; margin-top: 16px; transition: height .55s cubic-bezier(.4,0,.2,1); }
+.sv-wrap iframe { filter: grayscale(.25) contrast(1.03) brightness(.95); transition: opacity .4s ease; }
+.sv-wrap.collapsed { height: 70px; }
+.sv-wrap.collapsed iframe, .sv-wrap.collapsed .map-frame { opacity: 0; visibility: hidden; }
 .map-card.sv-card {
   top: 0; left: 0; width: 224px; max-width: 80%;
-  height: 64px; padding: 0 18px;
+  height: 70px; padding: 0 18px;
   display: flex; align-items: center; gap: 13px;
   border-radius: 8px 0 14px 0;
+  cursor: pointer; text-align: left;
+  transition: width .55s cubic-bezier(.4,0,.2,1), border-radius .4s ease;
 }
+.sv-wrap.collapsed .map-card.sv-card { width: 100%; max-width: 100%; border-radius: 8px; }
+.sv-arrow { margin-left: auto; color: var(--gold); font-size: 1.05rem; line-height: 1; transition: transform .4s ease; }
+.sv-wrap:not(.collapsed) .sv-arrow { transform: rotate(180deg); }
 .sv-ic { flex-shrink: 0; width: 30px; height: 30px; color: var(--gold); display: flex; align-items: center; justify-content: center; }
 .sv-ic svg { width: 26px; height: 26px; animation: svSpin 9s linear infinite; transform-origin: 50% 50%; }
 @keyframes svSpin { to { transform: rotate(360deg); } }
@@ -627,7 +634,9 @@ body {
   .map-inner { padding: 0 24px; }
   .map-wrap { height: 440px; }
   .sv-wrap { height: 320px; margin-top: 12px; }
-  .map-card.sv-card { top: 0; left: 0; width: 236px; max-width: 88%; height: 62px; gap: 10px; padding: 0 16px; border-radius: 8px 0 12px 0; }
+  .sv-wrap.collapsed { height: 66px; }
+  .map-card.sv-card { top: 0; left: 0; width: 236px; max-width: 88%; height: 66px; gap: 10px; padding: 0 16px; border-radius: 8px 0 12px 0; }
+  .sv-wrap.collapsed .map-card.sv-card { width: 100%; max-width: 100%; border-radius: 8px; }
   .sv-ic { width: 22px; height: 22px; }
   .sv-ic svg { width: 20px; height: 20px; }
   .sv-label { font-size: .56rem; letter-spacing: .18em; }
@@ -1338,10 +1347,10 @@ footer {
         </div>
       </div>
     </div>
-    <div class="map-wrap sv-wrap">
-      <iframe src="https://www.google.com/maps?q=&layer=c&cbll=58.3243681,12.2752206&cbp=12,56.49,0,0,0&output=svembed" title="Gatuvy — Kristiansandsvägen 21" loading="lazy"></iframe>
+    <div class="map-wrap sv-wrap collapsed" id="svWrap">
+      <iframe id="svFrame" data-src="https://www.google.com/maps?q=&layer=c&cbll=58.3243681,12.2752206&cbp=12,56.49,0,0,0&output=svembed" title="Gatuvy — Kristiansandsvägen 21" loading="lazy"></iframe>
       <div class="map-frame"></div>
-      <div class="map-card sv-card">
+      <button class="map-card sv-card" id="svToggle" type="button" aria-expanded="false" aria-controls="svWrap">
         <span class="sv-ic" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
             <ellipse cx="12" cy="12" rx="9" ry="4.4"/>
@@ -1350,10 +1359,26 @@ footer {
           </svg>
         </span>
         <span class="sv-label">360° Gatuvy</span>
-      </div>
+        <span class="sv-arrow" aria-hidden="true">⌄</span>
+      </button>
     </div>
   </div>
 </div>
+<script>
+// Gatuvy: fäll upp/ned (gömd tills man klickar på 360-knappen)
+(function(){
+  const wrap = document.getElementById('svWrap');
+  const toggle = document.getElementById('svToggle');
+  const frame = document.getElementById('svFrame');
+  if (!wrap || !toggle) return;
+  toggle.addEventListener('click', () => {
+    const opening = wrap.classList.contains('collapsed');
+    if (opening && frame && !frame.src) frame.src = frame.dataset.src; // ladda först vid öppning
+    wrap.classList.toggle('collapsed');
+    toggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+  });
+})();
+</script>
 
 <!-- ═══ SHARE ═══ -->
 <div class="share-band" id="dela">

@@ -570,7 +570,7 @@ body {
 /* Street view (gatuvy) under kartan */
 .sv-wrap { height: 440px; margin-top: 16px; }
 .sv-wrap iframe { filter: grayscale(.25) contrast(1.03) brightness(.95); }
-.sv-card .mc-addr { margin-bottom: 0; }
+.sv-card { top: 0; left: 0; border-top-left-radius: 0; padding-top: 18px; }
 .sv-badge {
   position: absolute; top: 8px; left: 8px; z-index: 3;
   background: rgba(13,13,13,.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
@@ -610,6 +610,7 @@ body {
   .map-inner { padding: 0 24px; }
   .map-wrap { height: 440px; }
   .sv-wrap { height: 320px; margin-top: 12px; }
+  .sv-card { top: 0; left: 0; }
   .map-card { top: 8px; left: 8px; right: auto; width: 230px; max-width: calc(100% - 16px); padding: 11px 13px; border-radius: 4px; }
   .map-card .mc-ey { font-size: .46rem; letter-spacing: .2em; }
   .map-card .mc-title { font-size: .92rem; margin: 3px 0 1px; }
@@ -1323,7 +1324,6 @@ footer {
       <div class="map-card sv-card">
         <div class="mc-ey">Gatuvy</div>
         <div class="mc-title">Kristiansandsvägen <span>21</span></div>
-        <div class="mc-addr">Utforska gatan i 360°<br>— dra för att se dig omkring</div>
       </div>
     </div>
   </div>

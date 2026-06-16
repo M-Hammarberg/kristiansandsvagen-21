@@ -413,6 +413,26 @@ body {
   font-family: "Libre Baskerville", serif; font-size: 2.6rem; font-style: italic;
   color: rgba(201,165,90,.12); line-height: 1;
 }
+/* Animerad ornament-rad under höjdpunkterna */
+.hl-flourish { display: flex; align-items: center; justify-content: center; margin-top: 56px; }
+.hf-line {
+  flex: 1; max-width: 240px; height: 1px; position: relative; overflow: hidden;
+  background: linear-gradient(90deg, transparent, rgba(201,165,90,.5), transparent);
+}
+.hf-line::after {
+  content: ''; position: absolute; top: 0; left: -45%; width: 45%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,247,232,.9), transparent);
+  animation: hfSweep 3.4s ease-in-out infinite;
+}
+.hf-diamond {
+  width: 9px; height: 9px; margin: 0 20px; background: var(--gold); transform: rotate(45deg);
+  animation: hfPulse 2.6s ease-in-out infinite;
+}
+@keyframes hfSweep { 0% { left: -45%; } 60%, 100% { left: 145%; } }
+@keyframes hfPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,165,90,.5); transform: rotate(45deg) scale(1); }
+  50%      { box-shadow: 0 0 0 9px rgba(201,165,90,0); transform: rotate(45deg) scale(1.18); }
+}
 
 /* ─── GALLERY ─── */
 .gallery-band { background: var(--obsidian); padding-bottom: 8px; }
@@ -1261,6 +1281,11 @@ footer {
     <div class="eyebrow" style="color:var(--gold)">Höjdpunkter</div>
     <h2 class="h2 h2-light">Det som gör detta hem <em>unikt</em></h2>
     <div class="hl-grid" id="hlGrid"></div>
+    <div class="hl-flourish" aria-hidden="true">
+      <span class="hf-line"></span>
+      <span class="hf-diamond"></span>
+      <span class="hf-line"></span>
+    </div>
   </div>
 </div>
 

@@ -571,12 +571,23 @@ body {
 .sv-wrap { height: 440px; margin-top: 16px; }
 .sv-wrap iframe { filter: grayscale(.25) contrast(1.03) brightness(.95); }
 .map-card.sv-card {
-  top: 2px; left: 0; width: 246px; max-width: 78%;
-  height: 74px; padding: 0 20px;
-  display: flex; align-items: center;
-  border-radius: 0 0 8px 0;
+  top: 16px; left: 16px; width: auto; max-width: calc(100% - 32px);
+  height: 56px; padding: 0 22px 0 18px;
+  display: flex; align-items: center; gap: 13px;
+  border-radius: 10px;
 }
-.map-card.sv-card .mc-ey { font-size: .6rem; letter-spacing: .26em; color: var(--champagne); opacity: .9; }
+.sv-ic { flex-shrink: 0; width: 30px; height: 30px; color: var(--gold); display: flex; align-items: center; justify-content: center; }
+.sv-ic svg { width: 26px; height: 26px; animation: svSpin 9s linear infinite; transform-origin: 50% 50%; }
+@keyframes svSpin { to { transform: rotate(360deg); } }
+.sv-label {
+  font-family: "Montserrat", sans-serif; font-size: .66rem; font-weight: 600;
+  letter-spacing: .24em; text-transform: uppercase; white-space: nowrap;
+  background: linear-gradient(100deg, var(--champagne) 0%, #fff7e8 30%, var(--gold) 50%, var(--champagne) 70%);
+  background-size: 220% auto; -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  animation: svShimmer 3.2s linear infinite;
+}
+@keyframes svShimmer { to { background-position: -220% center; } }
 .sv-badge {
   position: absolute; top: 8px; left: 8px; z-index: 3;
   background: rgba(13,13,13,.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
@@ -616,7 +627,10 @@ body {
   .map-inner { padding: 0 24px; }
   .map-wrap { height: 440px; }
   .sv-wrap { height: 320px; margin-top: 12px; }
-  .map-card.sv-card { top: 0; left: 0; }
+  .map-card.sv-card { top: 12px; left: 12px; height: 46px; gap: 9px; padding: 0 16px 0 13px; border-radius: 8px; }
+  .sv-ic { width: 22px; height: 22px; }
+  .sv-ic svg { width: 20px; height: 20px; }
+  .sv-label { font-size: .56rem; letter-spacing: .18em; }
   .map-card { top: 8px; left: 8px; right: auto; width: 230px; max-width: calc(100% - 16px); padding: 11px 13px; border-radius: 4px; }
   .map-card .mc-ey { font-size: .46rem; letter-spacing: .2em; }
   .map-card .mc-title { font-size: .92rem; margin: 3px 0 1px; }
@@ -1328,7 +1342,14 @@ footer {
       <iframe src="https://www.google.com/maps?q=&layer=c&cbll=58.3243681,12.2752206&cbp=12,56.49,0,0,0&output=svembed" title="Gatuvy — Kristiansandsvägen 21" loading="lazy"></iframe>
       <div class="map-frame"></div>
       <div class="map-card sv-card">
-        <div class="mc-ey">Gatuvy</div>
+        <span class="sv-ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="12" rx="9" ry="4.4"/>
+            <path d="M5.6 14.4A9 4.4 0 0 0 21 12"/>
+            <path d="M18.6 9.6 21 12l-2.6 2"/>
+          </svg>
+        </span>
+        <span class="sv-label">360° Gatuvy</span>
       </div>
     </div>
   </div>

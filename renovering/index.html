@@ -1158,6 +1158,10 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
 <script>
 (function() {
   const loader = document.getElementById('reno-loader');
+  // Lås scroll medan loadern är igång
+  window.scrollTo(0, 0);
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
   const canvas = document.getElementById('reno-canvas');
   const ctx = canvas.getContext('2d');
   const eyEl = document.getElementById('rl-ey');
@@ -1203,6 +1207,10 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
   function dismiss() {
     if (dismissed) return;
     dismissed = true;
+    // Lås upp scroll och börja från toppen
+    window.scrollTo(0, 0);
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
     loader.style.transition = 'opacity 0.8s ease';
     loader.style.opacity = '0';
     document.body.style.transition = 'background 0.8s ease';

@@ -568,8 +568,8 @@ body {
 .map-wrap { position: relative; height: 520px; margin-top: 44px; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.45); }
 .map-wrap iframe { width: 100%; height: 100%; border: none; display: block; filter: grayscale(.55) contrast(1.05) brightness(.9); }
 /* Street view (gatuvy) under kartan — infällbar */
-.sv-wrap { height: 440px; margin-top: 16px; transition: height .55s cubic-bezier(.4,0,.2,1); }
-.sv-wrap iframe { filter: grayscale(.25) contrast(1.03) brightness(.95); transition: opacity .4s ease; }
+.sv-wrap { height: 520px; margin-top: 16px; transition: height .55s cubic-bezier(.4,0,.2,1); }
+.sv-wrap iframe { height: 520px; filter: grayscale(.25) contrast(1.03) brightness(.95); transition: opacity .4s ease; }
 .sv-wrap.collapsed { height: 70px; }
 .sv-wrap.collapsed iframe, .sv-wrap.collapsed .map-frame { opacity: 0; visibility: hidden; }
 .map-card.sv-card {
@@ -633,7 +633,8 @@ body {
   .map-section { padding: 64px 0; }
   .map-inner { padding: 0 24px; }
   .map-wrap { height: 440px; }
-  .sv-wrap { height: 320px; margin-top: 12px; }
+  .sv-wrap { height: 360px; margin-top: 12px; }
+  .sv-wrap iframe { height: 360px; }
   .sv-wrap.collapsed { height: 66px; }
   .map-card.sv-card { top: 0; left: 0; width: 236px; max-width: 88%; height: 66px; gap: 10px; padding: 0 16px; border-radius: 8px 0 12px 0; }
   .sv-wrap.collapsed .map-card.sv-card { width: 100%; max-width: 100%; border-radius: 8px; }

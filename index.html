@@ -1892,6 +1892,50 @@ window.addEventListener('scroll', () => {
 </script>
 <script>document.getElementById("loader").classList.add("ready");</script>
 
+<script>
+// Uppräknande siffror när de scrollas in
+(function(){
+  const fmt = n => n.toLocaleString('sv-SE');
+  function parse(raw){
+    const m = raw.trim().match(/^([\d\s]*\d)(.*)$/);
+    if (!m) return null;
+    const value = parseInt(m[1].replace(/\s/g,''), 10);
+    const suffix = m[2];
+    const grouped = /\s/.test(m[1]) || value >= 10000;
+    // hoppa över rena årtal (t.ex. 1988) utan enhet
+    if (!suffix.trim() && value >= 1000 && value <= 9999 && !grouped) return null;
+    return { value, suffix, grouped };
+  }
+  function show(el, info, n){
+    el.textContent = (info.grouped ? fmt(n) : String(n)) + info.suffix;
+  }
+  function animate(el, info){
+    const dur = 1500, t0 = performance.now();
+    (function step(now){
+      const k = Math.min((now - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - k, 3);
+      show(el, info, Math.round(info.value * e));
+      if (k < 1) requestAnimationFrame(step);
+      else show(el, info, info.value);
+    })(t0);
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      obs.unobserve(en.target);
+      animate(en.target, en.target._ci);
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.hero-stat-val, .fact-val').forEach(el => {
+    const info = parse(el.textContent);
+    if (!info) return;
+    el._ci = info;
+    show(el, info, 0);
+    obs.observe(el);
+  });
+})();
+</script>
+
 
 </body>
 </html>

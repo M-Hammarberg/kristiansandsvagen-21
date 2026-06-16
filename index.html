@@ -575,7 +575,7 @@ body {
 }
 /* themed address card (covers Google's default card) */
 .map-card {
-  position: absolute; top: 8px; left: 8px; z-index: 3; width: 300px; max-width: calc(100% - 16px);
+  position: absolute; top: 8px; left: 8px; z-index: 3; width: 322px; max-width: calc(100% - 16px);
   background: rgba(13,13,13,.92); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   border: 1px solid rgba(201,165,90,.35); border-radius: 5px; padding: 20px 22px 18px;
   box-shadow: 0 20px 54px rgba(0,0,0,.55);
@@ -598,7 +598,12 @@ body {
   .map-section { padding: 64px 0; }
   .map-inner { padding: 0 24px; }
   .map-wrap { height: 440px; }
-  .map-card { top: 8px; left: 8px; width: auto; right: 8px; padding: 16px 18px; }
+  .map-card { top: 8px; left: 8px; right: 8px; width: auto; padding: 13px 15px; border-radius: 4px; }
+  .map-card .mc-ey { font-size: .5rem; letter-spacing: .22em; }
+  .map-card .mc-title { font-size: 1.05rem; margin: 4px 0 2px; }
+  .map-card .mc-addr { font-size: .68rem; margin-bottom: 12px; }
+  .map-card .mc-actions { gap: 8px; }
+  .map-card .mc-actions a { font-size: .5rem; letter-spacing: .12em; padding: 9px 8px; }
 }
 
 /* ─── SHARE ─── */

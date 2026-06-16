@@ -561,9 +561,45 @@ body {
 .price-reveal.locked .price-hide { opacity: 0; visibility: hidden; pointer-events: none; }
 
 /* ─── MAP ─── */
-.map-section { position: relative; }
-.map-wrap { height: 480px; }
-.map-wrap iframe { width: 100%; height: 100%; border: none; display: block; filter: grayscale(.4) contrast(1.1) brightness(.95); }
+.map-section { position: relative; background: var(--charcoal); padding: 100px 0; border-top: 1px solid var(--border); }
+.map-inner { max-width: 1260px; margin: 0 auto; padding: 0 80px; }
+.map-inner .eyebrow { color: var(--gold); }
+.map-inner .eyebrow::after { background: var(--gold); }
+.map-wrap { position: relative; height: 520px; margin-top: 44px; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.45); }
+.map-wrap iframe { width: 100%; height: 100%; border: none; display: block; filter: grayscale(.55) contrast(1.05) brightness(.9); }
+/* themed frame overlay (vignette + gold inner border) */
+.map-frame {
+  position: absolute; inset: 0; pointer-events: none; border-radius: 8px; z-index: 2;
+  box-shadow: inset 0 0 0 1px rgba(201,165,90,.4), inset 0 0 90px rgba(0,0,0,.6);
+  background: radial-gradient(ellipse at 50% 45%, transparent 52%, rgba(13,13,13,.5) 100%);
+}
+/* themed address card (covers Google's default card) */
+.map-card {
+  position: absolute; top: 22px; left: 22px; z-index: 3; width: 286px; max-width: calc(100% - 44px);
+  background: rgba(13,13,13,.9); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid rgba(201,165,90,.35); border-radius: 5px; padding: 20px 22px 18px;
+  box-shadow: 0 20px 54px rgba(0,0,0,.55);
+}
+.map-card .mc-ey { font-family: "Montserrat", sans-serif; font-size: .55rem; letter-spacing: .26em; text-transform: uppercase; color: var(--champagne); opacity: .7; }
+.map-card .mc-title { font-family: "Libre Baskerville", serif; font-style: italic; font-size: 1.35rem; color: #fff; margin: 7px 0 3px; }
+.map-card .mc-title span { font-style: normal; color: var(--gold); }
+.map-card .mc-addr { font-size: .76rem; color: rgba(255,255,255,.5); margin-bottom: 18px; line-height: 1.5; }
+.map-card .mc-actions { display: flex; gap: 10px; }
+.map-card .mc-actions a {
+  flex: 1; text-align: center; text-decoration: none; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .56rem; letter-spacing: .16em; text-transform: uppercase;
+  padding: 11px 10px; border-radius: 2px; transition: all .3s ease;
+}
+.map-card .mc-actions .mc-primary { background: var(--gold); color: #14110b; font-weight: 600; }
+.map-card .mc-actions .mc-primary:hover { background: var(--champagne2); }
+.map-card .mc-actions .mc-ghost { border: 1px solid rgba(201,165,90,.4); color: var(--champagne); }
+.map-card .mc-actions .mc-ghost:hover { border-color: var(--gold); color: var(--gold); }
+@media(max-width:768px){
+  .map-section { padding: 64px 0; }
+  .map-inner { padding: 0 24px; }
+  .map-wrap { height: 440px; }
+  .map-card { top: 14px; left: 14px; width: auto; right: 14px; padding: 16px 18px; }
+}
 
 /* ─── SHARE ─── */
 .share-band { background: var(--ivory2); padding: 100px 0; border-top: 1px solid var(--border-light); }
@@ -944,9 +980,8 @@ footer {
   .price-section { background: #1a1917 !important; }
   .price-section * { color: inherit !important; }
   
-  /* Map section */
-  .map-section { background: #f7f3ee !important; }
-  .map-section h2, .map-section p { color: #1a1917 !important; }
+  /* Map section — håll mörk/cinematisk */
+  .map-section { background: var(--charcoal) !important; }
   
   /* Share section */
   .share-section { background: #f7f3ee !important; }
@@ -1249,8 +1284,22 @@ footer {
 
 <!-- ═══ MAP ═══ -->
 <div class="map-section" id="karta">
-  <div class="map-wrap">
-    <iframe src="https://maps.google.com/maps?q=Kristiansandsv%C3%A4gen+21,+Trollh%C3%A4ttan,+Sverige&output=embed&z=15" title="Karta" loading="lazy"></iframe>
+  <div class="map-inner">
+    <div class="eyebrow">Läget</div>
+    <h2 class="h2 h2-light">Skogshöjden, <em>Trollhättan</em></h2>
+    <div class="map-wrap">
+      <iframe src="https://maps.google.com/maps?q=Kristiansandsv%C3%A4gen+21,+461+73+Trollh%C3%A4ttan,+Sverige&output=embed&z=15" title="Karta" loading="lazy"></iframe>
+      <div class="map-frame"></div>
+      <div class="map-card">
+        <div class="mc-ey">Adress</div>
+        <div class="mc-title">Kristiansandsvägen <span>21</span></div>
+        <div class="mc-addr">461 73 Trollhättan<br>Skogshöjden · Sverige</div>
+        <div class="mc-actions">
+          <a class="mc-primary" href="https://www.google.com/maps/dir/?api=1&destination=Kristiansandsv%C3%A4gen+21,+461+73+Trollh%C3%A4ttan" target="_blank" rel="noopener">Vägbeskrivning</a>
+          <a class="mc-ghost" href="https://www.google.com/maps/search/?api=1&query=Kristiansandsv%C3%A4gen+21,+461+73+Trollh%C3%A4ttan" target="_blank" rel="noopener">Öppna i Maps ↗</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

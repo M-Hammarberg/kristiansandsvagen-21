@@ -1828,16 +1828,16 @@ const ICONS = {
   heat:   '<path d="M12 3c.5 3-2 4.5-2 7a2 2 0 0 0 4 0c0-.8-.4-1.4-.4-1.4 1.6 1 2.4 2.6 2.4 4.4a4 4 0 1 1-8 0C8 9.5 11 7 12 3z"/>',
   sauna:  '<path d="M7 12c1-1 1-2.2 0-3.2"/><path d="M12 12c1-1 1-2.2 0-3.2"/><path d="M17 12c1-1 1-2.2 0-3.2"/><rect x="4" y="15" width="16" height="4" rx="1"/>',
   spa:    '<path d="M12 3c3.6 4.4 5.5 6.6 5.5 9.5a5.5 5.5 0 0 1-11 0C6.5 9.6 8.4 7.4 12 3z"/>',
-  garden: '<circle cx="12" cy="8.5" r="5.2"/><path d="M12 13.7V21"/><path d="M9 18h6"/>',
+  garden: '<path d="M4 20c0-8 6-15 16-15 0 9-7 15-16 15z"/><path d="M4 20c3.5-5 7.5-8 12-9.5"/>',
   garage: '<path d="M3 10.5 12 5l9 5.5"/><rect x="5" y="10.5" width="14" height="9" rx="1"/><path d="M8 19v-4h8v4"/>',
   balcony:'<circle cx="12" cy="11" r="3.4"/><path d="M3 20h18"/><path d="M12 3v2.2"/><path d="M5 6.5l1.4 1.4"/><path d="M19 6.5l-1.4 1.4"/><path d="M3.5 12.5h1.6"/><path d="M18.9 12.5h1.6"/>',
 };
 const featDefs = [
   { icon:'heat',    title:'Bergvärme',        desc:'Nyligen utbytt bergvärmepump — låg driftkostnad och ett behagligt inomhusklimat året om.' },
-  { icon:'sauna',   title:'Privat bastu',     desc:'Välbyggd finsk bastu — klassisk lyx för det svenska villalivet.' },
+  { icon:'sauna',   title:'Bastu',            desc:'Välbyggd finsk bastu — klassisk lyx för det svenska villalivet.' },
   { icon:'spa',     title:'Relax & spa',      desc:'Eget avkopplingsrum med mjukt ljus och genuin spa-känsla.' },
   { icon:'garden',  title:'885 m² trädgård',  desc:'Parklik tomt med formklippta buskar, naturstensmurar och inbjudande uteplats.' },
-  { icon:'garage',  title:'Garage & förvaring', desc:'Garage med plats för bil och förvaring — förberett för framtida elbilsladdare.' },
+  { icon:'garage',  title:'Dubbelgarage',     desc:'Rymligt dubbelgarage med plats för två bilar och förvaring — förberett för framtida elbilsladdare.' },
   { icon:'balcony', title:'Balkong & altan',  desc:'Uteplats under balkongen och fina lägen för uteliv i både sol och skugga.' },
 ];
 document.getElementById('hlGrid').innerHTML = featDefs.map((f,i) => `

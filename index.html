@@ -1340,6 +1340,10 @@ footer {
     return;
   }
   sessionStorage.setItem('hasVisited', '1');
+  // Lås scroll medan loadern är igång
+  window.scrollTo(0, 0);
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
   let progress = 0;
 
   // Time-based % counter synced to MIN_TIME (3000ms)
@@ -1369,6 +1373,10 @@ footer {
           requestAnimationFrame(fadeStep);
         } else {
           dismissed = true; // stop animation loop only now
+          // Lås upp scroll och börja från toppen
+          window.scrollTo(0, 0);
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
           loader.classList.add('dismissing');
           loader.addEventListener('animationend', () => {
             loader.classList.add('hidden');

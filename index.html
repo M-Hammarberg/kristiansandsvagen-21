@@ -556,7 +556,8 @@ body {
 }
 .price-hide::before { content: ''; width: 14px; height: 1px; background: currentColor; }
 .price-hide:hover { color: var(--champagne); }
-.price-reveal.locked .price-hide { display: none; }
+.price-hide { opacity: 1; visibility: visible; transition: color .25s ease, opacity .3s ease; }
+.price-reveal.locked .price-hide { opacity: 0; visibility: hidden; pointer-events: none; }
 
 /* ─── MAP ─── */
 .map-section { position: relative; }

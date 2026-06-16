@@ -516,6 +516,33 @@ body {
 .pbox-note { font-size: .76rem; color: rgba(255,255,255,.28); margin-top: 10px; }
 .pbox-val.neg { color: #b87070; }
 
+/* Pris dolt tills man klickar */
+.price-reveal { position: relative; }
+.price-reveal .price-row { transition: filter .55s ease; }
+.price-reveal.locked .price-row { filter: blur(12px); pointer-events: none; user-select: none; }
+.price-lock {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  background: none; border: none; cursor: pointer;
+  color: var(--champagne); font-family: "Montserrat", sans-serif;
+  font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+  transition: opacity .3s ease;
+}
+.price-reveal:not(.locked) .price-lock { opacity: 0; pointer-events: none; }
+.price-lock .lock-ic {
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 1px solid rgba(201,165,90,.5); display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: var(--gold); transition: all .3s ease;
+}
+.price-lock:hover .lock-ic { background: rgba(201,165,90,.1); border-color: var(--gold); }
+.price-hide {
+  display: inline-block; margin-top: 28px; background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,.4); font-family: "Montserrat", sans-serif;
+  font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; transition: color .25s ease;
+}
+.price-hide:hover { color: var(--champagne); }
+.price-reveal.locked .price-hide { display: none; }
+
 /* ─── MAP ─── */
 .map-section { position: relative; }
 .map-wrap { height: 480px; }
@@ -1172,13 +1199,29 @@ footer {
   <div class="price-inner">
     <div class="eyebrow" style="color:var(--gold)">Prisinformation</div>
     <h2 class="h2 h2-light">Försäljningspris</h2>
-    <div class="price-row">
-      <div class="pbox"><span class="pbox-lbl">Utgångspris</span><div class="pbox-val">4 500 000 kr</div><div class="pbox-note">Annonserat pris</div></div>
-      <div class="pbox"><span class="pbox-lbl">Slutpris</span><div class="pbox-val">3 900 000 kr</div><div class="pbox-note">Försäljningspris · 3 april 2026</div></div>
-      <div class="pbox"><span class="pbox-lbl">Prisskillnad</span><div class="pbox-val neg">− 600 000 kr</div><div class="pbox-note">−13 % under utgångspris</div></div>
+    <div class="price-reveal locked" id="priceReveal">
+      <div class="price-row">
+        <div class="pbox"><span class="pbox-lbl">Utgångspris</span><div class="pbox-val">4 500 000 kr</div><div class="pbox-note">Annonserat pris</div></div>
+        <div class="pbox"><span class="pbox-lbl">Slutpris</span><div class="pbox-val">3 900 000 kr</div><div class="pbox-note">Försäljningspris · 3 april 2026</div></div>
+        <div class="pbox"><span class="pbox-lbl">Prisskillnad</span><div class="pbox-val neg">− 600 000 kr</div><div class="pbox-note">−13 % under utgångspris</div></div>
+      </div>
+      <button class="price-lock" id="priceLockBtn" type="button" aria-label="Visa pris">
+        <span class="lock-ic">🔒</span>
+        <span>Klicka för att visa pris</span>
+      </button>
+      <button class="price-hide" id="priceHideBtn" type="button">Dölj pris igen</button>
     </div>
   </div>
 </div>
+<script>
+// Pris dolt tills man klickar (visa/dölj)
+(function(){
+  const wrap = document.getElementById('priceReveal');
+  if (!wrap) return;
+  document.getElementById('priceLockBtn').addEventListener('click', () => wrap.classList.remove('locked'));
+  document.getElementById('priceHideBtn').addEventListener('click', () => wrap.classList.add('locked'));
+})();
+</script>
 
 <!-- ═══ MAP ═══ -->
 <div class="map-section" id="karta">

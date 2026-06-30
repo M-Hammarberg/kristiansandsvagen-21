@@ -105,7 +105,17 @@ body::before {
   color: var(--champagne2);
   margin-bottom: 24px;
 }
-.page-hero h1 em { font-style: italic; color: var(--gold); }
+.page-hero h1 em {
+  font-style: italic; color: var(--gold);
+  background: linear-gradient(90deg, var(--gold2) 0%, var(--gold) 40%, #e8cb80 60%, var(--gold2) 100%);
+  background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; animation: shimmer 6s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.page-hero .eyebrow { opacity: 0; animation: fadeUp .9s ease .15s forwards; }
+.page-hero h1       { opacity: 0; animation: fadeUp .9s ease .30s forwards; }
+.page-hero p        { opacity: 0; animation: fadeUp .9s ease .50s forwards; }
 .page-hero p {
   font-size: .85rem; line-height: 1.9; color: rgba(212,184,150,.6);
   max-width: 600px; font-weight: 300;
@@ -130,6 +140,7 @@ body::before {
 .summary-stat .num {
   font-family: "Libre Baskerville", serif;
   font-size: clamp(1.3rem, 3.4vw, 1.9rem); font-weight: 400;
+  font-variant-numeric: tabular-nums;
 }
 .summary-stat.income .num { color: var(--champagne); }
 .summary-stat.expense .num { color: rgba(212,184,150,.75); }
@@ -141,9 +152,16 @@ body::before {
 }
 /* Visual income vs expense bar */
 .split-track {
+  position: relative;
   height: 6px; border-radius: 4px; overflow: hidden;
   background: var(--border); display: flex;
 }
+.split-track::after {
+  content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 38%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+  animation: barSweep 3.4s ease-in-out infinite; pointer-events: none;
+}
+@keyframes barSweep { 0%{transform:translateX(-120%)} 55%,100%{transform:translateX(380%)} }
 .split-expense {
   height: 100%;
   background: linear-gradient(90deg, var(--gold2), var(--gold));
@@ -169,7 +187,7 @@ body::before {
 .content-wrap { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 70px 40px; }
 
 .ledger-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;
 }
 .ledger-col {
   background: rgba(255,255,255,.96);
@@ -201,8 +219,58 @@ body::before {
 .row .name { color: var(--charcoal); font-weight: 400; }
 .row .amount {
   color: var(--gold2); font-weight: 500; white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums; transition: color .2s, transform .2s;
 }
+.ledger-col .row { margin: 0 -10px; padding-left: 10px; padding-right: 10px; border-radius: 5px; transition: background .2s; }
+.ledger-col .row:hover { background: rgba(201,165,90,.07); }
+.ledger-col .row:hover .amount { color: var(--gold); transform: scale(1.04); }
+.ledger-col { transition: box-shadow .35s ease; }
+.ledger-col:hover { box-shadow: 0 14px 50px rgba(40,36,30,.08); }
+
+/* ─── BREAKDOWN / DONUT ─── */
+.breakdown {
+  margin-bottom: 36px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 28px 30px 32px;
+  box-shadow: 0 10px 40px rgba(40,36,30,.05);
+  transition: box-shadow .35s ease;
+}
+.breakdown:hover { box-shadow: 0 16px 54px rgba(40,36,30,.10); }
+.breakdown-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--border-light);
+}
+.breakdown-head h2 { font-family: "Libre Baskerville", serif; font-size: 1.25rem; font-weight: 400; color: var(--charcoal); }
+.breakdown-head .sub { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: var(--stone); }
+.breakdown-grid { display: grid; grid-template-columns: 300px 1fr; gap: 40px; align-items: center; }
+.donut-wrap { position: relative; width: 300px; height: 300px; margin: 0 auto; }
+.donut-wrap canvas { width: 300px; height: 300px; display: block; }
+.donut-center {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; pointer-events: none; text-align: center;
+}
+.dc-label { font-size: .55rem; letter-spacing: .18em; text-transform: uppercase; color: var(--stone); margin-bottom: 6px; transition: color .25s; }
+.dc-value { font-family: "Libre Baskerville", serif; font-size: 1.55rem; color: var(--charcoal); font-variant-numeric: tabular-nums; transition: color .25s; }
+.dc-sub { font-size: .6rem; letter-spacing: .08em; color: var(--gold2); margin-top: 5px; min-height: 14px; }
+.legend { display: flex; flex-direction: column; gap: 1px; }
+.legend-item {
+  display: flex; align-items: center; gap: 12px; padding: 9px 10px;
+  border-radius: 5px; cursor: default; transition: background .2s, transform .2s;
+}
+.legend-item:hover, .legend-item.hot { background: rgba(201,165,90,.09); transform: translateX(2px); }
+.legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.05); transition: transform .2s; }
+.legend-item:hover .legend-swatch, .legend-item.hot .legend-swatch { transform: scale(1.25); }
+.legend-name { flex: 1; font-size: .76rem; color: var(--charcoal); }
+.legend-amt { font-size: .76rem; color: var(--gold2); font-weight: 500; font-variant-numeric: tabular-nums; }
+.legend-pct { font-size: .6rem; color: var(--stone); width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ─── REVEAL ANIMATIONER ─── */
+.anim .reveal-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+.anim .reveal-up.in { opacity: 1; transform: none; }
+.anim .reveal-row { opacity: 0; transform: translateY(10px); }
+.anim .reveal-row.in { opacity: 1; transform: none; transition: opacity .5s ease, transform .55s cubic-bezier(.22,1,.36,1); }
 
 /* ─── ÅRSKOSTNADER ─── */
 .yearcost {
@@ -383,7 +451,7 @@ body::before {
 .nav-home-icon:hover { color: var(--champagne); }
 </style>
 </head>
-<body>
+<body class="anim">
 
 <!-- ═══ BG CANVAS ═══ -->
 <canvas id="bgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
@@ -476,6 +544,24 @@ body::before {
 
 <!-- ═══ LEDGER ═══ -->
 <div class="content-wrap">
+  <div class="breakdown reveal-up" id="breakdown">
+    <div class="breakdown-head">
+      <h2>Vart pengarna går</h2>
+      <span class="sub">fördelning av inkomsten / mån</span>
+    </div>
+    <div class="breakdown-grid">
+      <div class="donut-wrap">
+        <canvas id="donut"></canvas>
+        <div class="donut-center">
+          <div class="dc-label" id="donutLabel">Inkomst / mån</div>
+          <div class="dc-value" id="donutValue">0 kr</div>
+          <div class="dc-sub" id="donutSub"></div>
+        </div>
+      </div>
+      <div class="legend" id="donutLegend"></div>
+    </div>
+  </div>
+
   <div class="ledger-grid">
     <div class="ledger-col income">
       <div class="ledger-head">
@@ -540,6 +626,7 @@ body::before {
   function unlock(){
     sessionStorage.setItem(SESSION_KEY, '1');
     lock.classList.add('hidden');
+    document.dispatchEvent(new Event('kv21:unlocked'));
   }
   if (sessionStorage.getItem(SESSION_KEY)) lock.classList.add('hidden');
 
@@ -584,18 +671,18 @@ const BUDGET = {
   ],
   expense: [
     // Bolån 3 510 000 kr: ränta 2,94% → 8 599,50/mån, amortering 2% → 5 850/mån
-    { name: 'Bolån – ränta (2,94 %)',            amount: 8600 },
-    { name: 'Bolån – amortering (2 %)',          amount: 5850 },
-    { name: 'Driftkostnad (el, vatten, sopor)',  amount: 4750 }, // ~57 000/år ÷ 12
-    { name: 'Bil (leasing + lån)',               amount: 4100 },
-    { name: 'Bil (sambo)',                       amount: 3000 },
-    { name: 'Mat & hushåll',                     amount: 8000 },
-    { name: 'Försäkringar',                      amount: 600 },  // schablon – justera
-    { name: 'Telefon & internet',                amount: 900 },  // schablon – justera
-    { name: 'Abonnemang & streaming',            amount: 500 },  // schablon – justera
-    { name: 'Studielån (CSN)',                   amount: 2000 },
-    { name: 'Fackförbundsavgift',                amount: 400 },
-    { name: 'Övrigt',                            amount: 5000 },
+    { name: 'Bolån – ränta (2,94 %)',            amount: 8600, group: 'Boende' },
+    { name: 'Bolån – amortering (2 %)',          amount: 5850, group: 'Boende' },
+    { name: 'Driftkostnad (el, vatten, sopor)',  amount: 4750, group: 'Boende' }, // ~57 000/år ÷ 12
+    { name: 'Bil (leasing + lån)',               amount: 4100, group: 'Bil' },
+    { name: 'Bil (sambo)',                       amount: 3000, group: 'Bil' },
+    { name: 'Mat & hushåll',                     amount: 8000, group: 'Mat & hushåll' },
+    { name: 'Försäkringar',                      amount: 600,  group: 'Försäkring & abonnemang' }, // schablon
+    { name: 'Telefon & internet',                amount: 900,  group: 'Försäkring & abonnemang' }, // schablon
+    { name: 'Abonnemang & streaming',            amount: 500,  group: 'Försäkring & abonnemang' }, // schablon
+    { name: 'Studielån (CSN)',                   amount: 2000, group: 'Lån' },
+    { name: 'Fackförbundsavgift',                amount: 400,  group: 'Medlemskap' },
+    { name: 'Övrigt',                            amount: 5000, group: 'Övrigt' },
   ],
 };
 
@@ -608,12 +695,14 @@ const ANNUAL = [
 
 (function(){
   const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
+  const PALETTE = ['#c9a55a','#a8872e','#e8cb80','#d4b896','#8a6f2e','#b89b6a','#6f5b2c','#caa86b'];
+  const SAVE_COLOR = '#3f9d68';
 
   function renderRows(container, arr){
     container.innerHTML = '';
     arr.forEach(it => {
       const row = document.createElement('div');
-      row.className = 'row';
+      row.className = 'row reveal-row';
       row.innerHTML = '<span class="name"></span><span class="amount"></span>';
       row.querySelector('.name').textContent = it.name;
       row.querySelector('.amount').textContent = fmt(it.amount || 0);
@@ -627,13 +716,7 @@ const ANNUAL = [
   const exp = BUDGET.expense.reduce((s, it) => s + (it.amount || 0), 0);
   const net = inc - exp;
 
-  document.getElementById('incomeTotal').textContent = fmt(inc);
-  document.getElementById('expenseTotal').textContent = fmt(exp);
-  document.getElementById('sumIncome').textContent = fmt(inc);
-  document.getElementById('sumExpense').textContent = fmt(exp);
-
   const netEl = document.getElementById('sumNet');
-  netEl.textContent = (net < 0 ? '−' : '') + fmt(Math.abs(net));
   netEl.classList.toggle('pos', net >= 0);
   netEl.classList.toggle('neg', net < 0);
 
@@ -645,14 +728,7 @@ const ANNUAL = [
       : 'Minus ' + Math.round(Math.abs(rate)) + '% av inkomsten';
   }
 
-  const expPct = inc > 0 ? Math.min(exp / inc * 100, 100) : 0;
-  const savePct = Math.max(0, 100 - expPct);
-  setTimeout(() => {
-    document.getElementById('splitExpense').style.width = expPct + '%';
-    document.getElementById('splitSaving').style.width = savePct + '%';
-  }, 200);
-
-  // Årskostnader (belopp = kr/år) — visas separat, ej i månadssumman
+  // ── Årskostnader (belopp = kr/år) — visas separat, ej i månadssumman ──
   const yearTotal = ANNUAL.reduce((s, it) => s + (it.amount || 0), 0);
   if (ANNUAL.length){
     const yc = document.getElementById('yearcostRows');
@@ -669,7 +745,6 @@ const ANNUAL = [
     document.getElementById('yearcostSection').style.display = '';
   }
 
-  // Årssparande = månadsnetto × 12 − årskostnader
   const yearlyNet = net * 12 - yearTotal;
   const an = document.getElementById('annualNote');
   if (inc > 0){
@@ -678,12 +753,159 @@ const ANNUAL = [
       : 'På ett år går budgeten back <strong>' + fmt(Math.abs(yearlyNet)) + '</strong> (efter årskostnader).';
   }
 
-  // Senast uppdaterad
   try {
     const d = new Date(LAST_UPDATED + 'T00:00:00');
     const s = d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric' });
     document.getElementById('updatedNote').textContent = 'Senast uppdaterad ' + s;
   } catch(e){}
+
+  // ── Donut-segment: utgiftsgrupper + kvar att spara (= hela inkomsten) ──
+  const groups = {}, order = [];
+  BUDGET.expense.forEach(it => {
+    const g = it.group || it.name;
+    if (!(g in groups)){ groups[g] = 0; order.push(g); }
+    groups[g] += (it.amount || 0);
+  });
+  const segs = order.map((g, i) => ({ label: g, value: groups[g], color: PALETTE[i % PALETTE.length] }));
+  if (net > 0) segs.push({ label: 'Kvar att spara', value: net, color: SAVE_COLOR });
+  const segTotal = segs.reduce((s, x) => s + x.value, 0) || 1;
+
+  // ── Legend ──
+  const legendEl = document.getElementById('donutLegend');
+  segs.forEach((sg, i) => {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.dataset.i = i;
+    item.innerHTML =
+      '<span class="legend-swatch" style="background:' + sg.color + '"></span>' +
+      '<span class="legend-name"></span>' +
+      '<span class="legend-amt">' + fmt(sg.value) + '</span>' +
+      '<span class="legend-pct">' + Math.round(sg.value / segTotal * 100) + '%</span>';
+    item.querySelector('.legend-name').textContent = sg.label;
+    item.addEventListener('mouseenter', () => setHot(i));
+    item.addEventListener('mouseleave', () => setHot(-1));
+    legendEl.appendChild(item);
+  });
+
+  // ── Donut canvas ──
+  const canvas = document.getElementById('donut');
+  const ctx = canvas.getContext('2d');
+  let DPR = Math.min(window.devicePixelRatio || 1, 2), CW = 300, CH = 300;
+  function sizeCanvas(){
+    CW = canvas.clientWidth || 300; CH = canvas.clientHeight || 300;
+    canvas.width = CW * DPR; canvas.height = CH * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  let hot = -1, prog = 0, ready = false;
+  const cLabel = document.getElementById('donutLabel');
+  const cVal = document.getElementById('donutValue');
+  const cSub = document.getElementById('donutSub');
+
+  function setHot(i){
+    hot = i;
+    document.querySelectorAll('.legend-item').forEach(el => el.classList.toggle('hot', +el.dataset.i === i));
+    if (ready){
+      if (i >= 0){
+        cLabel.textContent = segs[i].label;
+        cVal.textContent = fmt(segs[i].value);
+        cVal.style.color = segs[i].color;
+        cSub.textContent = Math.round(segs[i].value / segTotal * 100) + '% av inkomsten';
+      } else {
+        cLabel.textContent = 'Inkomst / mån';
+        cVal.textContent = fmt(inc);
+        cVal.style.color = '';
+        cSub.textContent = '';
+      }
+    }
+    if (prog >= 1) drawDonut();
+  }
+
+  function drawDonut(){
+    const cx = CW / 2, cy = CH / 2;
+    const outer = Math.min(CW, CH) / 2 - 6;
+    const ringW = outer * 0.30, r = outer - ringW / 2, gap = 0.016;
+    ctx.clearRect(0, 0, CW, CH);
+    let a0 = -Math.PI / 2;
+    segs.forEach((sg, i) => {
+      const frac = sg.value / segTotal;
+      const sweep = frac * Math.PI * 2 * prog;
+      const isHot = hot === i;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r + (isHot ? 4 : 0), a0 + gap / 2, Math.max(a0 + gap / 2, a0 + sweep - gap / 2));
+      ctx.lineWidth = ringW + (isHot ? 6 : 0);
+      ctx.lineCap = 'butt';
+      ctx.strokeStyle = sg.color;
+      ctx.globalAlpha = (hot === -1 || isHot) ? 1 : 0.30;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      a0 += frac * Math.PI * 2 * prog;
+    });
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    if (prog < 1) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left - CW / 2, y = e.clientY - rect.top - CH / 2;
+    const dist = Math.hypot(x, y);
+    const outer = Math.min(CW, CH) / 2 - 6, inner = outer - outer * 0.30 - 6;
+    if (dist < inner || dist > outer + 6){ if (hot !== -1) setHot(-1); return; }
+    let ang = Math.atan2(y, x) + Math.PI / 2; if (ang < 0) ang += Math.PI * 2;
+    let acc = 0, found = -1;
+    for (let i = 0; i < segs.length; i++){
+      const frac = segs[i].value / segTotal * Math.PI * 2;
+      if (ang >= acc && ang < acc + frac){ found = i; break; }
+      acc += frac;
+    }
+    if (found !== hot) setHot(found);
+  });
+  canvas.addEventListener('mouseleave', () => setHot(-1));
+
+  // ── Count-up ──
+  function countUp(el, target, dur, sign){
+    const t0 = performance.now();
+    (function step(now){
+      const k = Math.min((now - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - k, 3);
+      el.textContent = (sign && target < 0 ? '−' : '') + fmt(Math.abs(target * e));
+      if (k < 1) requestAnimationFrame(step);
+      else el.textContent = (sign && target < 0 ? '−' : '') + fmt(Math.abs(target));
+    })(performance.now());
+  }
+
+  // ── Starta animationer vid visning ──
+  let started = false;
+  function start(){
+    if (started) return; started = true;
+    sizeCanvas();
+    requestAnimationFrame(() => document.getElementById('breakdown').classList.add('in'));
+    countUp(document.getElementById('sumIncome'), inc, 1100);
+    countUp(document.getElementById('sumExpense'), exp, 1100);
+    countUp(netEl, net, 1100, true);
+    countUp(document.getElementById('incomeTotal'), inc, 1100);
+    countUp(document.getElementById('expenseTotal'), exp, 1100);
+    countUp(cVal, inc, 1200);
+    const expPct = inc > 0 ? Math.min(exp / inc * 100, 100) : 0;
+    setTimeout(() => {
+      document.getElementById('splitExpense').style.width = expPct + '%';
+      document.getElementById('splitSaving').style.width = Math.max(0, 100 - expPct) + '%';
+    }, 250);
+    document.querySelectorAll('.reveal-row').forEach((row, i) => setTimeout(() => row.classList.add('in'), 140 + i * 55));
+    const d0 = performance.now(), dur = 1300;
+    (function anim(now){
+      const k = Math.min((now - d0) / dur, 1);
+      prog = 1 - Math.pow(1 - k, 3);
+      drawDonut();
+      if (k < 1) requestAnimationFrame(anim);
+      else { prog = 1; drawDonut(); ready = true; setHot(hot); }
+    })(performance.now());
+  }
+
+  window.addEventListener('resize', () => { DPR = Math.min(window.devicePixelRatio||1,2); sizeCanvas(); if (prog >= 1) drawDonut(); });
+
+  setHot(-1);
+  if (document.getElementById('lock').classList.contains('hidden')) start();
+  else document.addEventListener('kv21:unlocked', start, { once: true });
 })();
 </script>
 

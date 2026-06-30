@@ -245,8 +245,8 @@ body::before {
 .breakdown-head h2 { font-family: "Libre Baskerville", serif; font-size: 1.25rem; font-weight: 400; color: var(--charcoal); }
 .breakdown-head .sub { font-size: .56rem; letter-spacing: .16em; text-transform: uppercase; color: var(--stone); }
 .breakdown-grid { display: grid; grid-template-columns: 300px 1fr; gap: 40px; align-items: center; }
-.donut-wrap { position: relative; width: 300px; height: 300px; margin: 0 auto; }
-.donut-wrap canvas { width: 300px; height: 300px; display: block; }
+.donut-wrap { position: relative; width: 100%; max-width: 300px; aspect-ratio: 1 / 1; margin: 0 auto; }
+.donut-wrap canvas { width: 100%; height: 100%; display: block; }
 .donut-center {
   position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; pointer-events: none; text-align: center;
@@ -265,6 +265,11 @@ body::before {
 .legend-name { flex: 1; font-size: .76rem; color: var(--charcoal); }
 .legend-amt { font-size: .76rem; color: var(--gold2); font-weight: 500; font-variant-numeric: tabular-nums; }
 .legend-pct { font-size: .6rem; color: var(--stone); width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+@media(max-width:760px){
+  .breakdown-grid { grid-template-columns: 1fr; gap: 24px; justify-items: center; }
+  .donut-wrap { max-width: 260px; }
+  .legend { width: 100%; }
+}
 
 /* ─── REVEAL ANIMATIONER ─── */
 .anim .reveal-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
@@ -466,13 +471,13 @@ body::before {
 }
 /* mjukt ljussvep diagonalt över korten */
 .breakdown::before, .ledger-col::before, .yearcost::before {
-  content: ''; position: absolute; top: -20%; left: -65%; width: 50%; height: 140%;
+  content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
   background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
-  transform: skewX(-18deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite;
+  transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite;
 }
 .ledger-col.expense::before { animation-delay: 1.6s; }
 .yearcost::before { animation-delay: 2.8s; }
-@keyframes cardShine { 0%, 70% { left: -65%; } 100% { left: 135%; } }
+@keyframes cardShine { 0%, 70% { left: -130%; } 100% { left: 140%; } }
 
 .breakdown-head, .ledger-head, .yearcost-head { border-bottom-color: rgba(201,165,90,.16) !important; }
 .breakdown-head h2, .ledger-head h2, .yearcost-head h2 { color: #ecdcbf; }

@@ -531,26 +531,24 @@ body::before {
    ─────────────────────────────────────────────────────────────
    Detta är källan till alla siffror. Ändra här för att uppdatera
    sidan (gäller på alla enheter när det är publicerat).
-   Belopp i kronor per månad.
+   Belopp i kronor per månad. Inkomster = nettolön (efter skatt).
 
-   OBS: nedanstående är EXEMPELSIFFROR — byts mot riktiga.
+   OBS: ännu saknas löpande utgifter som el/vatten/sopor, mat,
+   försäkringar, telefon/internet, abonnemang m.m. — fyll på dem
+   här när siffrorna är kända.
    ═════════════════════════════════════════════════════════════ */
 const LAST_UPDATED = '2026-06-30';
 const BUDGET = {
   income: [
-    { name: 'Lön (person 1)',        amount: 38500 },
-    { name: 'Lön (person 2)',        amount: 36700 },
+    { name: 'Lön (person 1)',        amount: 29000 }, // netto (efter skatt)
+    { name: 'Lön (person 2)',        amount: 30000 }, // netto (efter skatt)
   ],
   expense: [
-    { name: 'Bolån / ränta',                     amount: 11200 },
-    { name: 'Driftkostnad (el, vatten, sopor)',  amount: 4800 },
-    { name: 'Mat & hushåll',                     amount: 9000 },
-    { name: 'Försäkringar',                      amount: 3200 },
-    { name: 'Bil & transport',                   amount: 3500 },
-    { name: 'Telefon & internet',                amount: 899 },
-    { name: 'Abonnemang & streaming',            amount: 650 },
-    { name: 'Sparande',                          amount: 8000 },
-    { name: 'Övrigt',                            amount: 1500 },
+    // Bolån 3 510 000 kr: ränta 2,94% → 8 599,50/mån, amortering 2% → 5 850/mån
+    { name: 'Bolån – ränta (2,94 %)',     amount: 8600 },
+    { name: 'Bolån – amortering (2 %)',   amount: 5850 },
+    { name: 'Bil (leasing + lån)',        amount: 4100 },
+    { name: 'Studielån (CSN)',            amount: 2000 },
   ],
 };
 

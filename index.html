@@ -668,6 +668,9 @@ footer {
   letter-spacing: .06em;
 }
 .footer-copy { font-size: .62rem; letter-spacing: .1em; color: rgba(255,255,255,.18); line-height: 1.9; text-align: right; }
+/* Diskret ingång till privata sidan – ser ut som vanlig skiljepunkt */
+.footer-dot { color: inherit; text-decoration: none; cursor: inherit; padding: 0 3px; }
+.footer-dot:hover, .footer-dot:focus { color: inherit; outline: none; }
 
 /* ─── LIGHTBOX ─── */
 .lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.97); z-index: 999; flex-direction: column; justify-content: center; align-items: center; }
@@ -1399,7 +1402,7 @@ footer {
   <div class="footer-rule"></div>
   <div class="footer-name">Maximiliam Hammarberg</div>
   <div class="footer-rule"></div>
-  <div class="footer-copy">Skogshöjden · Trollhättans kommun<br>Villa 1988 · 164 m² · 6 rum · 885 m² tomt</div>
+  <div class="footer-copy">Skogshöjden · Trollhättans kommun<br>Villa 1988 · 164 m² · 6 rum <a href="/privat" class="footer-dot" aria-hidden="true" tabindex="-1">·</a> 885 m² tomt</div>
 </footer>
 
 <!-- ═══ LIGHTBOX ═══ -->

@@ -293,6 +293,9 @@ body::before {
   color: rgba(212,184,150,.3); font-size: .85rem; letter-spacing: .06em;
 }
 .footer-logo em { font-style: normal; color: rgba(201,165,90,.4); }
+/* Diskret ingång till privata sidan – ser ut som vanlig text */
+.footer-dot { color: inherit; text-decoration: none; cursor: inherit; padding: 0 3px; }
+.footer-dot:hover, .footer-dot:focus { color: inherit; outline: none; }
 
 /* ─── REVEAL ANIMATIONS ─── */
 .reveal {
@@ -1014,7 +1017,7 @@ body::before {
 
 <!-- ═══ FOOTER ═══ -->
 <div class="site-footer">
-  <div class="footer-logo"><em>Kristiansandsvägen</em> 21 — Renoveringsplaner</div>
+  <div class="footer-logo"><em>Kristiansandsvägen</em> 21 <a href="/privat" class="footer-dot" aria-hidden="true" tabindex="-1">—</a> Renoveringsplaner</div>
 </div>
 
 <script>

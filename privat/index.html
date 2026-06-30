@@ -692,8 +692,15 @@ body::before {
   }
   function unlock(){
     sessionStorage.setItem(SESSION_KEY, '1');
+    if (inp) inp.blur();              // stäng tangentbordet
     lock.classList.add('hidden');
     document.dispatchEvent(new Event('kv21:unlocked'));
+    // mobilen kan ha scrollat ner när fältet fokuserades — tillbaka till toppen
+    const toTop = () => window.scrollTo(0, 0);
+    toTop();
+    requestAnimationFrame(toTop);
+    setTimeout(toTop, 80);
+    setTimeout(toTop, 250);
   }
   if (sessionStorage.getItem(SESSION_KEY)) lock.classList.add('hidden');
 
@@ -749,6 +756,7 @@ const BUDGET = {
     { name: 'Abonnemang & streaming',            amount: 500,  group: 'Försäkring & abonnemang' }, // schablon
     { name: 'Studielån (CSN)',                   amount: 2000, group: 'Lån' },
     { name: 'Fackförbundsavgift',                amount: 400,  group: 'Medlemskap' },
+    { name: 'Gymkort (STC)',                     amount: 700,  group: 'Medlemskap' },
     { name: 'Övrigt',                            amount: 5000, group: 'Övrigt' },
   ],
 };

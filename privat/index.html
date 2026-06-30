@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<script>document.documentElement.style.background="#0d0d0d"</script>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../images/misc/favicon.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Privat — Ekonomi</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --obsidian: #0d0d0d;
+  --charcoal: #1a1917;
+  --champagne: #d4b896;
+  --champagne2: #e8d5bb;
+  --ivory: #f7f3ee;
+  --ivory2: #ede8e1;
+  --stone: #7a7670;
+  --cream: #f2ece4;
+  --gold: #c9a55a;
+  --gold2: #a8872e;
+  --border: #2e2c28;
+  --border-light: #d8d0c4;
+  --green: #2e7d4f;
+  --red: #b5483b;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overscroll-behavior: none; scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+body {
+  font-family: "Montserrat", sans-serif;
+  background: transparent;
+  color: var(--charcoal);
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ''; position: fixed; top: 0; left: 0; right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: #0d0d0d; z-index: 1000; pointer-events: none;
+}
+
+/* ─── NAV ─── */
+.site-nav {
+  position: sticky; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center;
+  padding: env(safe-area-inset-top, 0px) 40px 0;
+  height: calc(64px + env(safe-area-inset-top, 0px));
+  background: var(--obsidian);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: "Libre Baskerville", serif; font-size: .95rem; font-style: italic;
+  color: var(--champagne); letter-spacing: .06em; margin-right: auto;
+  text-decoration: none;
+}
+.nav-logo em { font-style: normal; color: var(--gold); }
+.nav-links { display: flex; align-items: center; }
+.nav-links a {
+  color: rgba(255,255,255,.35); text-decoration: none;
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  padding: 20px 22px; transition: color .25s; font-weight: 400;
+}
+.nav-links a:hover { color: var(--champagne); }
+.nav-links a.active { color: var(--gold); }
+.nav-links a.active::after {
+  content: ''; display: block; height: 1px;
+  background: var(--gold); margin-top: 3px;
+}
+.nav-lock-btn {
+  background: none; border: 1px solid rgba(201,165,90,.3); cursor: pointer;
+  color: rgba(212,184,150,.6); font-family: "Montserrat", sans-serif;
+  font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+  padding: 8px 14px; border-radius: 3px; transition: all .2s; margin-left: 8px;
+}
+.nav-lock-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+/* ─── PAGE HERO ─── */
+.page-hero {
+  position: relative; z-index: 1;
+  background: rgba(26,25,23,.92);
+  padding: calc(64px + env(safe-area-inset-top, 0px)) 40px 70px;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero-inner { max-width: 980px; margin: 0 auto; }
+.eyebrow {
+  font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold); display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px; font-weight: 500;
+}
+.eyebrow::before {
+  content: ''; display: inline-block; width: 13px; height: 13px;
+  border: 1.5px solid var(--gold); border-radius: 3px 3px 4px 4px;
+  border-bottom-width: 4px; position: relative;
+}
+.eyebrow::after { content: ''; flex: 0 0 40px; height: 1px; background: var(--gold2); }
+.page-hero h1 {
+  font-family: "Libre Baskerville", serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--champagne2);
+  margin-bottom: 24px;
+}
+.page-hero h1 em { font-style: italic; color: var(--gold); }
+.page-hero p {
+  font-size: .85rem; line-height: 1.9; color: rgba(212,184,150,.6);
+  max-width: 600px; font-weight: 300;
+}
+
+/* ─── SUMMARY BAR ─── */
+.summary-section {
+  position: relative; z-index: 1;
+  background: var(--obsidian);
+  padding: 40px;
+  border-bottom: 1px solid var(--border);
+}
+.summary-inner { max-width: 980px; margin: 0 auto; }
+.summary-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+  margin-bottom: 26px;
+}
+.summary-stat .lbl {
+  font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--stone); margin-bottom: 8px;
+}
+.summary-stat .num {
+  font-family: "Libre Baskerville", serif;
+  font-size: clamp(1.3rem, 3.4vw, 1.9rem); font-weight: 400;
+}
+.summary-stat.income .num { color: var(--champagne); }
+.summary-stat.expense .num { color: rgba(212,184,150,.75); }
+.summary-stat.net .num.pos { color: #6cc795; }
+.summary-stat.net .num.neg { color: #d98377; }
+.summary-stat.net .sub {
+  font-size: .55rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--stone); margin-top: 4px;
+}
+/* Visual income vs expense bar */
+.split-track {
+  height: 6px; border-radius: 4px; overflow: hidden;
+  background: var(--border); display: flex;
+}
+.split-expense {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold2), var(--gold));
+  width: 0; transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+.split-legend {
+  display: flex; gap: 24px; margin-top: 12px; flex-wrap: wrap;
+}
+.split-legend span {
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--stone); display: inline-flex; align-items: center; gap: 7px;
+}
+.split-legend .dot { width: 9px; height: 9px; border-radius: 50%; }
+.split-legend .dot.exp { background: var(--gold); }
+.split-legend .dot.sav { background: #6cc795; }
+
+/* ─── MAIN CONTENT ─── */
+.content-wrap { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 70px 40px; }
+
+.ledger-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+}
+.ledger-col {
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 28px 26px 22px;
+}
+.ledger-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 18px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-light);
+}
+.ledger-head h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.25rem; font-weight: 400; color: var(--charcoal);
+}
+.ledger-head .total {
+  font-family: "Libre Baskerville", serif; font-size: 1.05rem; font-weight: 700;
+}
+.ledger-col.income .total { color: var(--gold2); }
+.ledger-col.expense .total { color: var(--gold2); }
+
+.row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(216,208,196,.5);
+}
+.row:last-of-type { border-bottom: none; }
+.row .name {
+  flex: 1; border: none; background: transparent;
+  font-family: "Montserrat", sans-serif; font-size: .8rem;
+  color: var(--charcoal); font-weight: 400; padding: 4px 2px;
+  border-bottom: 1px solid transparent; transition: border-color .2s;
+  min-width: 0;
+}
+.row .name:focus { outline: none; border-bottom-color: rgba(201,165,90,.5); }
+.row .amount {
+  width: 110px; text-align: right; border: none; background: transparent;
+  font-family: "Montserrat", sans-serif; font-size: .82rem; font-weight: 500;
+  color: var(--gold2); padding: 4px 2px;
+  border-bottom: 1px solid transparent; transition: border-color .2s;
+}
+.row .amount:focus { outline: none; border-bottom-color: rgba(201,165,90,.5); }
+.row .amount::placeholder { color: rgba(122,118,112,.4); }
+.row .unit { font-size: .68rem; color: var(--stone); flex-shrink: 0; }
+.row .del {
+  background: none; border: none; cursor: pointer;
+  color: rgba(122,118,112,.35); font-size: 1rem; line-height: 1;
+  padding: 2px 4px; flex-shrink: 0; transition: color .2s;
+}
+.row .del:hover { color: var(--red); }
+
+.add-row {
+  margin-top: 14px; background: none;
+  border: 1px dashed rgba(201,165,90,.4); border-radius: 4px;
+  color: var(--gold2); cursor: pointer; width: 100%;
+  font-family: "Montserrat", sans-serif; font-size: .6rem;
+  letter-spacing: .16em; text-transform: uppercase; padding: 10px;
+  transition: all .2s;
+}
+.add-row:hover { background: rgba(201,165,90,.07); border-color: var(--gold); }
+
+/* ─── ANNUAL NOTE ─── */
+.annual-note {
+  margin-top: 36px; text-align: center;
+  font-size: .72rem; color: var(--stone); font-weight: 300;
+}
+.annual-note strong { color: var(--gold2); font-weight: 600; }
+
+.privacy-note {
+  margin-top: 26px; max-width: 640px; margin-left: auto; margin-right: auto;
+  text-align: center; font-size: .66rem; line-height: 1.7;
+  color: rgba(122,118,112,.85); font-weight: 300;
+}
+.privacy-note .pico { color: var(--gold2); }
+
+.reset-link {
+  display: block; text-align: center; margin-top: 18px;
+  font-size: .55rem; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(122,118,112,.5); background: none; border: none; cursor: pointer;
+  width: 100%; transition: color .2s;
+}
+.reset-link:hover { color: var(--red); }
+
+/* ─── FOOTER ─── */
+.site-footer {
+  position: relative; z-index: 1;
+  background: var(--obsidian);
+  border-top: 1px solid var(--border);
+  padding: 40px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: "Libre Baskerville", serif; font-style: italic;
+  color: rgba(212,184,150,.3); font-size: .85rem; letter-spacing: .06em;
+}
+.footer-logo em { font-style: normal; color: rgba(201,165,90,.4); }
+
+/* ─── LOCK SCREEN ─── */
+.lock {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #0d0d0d;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.lock.hidden { display: none; }
+.lock-inner {
+  max-width: 360px; width: 100%; text-align: center;
+  animation: lockUp .8s cubic-bezier(.22,1,.36,1);
+}
+@keyframes lockUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.lock-icon {
+  width: 58px; height: 58px; margin: 0 auto 26px;
+  border: 1.5px solid rgba(201,165,90,.5); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+}
+.lock-eyebrow {
+  font-size: .58rem; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px; font-weight: 500;
+}
+.lock-title {
+  font-family: "Libre Baskerville", serif; font-style: italic;
+  font-size: 1.7rem; color: var(--champagne2); margin-bottom: 12px;
+}
+.lock-sub {
+  font-size: .72rem; line-height: 1.7; color: rgba(212,184,150,.5);
+  margin-bottom: 26px; font-weight: 300;
+}
+.lock-form { display: flex; flex-direction: column; gap: 12px; }
+.lock-input {
+  width: 100%; background: rgba(255,255,255,.05);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 14px 16px; color: var(--champagne2);
+  font-family: "Montserrat", sans-serif; font-size: .85rem;
+  letter-spacing: .08em; text-align: center; transition: border-color .2s;
+}
+.lock-input:focus { outline: none; border-color: var(--gold); }
+.lock-input::placeholder { color: rgba(212,184,150,.3); letter-spacing: .04em; }
+.lock-btn {
+  width: 100%; background: var(--gold); border: none; border-radius: 4px;
+  padding: 14px; color: #1a1917; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .62rem;
+  letter-spacing: .2em; text-transform: uppercase; font-weight: 600;
+  transition: background .2s;
+}
+.lock-btn:hover { background: var(--champagne); }
+.lock-error {
+  font-size: .68rem; color: #d98377; min-height: 16px;
+  letter-spacing: .04em; margin-top: 2px;
+}
+.lock-home {
+  display: inline-block; margin-top: 24px;
+  font-size: .55rem; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(212,184,150,.4); text-decoration: none; transition: color .2s;
+}
+.lock-home:hover { color: var(--champagne); }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:760px){
+  .ledger-grid { grid-template-columns: 1fr; gap: 20px; }
+  .summary-stats { gap: 16px; }
+}
+@media(max-width:640px){
+  .site-nav { padding: env(safe-area-inset-top, 0px) 20px 0; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .page-hero { padding: calc(52px + env(safe-area-inset-top, 0px)) 20px 46px; }
+  .page-hero h1 { font-size: clamp(1.8rem, 8vw, 2.5rem); }
+  .page-hero p { font-size: .8rem; max-width: 100%; }
+  .summary-section { padding: 26px 20px; }
+  .summary-stats { grid-template-columns: 1fr; gap: 18px; }
+  .content-wrap { padding: 44px 20px; }
+  .ledger-col { padding: 22px 18px 18px; }
+  .row .amount { width: 92px; }
+}
+
+/* ─── HAMBURGER ─── */
+.nav-hamburger {
+  display: none; flex-direction: column; justify-content: center; gap: 5px;
+  width: 36px; height: 36px; cursor: pointer; background: none; border: none;
+  padding: 4px; margin-left: auto; position: relative; z-index: 600;
+}
+.nav-hamburger span {
+  display: block; width: 100%; height: 1px; background: var(--champagne);
+  transition: transform .3s ease, opacity .3s ease; transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.mobile-nav {
+  display: none; position: fixed; inset: 0;
+  background: rgba(13,13,13,.97); z-index: 500;
+  flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .3s ease; pointer-events: none;
+}
+.mobile-nav.open { display: flex; opacity: 1; pointer-events: all; }
+.mobile-nav-logo {
+  font-family: "Libre Baskerville", serif; font-size: 1rem; font-style: italic;
+  color: var(--champagne); letter-spacing: .06em; margin-bottom: 40px;
+}
+.mobile-nav-logo em { font-style: normal; color: var(--gold); }
+.mobile-nav a {
+  color: rgba(255,255,255,.45); text-decoration: none; font-size: .7rem;
+  letter-spacing: .28em; text-transform: uppercase; font-weight: 400;
+  padding: 16px 40px; width: 100%; text-align: center;
+  border-bottom: 1px solid var(--border); transition: color .2s, background .2s;
+}
+.mobile-nav a:first-of-type { border-top: 1px solid var(--border); }
+.mobile-nav a:hover, .mobile-nav a.active { color: var(--gold); }
+.nav-home-icon {
+  color: rgba(255,255,255,.35); display: flex; align-items: center;
+  padding: 0 16px; height: 100%; transition: color .25s; text-decoration: none;
+}
+.nav-home-icon:hover { color: var(--champagne); }
+</style>
+</head>
+<body>
+
+<!-- ═══ BG CANVAS ═══ -->
+<canvas id="bgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
+<!-- ═══ LOCK SCREEN ═══ -->
+<div class="lock" id="lock">
+  <div class="lock-inner">
+    <div class="lock-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="10" width="16" height="11" rx="2"/>
+        <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+        <circle cx="12" cy="15.5" r="1.3"/>
+      </svg>
+    </div>
+    <div class="lock-eyebrow" id="lockEyebrow">Privat sida</div>
+    <div class="lock-title" id="lockTitle">Ange lösenord</div>
+    <div class="lock-sub" id="lockSub">Den här sidan är låst. Ange lösenordet för att se hushållets ekonomi.</div>
+    <form class="lock-form" id="lockForm">
+      <input class="lock-input" id="lockInput" type="password" placeholder="Lösenord" autocomplete="off" autofocus>
+      <input class="lock-input" id="lockInput2" type="password" placeholder="Upprepa lösenord" autocomplete="off" style="display:none;">
+      <button class="lock-btn" id="lockSubmit" type="submit">Lås upp</button>
+    </form>
+    <div class="lock-error" id="lockError"></div>
+    <a href="/" class="lock-home">← Tillbaka till startsidan</a>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="site-nav">
+  <a href="/" class="nav-logo"><em>Kristiansandsvägen</em> <span>21</span></a>
+  <div class="nav-links">
+    <a href="/#om">Om bostaden</a>
+    <a href="/#galleri">Galleri</a>
+    <a href="/renovering">Renovering</a>
+    <a href="/privat" class="active">Privat</a>
+    <button class="nav-lock-btn" id="lockNowBtn" type="button">Lås</button>
+  </div>
+  <a href="/" class="nav-home-icon" aria-label="Till startsidan">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+      <path d="M9 22V12h6v10"/>
+    </svg>
+  </a>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Öppna meny">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-logo"><em>Kristiansandsvägen</em> 21</div>
+  <a href="/#om">Om bostaden</a>
+  <a href="/#galleri">Galleri</a>
+  <a href="/renovering">Renovering</a>
+  <a href="/privat" class="active">Privat</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">Privat — endast för oss</div>
+    <h1>Inkomster &amp; utgifter<br><em>månad för månad</em></h1>
+    <p>Vår enkla hushållsbudget. Fyll i vad som kommer in och vad som går ut varje månad, så räknar sidan ut vad vi har kvar. Allt sparas bara lokalt i den här webbläsaren.</p>
+  </div>
+</div>
+
+<!-- ═══ SUMMARY ═══ -->
+<div class="summary-section">
+  <div class="summary-inner">
+    <div class="summary-stats">
+      <div class="summary-stat income">
+        <div class="lbl">Inkomster / mån</div>
+        <div class="num" id="sumIncome">0 kr</div>
+      </div>
+      <div class="summary-stat expense">
+        <div class="lbl">Utgifter / mån</div>
+        <div class="num" id="sumExpense">0 kr</div>
+      </div>
+      <div class="summary-stat net">
+        <div class="lbl">Kvar / mån</div>
+        <div class="num" id="sumNet">0 kr</div>
+        <div class="sub" id="sumRate"></div>
+      </div>
+    </div>
+    <div class="split-track"><div class="split-expense" id="splitExpense"></div></div>
+    <div class="split-legend">
+      <span><span class="dot exp"></span> Utgifter</span>
+      <span><span class="dot sav"></span> Kvar att spara</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LEDGER ═══ -->
+<div class="content-wrap">
+  <div class="ledger-grid">
+    <div class="ledger-col income">
+      <div class="ledger-head">
+        <h2>Inkomster</h2>
+        <span class="total" id="incomeTotal">0 kr</span>
+      </div>
+      <div id="incomeRows"></div>
+      <button class="add-row" data-add="income" type="button">+ Lägg till inkomst</button>
+    </div>
+    <div class="ledger-col expense">
+      <div class="ledger-head">
+        <h2>Utgifter</h2>
+        <span class="total" id="expenseTotal">0 kr</span>
+      </div>
+      <div id="expenseRows"></div>
+      <button class="add-row" data-add="expense" type="button">+ Lägg till utgift</button>
+    </div>
+  </div>
+
+  <div class="annual-note" id="annualNote"></div>
+
+  <div class="privacy-note">
+    <span class="pico">🔒</span> Siffrorna sparas bara i den här webbläsaren på den här enheten — de skickas aldrig någonstans och finns inte i sidans kod. Öppnar du sidan på en annan enhet börjar du med en tom mall.
+  </div>
+
+  <button class="reset-link" id="resetBtn" type="button">Nollställ alla siffror &amp; lösenord</button>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="site-footer">
+  <div class="footer-logo"><em>Kristiansandsvägen</em> 21 — Privat</div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   LÖSENORDSLÅS
+   Lösenordet lagras bara som en SHA-256-hash i
+   din webbläsare (localStorage) — aldrig i koden.
+   Första besöket: skapa ett lösenord.
+   ───────────────────────────────────────────── */
+(function(){
+  const HASH_KEY = 'kv21_privat_pwhash';
+  const SESSION_KEY = 'kv21_privat_unlocked';
+  const lock = document.getElementById('lock');
+  const form = document.getElementById('lockForm');
+  const inp1 = document.getElementById('lockInput');
+  const inp2 = document.getElementById('lockInput2');
+  const err = document.getElementById('lockError');
+  const titleEl = document.getElementById('lockTitle');
+  const subEl = document.getElementById('lockSub');
+  const submitBtn = document.getElementById('lockSubmit');
+
+  async function sha256(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  const hasPw = !!localStorage.getItem(HASH_KEY);
+  const isSetup = !hasPw;
+
+  if (isSetup){
+    titleEl.textContent = 'Skapa ett lösenord';
+    subEl.textContent = 'Det här är första gången. Välj ett lösenord som låser sidan på den här enheten.';
+    inp1.placeholder = 'Välj lösenord';
+    inp2.style.display = 'block';
+    submitBtn.textContent = 'Skapa & lås upp';
+  }
+
+  function unlock(){
+    sessionStorage.setItem(SESSION_KEY, '1');
+    lock.classList.add('hidden');
+    document.dispatchEvent(new Event('kv21:unlocked'));
+  }
+
+  // Redan upplåst denna flik/session
+  if (sessionStorage.getItem(SESSION_KEY)){
+    lock.classList.add('hidden');
+  }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    err.textContent = '';
+    const val = inp1.value;
+    if (!val){ err.textContent = 'Skriv ett lösenord.'; return; }
+
+    if (isSetup){
+      if (val.length < 4){ err.textContent = 'Minst 4 tecken.'; return; }
+      if (val !== inp2.value){ err.textContent = 'Lösenorden matchar inte.'; return; }
+      localStorage.setItem(HASH_KEY, await sha256(val));
+      unlock();
+      return;
+    }
+
+    const h = await sha256(val);
+    if (h === localStorage.getItem(HASH_KEY)){
+      unlock();
+    } else {
+      err.textContent = 'Fel lösenord.';
+      inp1.value = '';
+      inp1.focus();
+    }
+  });
+
+  // Lås-knapp i nav
+  const lockNowBtn = document.getElementById('lockNowBtn');
+  if (lockNowBtn) lockNowBtn.addEventListener('click', function(){
+    sessionStorage.removeItem(SESSION_KEY);
+    location.reload();
+  });
+})();
+</script>
+
+<script>
+/* ─────────────────────────────────────────────
+   BUDGET — inkomster vs utgifter
+   Data sparas i localStorage (bara på enheten).
+   ───────────────────────────────────────────── */
+(function(){
+  const STORE_KEY = 'kv21_privat_budget';
+  const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
+  const parseAmt = v => {
+    const n = parseFloat(String(v).replace(/\s/g,'').replace(',','.'));
+    return isNaN(n) ? 0 : n;
+  };
+
+  const DEFAULTS = {
+    income: [
+      { name: 'Lön (person 1)', amount: '' },
+      { name: 'Lön (person 2)', amount: '' },
+      { name: 'Barnbidrag', amount: '' },
+      { name: 'Övrigt', amount: '' },
+    ],
+    expense: [
+      { name: 'Bolån / ränta', amount: '' },
+      { name: 'Driftkostnad (el, vatten, sopor)', amount: '' },
+      { name: 'Mat & hushåll', amount: '' },
+      { name: 'Försäkringar', amount: '' },
+      { name: 'Bil & transport', amount: '' },
+      { name: 'Telefon & internet', amount: '' },
+      { name: 'Abonnemang & streaming', amount: '' },
+      { name: 'Sparande', amount: '' },
+      { name: 'Övrigt', amount: '' },
+    ],
+  };
+
+  let data;
+  try { data = JSON.parse(localStorage.getItem(STORE_KEY)); } catch(e){ data = null; }
+  if (!data || !data.income || !data.expense){
+    data = JSON.parse(JSON.stringify(DEFAULTS));
+  }
+
+  const incomeRows = document.getElementById('incomeRows');
+  const expenseRows = document.getElementById('expenseRows');
+
+  function save(){ localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
+
+  function makeRow(item, type){
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML =
+      '<input class="name" type="text" placeholder="Benämning">' +
+      '<input class="amount" type="text" inputmode="numeric" placeholder="0">' +
+      '<span class="unit">kr</span>' +
+      '<button class="del" type="button" aria-label="Ta bort">×</button>';
+    const nameEl = row.querySelector('.name');
+    const amtEl = row.querySelector('.amount');
+    nameEl.value = item.name || '';
+    amtEl.value = item.amount === '' || item.amount == null ? '' : item.amount;
+
+    nameEl.addEventListener('input', () => { item.name = nameEl.value; save(); });
+    amtEl.addEventListener('input', () => { item.amount = amtEl.value; save(); recalc(); });
+    row.querySelector('.del').addEventListener('click', () => {
+      const arr = data[type];
+      const i = arr.indexOf(item);
+      if (i > -1) arr.splice(i, 1);
+      row.remove();
+      save(); recalc();
+    });
+    return row;
+  }
+
+  function render(){
+    incomeRows.innerHTML = '';
+    expenseRows.innerHTML = '';
+    data.income.forEach(it => incomeRows.appendChild(makeRow(it, 'income')));
+    data.expense.forEach(it => expenseRows.appendChild(makeRow(it, 'expense')));
+    recalc();
+  }
+
+  function recalc(){
+    const inc = data.income.reduce((s, it) => s + parseAmt(it.amount), 0);
+    const exp = data.expense.reduce((s, it) => s + parseAmt(it.amount), 0);
+    const net = inc - exp;
+
+    document.getElementById('incomeTotal').textContent = fmt(inc);
+    document.getElementById('expenseTotal').textContent = fmt(exp);
+    document.getElementById('sumIncome').textContent = fmt(inc);
+    document.getElementById('sumExpense').textContent = fmt(exp);
+
+    const netEl = document.getElementById('sumNet');
+    netEl.textContent = (net < 0 ? '−' : '') + fmt(Math.abs(net));
+    netEl.classList.toggle('pos', net >= 0);
+    netEl.classList.toggle('neg', net < 0);
+
+    const rateEl = document.getElementById('sumRate');
+    if (inc > 0){
+      const rate = net / inc * 100;
+      rateEl.textContent = net >= 0
+        ? Math.round(rate) + '% kvar att spara'
+        : 'Minus ' + Math.round(Math.abs(rate)) + '% av inkomsten';
+    } else { rateEl.textContent = ''; }
+
+    // Split bar: andel av inkomsten som går till utgifter
+    const expPct = inc > 0 ? Math.min(exp / inc * 100, 100) : 0;
+    document.getElementById('splitExpense').style.width = expPct + '%';
+
+    // Årsöverblick
+    const an = document.getElementById('annualNote');
+    if (net !== 0 && inc > 0){
+      an.innerHTML = net >= 0
+        ? 'På ett år blir det <strong>' + fmt(net * 12) + '</strong> kvar att spara.'
+        : 'På ett år går budgeten back <strong>' + fmt(Math.abs(net) * 12) + '</strong>.';
+    } else { an.innerHTML = ''; }
+  }
+
+  document.querySelectorAll('.add-row').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.add;
+      const item = { name: '', amount: '' };
+      data[type].push(item);
+      (type === 'income' ? incomeRows : expenseRows).appendChild(makeRow(item, type));
+      save(); recalc();
+    });
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if (confirm('Nollställa alla siffror OCH ta bort lösenordet på den här enheten?')){
+      localStorage.removeItem(STORE_KEY);
+      localStorage.removeItem('kv21_privat_pwhash');
+      sessionStorage.removeItem('kv21_privat_unlocked');
+      location.reload();
+    }
+  });
+
+  render();
+})();
+</script>
+
+<script>
+// ── Mobilmeny ──
+(function() {
+  var btn = document.getElementById('navHamburger');
+  var nav = document.getElementById('mobileNav');
+  if (!btn || !nav) return;
+  function openMenu()  { btn.classList.add('open'); nav.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeMenu() { btn.classList.remove('open'); nav.classList.remove('open'); document.body.style.overflow=''; }
+  btn.addEventListener('click', function() { btn.classList.contains('open') ? closeMenu() : openMenu(); });
+  nav.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if(e.key==='Escape') closeMenu(); });
+})();
+</script>
+
+<script>
+// ── Bakgrund (samma lugna ivory-canvas som renoveringssidan) ──
+(function(){
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const blobs = Array.from({length: 6}, (_, i) => ({
+    x: Math.random(), y: Math.random(), r: 200 + Math.random() * 280,
+    vx: (Math.random() - .5) * .00012, vy: (Math.random() - .5) * .00008,
+    hue: i % 2 === 0 ? [210,190,160] : [225,210,185],
+    a: .30 + Math.random() * .20, phase: Math.random() * Math.PI * 2,
+  }));
+  const lines = Array.from({length: 5}, () => ({
+    y: Math.random(), vy: (Math.random() - .5) * .00006,
+    a: .04 + Math.random() * .04, phase: Math.random() * Math.PI * 2,
+  }));
+  let t = 0;
+  function frame() {
+    t += 0.003;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#f7f3ee';
+    ctx.fillRect(0, 0, W, H);
+    blobs.forEach(b => {
+      b.x += b.vx + Math.sin(b.phase + t * .4) * .00005;
+      b.y += b.vy + Math.cos(b.phase + t * .3) * .00004;
+      if (b.x < -.3) b.x = 1.3; if (b.x > 1.3) b.x = -.3;
+      if (b.y < -.3) b.y = 1.3; if (b.y > 1.3) b.y = -.3;
+      const px = b.x * W, py = b.y * H;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, b.r);
+      g.addColorStop(0, `rgba(${b.hue},${b.a})`);
+      g.addColorStop(1, `rgba(${b.hue},0)`);
+      ctx.beginPath(); ctx.arc(px, py, b.r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
+    });
+    lines.forEach(l => {
+      l.y += l.vy + Math.sin(l.phase + t * .5) * .00003;
+      if (l.y < -.1) l.y = 1.1; if (l.y > 1.1) l.y = -.1;
+      const py = l.y * H;
+      const g = ctx.createLinearGradient(0, 0, W, 0);
+      g.addColorStop(0, `rgba(180,165,140,0)`);
+      g.addColorStop(.3, `rgba(180,165,140,${l.a})`);
+      g.addColorStop(.7, `rgba(180,165,140,${l.a})`);
+      g.addColorStop(1, `rgba(180,165,140,0)`);
+      ctx.beginPath(); ctx.lineWidth = .6; ctx.strokeStyle = g;
+      ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>

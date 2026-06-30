@@ -170,11 +170,11 @@ body::before {
   background: rgba(255,255,255,.96);
   border: 1px solid var(--border-light);
   border-radius: 6px;
-  padding: 28px 26px 22px;
+  padding: 28px 26px 24px;
 }
 .ledger-head {
   display: flex; align-items: baseline; justify-content: space-between;
-  margin-bottom: 18px; padding-bottom: 14px;
+  margin-bottom: 8px; padding-bottom: 14px;
   border-bottom: 1px solid var(--border-light);
 }
 .ledger-head h2 {
@@ -183,49 +183,21 @@ body::before {
 }
 .ledger-head .total {
   font-family: "Libre Baskerville", serif; font-size: 1.05rem; font-weight: 700;
+  color: var(--gold2);
 }
-.ledger-col.income .total { color: var(--gold2); }
-.ledger-col.expense .total { color: var(--gold2); }
 
 .row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 7px 0;
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 14px; padding: 10px 0;
   border-bottom: 1px solid rgba(216,208,196,.5);
+  font-size: .8rem;
 }
-.row:last-of-type { border-bottom: none; }
-.row .name {
-  flex: 1; border: none; background: transparent;
-  font-family: "Montserrat", sans-serif; font-size: .8rem;
-  color: var(--charcoal); font-weight: 400; padding: 4px 2px;
-  border-bottom: 1px solid transparent; transition: border-color .2s;
-  min-width: 0;
-}
-.row .name:focus { outline: none; border-bottom-color: rgba(201,165,90,.5); }
+.row:last-child { border-bottom: none; }
+.row .name { color: var(--charcoal); font-weight: 400; }
 .row .amount {
-  width: 110px; text-align: right; border: none; background: transparent;
-  font-family: "Montserrat", sans-serif; font-size: .82rem; font-weight: 500;
-  color: var(--gold2); padding: 4px 2px;
-  border-bottom: 1px solid transparent; transition: border-color .2s;
+  color: var(--gold2); font-weight: 500; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
-.row .amount:focus { outline: none; border-bottom-color: rgba(201,165,90,.5); }
-.row .amount::placeholder { color: rgba(122,118,112,.4); }
-.row .unit { font-size: .68rem; color: var(--stone); flex-shrink: 0; }
-.row .del {
-  background: none; border: none; cursor: pointer;
-  color: rgba(122,118,112,.35); font-size: 1rem; line-height: 1;
-  padding: 2px 4px; flex-shrink: 0; transition: color .2s;
-}
-.row .del:hover { color: var(--red); }
-
-.add-row {
-  margin-top: 14px; background: none;
-  border: 1px dashed rgba(201,165,90,.4); border-radius: 4px;
-  color: var(--gold2); cursor: pointer; width: 100%;
-  font-family: "Montserrat", sans-serif; font-size: .6rem;
-  letter-spacing: .16em; text-transform: uppercase; padding: 10px;
-  transition: all .2s;
-}
-.add-row:hover { background: rgba(201,165,90,.07); border-color: var(--gold); }
 
 /* ─── ANNUAL NOTE ─── */
 .annual-note {
@@ -235,19 +207,16 @@ body::before {
 .annual-note strong { color: var(--gold2); font-weight: 600; }
 
 .privacy-note {
-  margin-top: 26px; max-width: 640px; margin-left: auto; margin-right: auto;
-  text-align: center; font-size: .66rem; line-height: 1.7;
-  color: rgba(122,118,112,.85); font-weight: 300;
+  margin-top: 22px; max-width: 640px; margin-left: auto; margin-right: auto;
+  text-align: center; font-size: .64rem; line-height: 1.7;
+  color: rgba(122,118,112,.8); font-weight: 300;
 }
 .privacy-note .pico { color: var(--gold2); }
-
-.reset-link {
-  display: block; text-align: center; margin-top: 18px;
-  font-size: .55rem; letter-spacing: .14em; text-transform: uppercase;
-  color: rgba(122,118,112,.5); background: none; border: none; cursor: pointer;
-  width: 100%; transition: color .2s;
+.updated-note {
+  margin-top: 8px; text-align: center;
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(122,118,112,.55);
 }
-.reset-link:hover { color: var(--red); }
 
 /* ─── FOOTER ─── */
 .site-footer {
@@ -339,7 +308,6 @@ body::before {
   .summary-stats { grid-template-columns: 1fr; gap: 18px; }
   .content-wrap { padding: 44px 20px; }
   .ledger-col { padding: 22px 18px 18px; }
-  .row .amount { width: 92px; }
 }
 
 /* ─── HAMBURGER ─── */
@@ -397,13 +365,12 @@ body::before {
         <circle cx="12" cy="15.5" r="1.3"/>
       </svg>
     </div>
-    <div class="lock-eyebrow" id="lockEyebrow">Privat sida</div>
-    <div class="lock-title" id="lockTitle">Ange lösenord</div>
-    <div class="lock-sub" id="lockSub">Den här sidan är låst. Ange lösenordet för att se hushållets ekonomi.</div>
+    <div class="lock-eyebrow">Privat sida</div>
+    <div class="lock-title">Ange kod</div>
+    <div class="lock-sub">Den här sidan är låst. Ange koden för att se hushållets ekonomi.</div>
     <form class="lock-form" id="lockForm">
-      <input class="lock-input" id="lockInput" type="password" placeholder="Lösenord" autocomplete="off" autofocus>
-      <input class="lock-input" id="lockInput2" type="password" placeholder="Upprepa lösenord" autocomplete="off" style="display:none;">
-      <button class="lock-btn" id="lockSubmit" type="submit">Lås upp</button>
+      <input class="lock-input" id="lockInput" type="password" inputmode="numeric" placeholder="Kod" autocomplete="off" autofocus>
+      <button class="lock-btn" type="submit">Lås upp</button>
     </form>
     <div class="lock-error" id="lockError"></div>
     <a href="/" class="lock-home">← Tillbaka till startsidan</a>
@@ -444,7 +411,7 @@ body::before {
   <div class="page-hero-inner">
     <div class="eyebrow">Privat — endast för oss</div>
     <h1>Inkomster &amp; utgifter<br><em>månad för månad</em></h1>
-    <p>Vår enkla hushållsbudget. Fyll i vad som kommer in och vad som går ut varje månad, så räknar sidan ut vad vi har kvar. Allt sparas bara lokalt i den här webbläsaren.</p>
+    <p>Vår hushållsbudget. Här ser vi vad som kommer in och vad som går ut varje månad, och vad vi har kvar. Siffrorna underhålls löpande och visas likadant på alla våra enheter.</p>
   </div>
 </div>
 
@@ -483,7 +450,6 @@ body::before {
         <span class="total" id="incomeTotal">0 kr</span>
       </div>
       <div id="incomeRows"></div>
-      <button class="add-row" data-add="income" type="button">+ Lägg till inkomst</button>
     </div>
     <div class="ledger-col expense">
       <div class="ledger-head">
@@ -491,17 +457,14 @@ body::before {
         <span class="total" id="expenseTotal">0 kr</span>
       </div>
       <div id="expenseRows"></div>
-      <button class="add-row" data-add="expense" type="button">+ Lägg till utgift</button>
     </div>
   </div>
 
   <div class="annual-note" id="annualNote"></div>
-
   <div class="privacy-note">
-    <span class="pico">🔒</span> Siffrorna sparas bara i den här webbläsaren på den här enheten — de skickas aldrig någonstans och finns inte i sidans kod. Öppnar du sidan på en annan enhet börjar du med en tom mall.
+    <span class="pico">🔒</span> Låst med kod och nås bara via dolda ingångar — inte tänkt för andra ögon. Hör av dig när något ska ändras, så uppdaterar vi siffrorna.
   </div>
-
-  <button class="reset-link" id="resetBtn" type="button">Nollställ alla siffror &amp; lösenord</button>
+  <div class="updated-note" id="updatedNote"></div>
 </div>
 
 <!-- ═══ FOOTER ═══ -->
@@ -511,75 +474,44 @@ body::before {
 
 <script>
 /* ─────────────────────────────────────────────
-   LÖSENORDSLÅS
-   Lösenordet lagras bara som en SHA-256-hash i
-   din webbläsare (localStorage) — aldrig i koden.
-   Första besöket: skapa ett lösenord.
+   KODLÅS
+   Lösenord/kod: 2121
+   (jämförs mot SHA-256-hashen nedan så koden inte
+    står i klartext). Byt kod genom att ersätta
+    PW_HASH med sha256 av den nya koden.
    ───────────────────────────────────────────── */
 (function(){
-  const HASH_KEY = 'kv21_privat_pwhash';
+  const PW_HASH = 'b8dc2c143be8994682b08461f46487e05874e59dd9ab65cf973e3a3c67a763aa'; // = "2121"
   const SESSION_KEY = 'kv21_privat_unlocked';
   const lock = document.getElementById('lock');
   const form = document.getElementById('lockForm');
-  const inp1 = document.getElementById('lockInput');
-  const inp2 = document.getElementById('lockInput2');
+  const inp = document.getElementById('lockInput');
   const err = document.getElementById('lockError');
-  const titleEl = document.getElementById('lockTitle');
-  const subEl = document.getElementById('lockSub');
-  const submitBtn = document.getElementById('lockSubmit');
 
   async function sha256(str){
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
-
-  const hasPw = !!localStorage.getItem(HASH_KEY);
-  const isSetup = !hasPw;
-
-  if (isSetup){
-    titleEl.textContent = 'Skapa ett lösenord';
-    subEl.textContent = 'Det här är första gången. Välj ett lösenord som låser sidan på den här enheten.';
-    inp1.placeholder = 'Välj lösenord';
-    inp2.style.display = 'block';
-    submitBtn.textContent = 'Skapa & lås upp';
-  }
-
   function unlock(){
     sessionStorage.setItem(SESSION_KEY, '1');
     lock.classList.add('hidden');
-    document.dispatchEvent(new Event('kv21:unlocked'));
   }
-
-  // Redan upplåst denna flik/session
-  if (sessionStorage.getItem(SESSION_KEY)){
-    lock.classList.add('hidden');
-  }
+  if (sessionStorage.getItem(SESSION_KEY)) lock.classList.add('hidden');
 
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     err.textContent = '';
-    const val = inp1.value;
-    if (!val){ err.textContent = 'Skriv ett lösenord.'; return; }
-
-    if (isSetup){
-      if (val.length < 4){ err.textContent = 'Minst 4 tecken.'; return; }
-      if (val !== inp2.value){ err.textContent = 'Lösenorden matchar inte.'; return; }
-      localStorage.setItem(HASH_KEY, await sha256(val));
-      unlock();
-      return;
-    }
-
-    const h = await sha256(val);
-    if (h === localStorage.getItem(HASH_KEY)){
+    const val = inp.value;
+    if (!val){ err.textContent = 'Skriv koden.'; return; }
+    if (await sha256(val) === PW_HASH){
       unlock();
     } else {
-      err.textContent = 'Fel lösenord.';
-      inp1.value = '';
-      inp1.focus();
+      err.textContent = 'Fel kod.';
+      inp.value = '';
+      inp.focus();
     }
   });
 
-  // Lås-knapp i nav
   const lockNowBtn = document.getElementById('lockNowBtn');
   if (lockNowBtn) lockNowBtn.addEventListener('click', function(){
     sessionStorage.removeItem(SESSION_KEY);
@@ -589,138 +521,90 @@ body::before {
 </script>
 
 <script>
-/* ─────────────────────────────────────────────
-   BUDGET — inkomster vs utgifter
-   Data sparas i localStorage (bara på enheten).
-   ───────────────────────────────────────────── */
+/* ═════════════════════════════════════════════════════════════
+   HUSHÅLLSBUDGET — datakälla
+   ─────────────────────────────────────────────────────────────
+   Detta är källan till alla siffror. Ändra här för att uppdatera
+   sidan (gäller på alla enheter när det är publicerat).
+   Belopp i kronor per månad.
+
+   OBS: nedanstående är EXEMPELSIFFROR — byts mot riktiga.
+   ═════════════════════════════════════════════════════════════ */
+const LAST_UPDATED = '2026-06-30';
+const BUDGET = {
+  income: [
+    { name: 'Lön (person 1)',        amount: 45000 },
+    { name: 'Lön (person 2)',        amount: 38000 },
+    { name: 'Barnbidrag',            amount: 1250 },
+  ],
+  expense: [
+    { name: 'Bolån / ränta',                     amount: 11200 },
+    { name: 'Driftkostnad (el, vatten, sopor)',  amount: 4800 },
+    { name: 'Mat & hushåll',                     amount: 9000 },
+    { name: 'Försäkringar',                      amount: 3200 },
+    { name: 'Bil & transport',                   amount: 3500 },
+    { name: 'Telefon & internet',                amount: 899 },
+    { name: 'Abonnemang & streaming',            amount: 650 },
+    { name: 'Sparande',                          amount: 8000 },
+    { name: 'Övrigt',                            amount: 1500 },
+  ],
+};
+
 (function(){
-  const STORE_KEY = 'kv21_privat_budget';
   const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
-  const parseAmt = v => {
-    const n = parseFloat(String(v).replace(/\s/g,'').replace(',','.'));
-    return isNaN(n) ? 0 : n;
-  };
 
-  const DEFAULTS = {
-    income: [
-      { name: 'Lön (person 1)', amount: '' },
-      { name: 'Lön (person 2)', amount: '' },
-      { name: 'Barnbidrag', amount: '' },
-      { name: 'Övrigt', amount: '' },
-    ],
-    expense: [
-      { name: 'Bolån / ränta', amount: '' },
-      { name: 'Driftkostnad (el, vatten, sopor)', amount: '' },
-      { name: 'Mat & hushåll', amount: '' },
-      { name: 'Försäkringar', amount: '' },
-      { name: 'Bil & transport', amount: '' },
-      { name: 'Telefon & internet', amount: '' },
-      { name: 'Abonnemang & streaming', amount: '' },
-      { name: 'Sparande', amount: '' },
-      { name: 'Övrigt', amount: '' },
-    ],
-  };
-
-  let data;
-  try { data = JSON.parse(localStorage.getItem(STORE_KEY)); } catch(e){ data = null; }
-  if (!data || !data.income || !data.expense){
-    data = JSON.parse(JSON.stringify(DEFAULTS));
-  }
-
-  const incomeRows = document.getElementById('incomeRows');
-  const expenseRows = document.getElementById('expenseRows');
-
-  function save(){ localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
-
-  function makeRow(item, type){
-    const row = document.createElement('div');
-    row.className = 'row';
-    row.innerHTML =
-      '<input class="name" type="text" placeholder="Benämning">' +
-      '<input class="amount" type="text" inputmode="numeric" placeholder="0">' +
-      '<span class="unit">kr</span>' +
-      '<button class="del" type="button" aria-label="Ta bort">×</button>';
-    const nameEl = row.querySelector('.name');
-    const amtEl = row.querySelector('.amount');
-    nameEl.value = item.name || '';
-    amtEl.value = item.amount === '' || item.amount == null ? '' : item.amount;
-
-    nameEl.addEventListener('input', () => { item.name = nameEl.value; save(); });
-    amtEl.addEventListener('input', () => { item.amount = amtEl.value; save(); recalc(); });
-    row.querySelector('.del').addEventListener('click', () => {
-      const arr = data[type];
-      const i = arr.indexOf(item);
-      if (i > -1) arr.splice(i, 1);
-      row.remove();
-      save(); recalc();
+  function renderRows(container, arr){
+    container.innerHTML = '';
+    arr.forEach(it => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = '<span class="name"></span><span class="amount"></span>';
+      row.querySelector('.name').textContent = it.name;
+      row.querySelector('.amount').textContent = fmt(it.amount || 0);
+      container.appendChild(row);
     });
-    return row;
+  }
+  renderRows(document.getElementById('incomeRows'), BUDGET.income);
+  renderRows(document.getElementById('expenseRows'), BUDGET.expense);
+
+  const inc = BUDGET.income.reduce((s, it) => s + (it.amount || 0), 0);
+  const exp = BUDGET.expense.reduce((s, it) => s + (it.amount || 0), 0);
+  const net = inc - exp;
+
+  document.getElementById('incomeTotal').textContent = fmt(inc);
+  document.getElementById('expenseTotal').textContent = fmt(exp);
+  document.getElementById('sumIncome').textContent = fmt(inc);
+  document.getElementById('sumExpense').textContent = fmt(exp);
+
+  const netEl = document.getElementById('sumNet');
+  netEl.textContent = (net < 0 ? '−' : '') + fmt(Math.abs(net));
+  netEl.classList.toggle('pos', net >= 0);
+  netEl.classList.toggle('neg', net < 0);
+
+  const rateEl = document.getElementById('sumRate');
+  if (inc > 0){
+    const rate = net / inc * 100;
+    rateEl.textContent = net >= 0
+      ? Math.round(rate) + '% kvar att spara'
+      : 'Minus ' + Math.round(Math.abs(rate)) + '% av inkomsten';
   }
 
-  function render(){
-    incomeRows.innerHTML = '';
-    expenseRows.innerHTML = '';
-    data.income.forEach(it => incomeRows.appendChild(makeRow(it, 'income')));
-    data.expense.forEach(it => expenseRows.appendChild(makeRow(it, 'expense')));
-    recalc();
+  const expPct = inc > 0 ? Math.min(exp / inc * 100, 100) : 0;
+  setTimeout(() => { document.getElementById('splitExpense').style.width = expPct + '%'; }, 200);
+
+  const an = document.getElementById('annualNote');
+  if (net !== 0 && inc > 0){
+    an.innerHTML = net >= 0
+      ? 'På ett år blir det <strong>' + fmt(net * 12) + '</strong> kvar att spara.'
+      : 'På ett år går budgeten back <strong>' + fmt(Math.abs(net) * 12) + '</strong>.';
   }
 
-  function recalc(){
-    const inc = data.income.reduce((s, it) => s + parseAmt(it.amount), 0);
-    const exp = data.expense.reduce((s, it) => s + parseAmt(it.amount), 0);
-    const net = inc - exp;
-
-    document.getElementById('incomeTotal').textContent = fmt(inc);
-    document.getElementById('expenseTotal').textContent = fmt(exp);
-    document.getElementById('sumIncome').textContent = fmt(inc);
-    document.getElementById('sumExpense').textContent = fmt(exp);
-
-    const netEl = document.getElementById('sumNet');
-    netEl.textContent = (net < 0 ? '−' : '') + fmt(Math.abs(net));
-    netEl.classList.toggle('pos', net >= 0);
-    netEl.classList.toggle('neg', net < 0);
-
-    const rateEl = document.getElementById('sumRate');
-    if (inc > 0){
-      const rate = net / inc * 100;
-      rateEl.textContent = net >= 0
-        ? Math.round(rate) + '% kvar att spara'
-        : 'Minus ' + Math.round(Math.abs(rate)) + '% av inkomsten';
-    } else { rateEl.textContent = ''; }
-
-    // Split bar: andel av inkomsten som går till utgifter
-    const expPct = inc > 0 ? Math.min(exp / inc * 100, 100) : 0;
-    document.getElementById('splitExpense').style.width = expPct + '%';
-
-    // Årsöverblick
-    const an = document.getElementById('annualNote');
-    if (net !== 0 && inc > 0){
-      an.innerHTML = net >= 0
-        ? 'På ett år blir det <strong>' + fmt(net * 12) + '</strong> kvar att spara.'
-        : 'På ett år går budgeten back <strong>' + fmt(Math.abs(net) * 12) + '</strong>.';
-    } else { an.innerHTML = ''; }
-  }
-
-  document.querySelectorAll('.add-row').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const type = btn.dataset.add;
-      const item = { name: '', amount: '' };
-      data[type].push(item);
-      (type === 'income' ? incomeRows : expenseRows).appendChild(makeRow(item, type));
-      save(); recalc();
-    });
-  });
-
-  document.getElementById('resetBtn').addEventListener('click', () => {
-    if (confirm('Nollställa alla siffror OCH ta bort lösenordet på den här enheten?')){
-      localStorage.removeItem(STORE_KEY);
-      localStorage.removeItem('kv21_privat_pwhash');
-      sessionStorage.removeItem('kv21_privat_unlocked');
-      location.reload();
-    }
-  });
-
-  render();
+  // Senast uppdaterad
+  try {
+    const d = new Date(LAST_UPDATED + 'T00:00:00');
+    const s = d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('updatedNote').textContent = 'Senast uppdaterad ' + s;
+  } catch(e){}
 })();
 </script>
 

@@ -533,9 +533,8 @@ body::before {
    sidan (gäller på alla enheter när det är publicerat).
    Belopp i kronor per månad. Inkomster = nettolön (efter skatt).
 
-   OBS: ännu saknas löpande utgifter som el/vatten/sopor, mat,
-   försäkringar, telefon/internet, abonnemang m.m. — fyll på dem
-   här när siffrorna är kända.
+   Rader markerade "schablon" är uppskattningar — justera när de
+   exakta beloppen är kända.
    ═════════════════════════════════════════════════════════════ */
 const LAST_UPDATED = '2026-06-30';
 const BUDGET = {
@@ -545,10 +544,19 @@ const BUDGET = {
   ],
   expense: [
     // Bolån 3 510 000 kr: ränta 2,94% → 8 599,50/mån, amortering 2% → 5 850/mån
-    { name: 'Bolån – ränta (2,94 %)',     amount: 8600 },
-    { name: 'Bolån – amortering (2 %)',   amount: 5850 },
-    { name: 'Bil (leasing + lån)',        amount: 4100 },
-    { name: 'Studielån (CSN)',            amount: 2000 },
+    { name: 'Bolån – ränta (2,94 %)',            amount: 8600 },
+    { name: 'Bolån – amortering (2 %)',          amount: 5850 },
+    { name: 'Driftkostnad (el, vatten, sopor)',  amount: 4750 }, // ~57 000/år ÷ 12
+    { name: 'Bil (leasing + lån)',               amount: 4100 },
+    { name: 'Bil (sambo)',                       amount: 3000 },
+    { name: 'Mat & hushåll',                     amount: 8000 },
+    { name: 'Försäkringar',                      amount: 600 },  // schablon – justera
+    { name: 'Telefon & internet',                amount: 900 },  // schablon – justera
+    { name: 'Abonnemang & streaming',            amount: 500 },  // schablon – justera
+    { name: 'Studielån (CSN)',                   amount: 2000 },
+    { name: 'Fackförbundsavgift',                amount: 400 },
+    { name: 'Golfmedlemskap',                    amount: 417 },  // ~5 000/år ÷ 12
+    { name: 'Övrigt',                            amount: 5000 },
   ],
 };
 

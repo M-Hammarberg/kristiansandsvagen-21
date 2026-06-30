@@ -206,7 +206,7 @@ body::before {
 }
 .ledger-head .total {
   font-family: "Libre Baskerville", serif; font-size: 1.05rem; font-weight: 700;
-  color: var(--gold2);
+  color: #e6c578;
 }
 
 .row {
@@ -449,6 +449,68 @@ body::before {
   padding: 0 16px; height: 100%; transition: color .25s; text-decoration: none;
 }
 .nav-home-icon:hover { color: var(--champagne); }
+
+/* ════════ MÖRKT LYX-TEMA (glas) ════════ */
+.breakdown, .ledger-col, .yearcost {
+  position: relative; overflow: hidden;
+  background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74));
+  -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
+  border: 1px solid rgba(201,165,90,.16);
+  box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
+  transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
+}
+.breakdown:hover, .ledger-col:hover, .yearcost:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201,165,90,.34);
+  box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
+}
+/* mjukt ljussvep diagonalt över korten */
+.breakdown::before, .ledger-col::before, .yearcost::before {
+  content: ''; position: absolute; top: -20%; left: -65%; width: 50%; height: 140%;
+  background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
+  transform: skewX(-18deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite;
+}
+.ledger-col.expense::before { animation-delay: 1.6s; }
+.yearcost::before { animation-delay: 2.8s; }
+@keyframes cardShine { 0%, 70% { left: -65%; } 100% { left: 135%; } }
+
+.breakdown-head, .ledger-head, .yearcost-head { border-bottom-color: rgba(201,165,90,.16) !important; }
+.breakdown-head h2, .ledger-head h2, .yearcost-head h2 { color: #ecdcbf; }
+.breakdown-head .sub, .yearcost-head .sub { color: rgba(212,184,150,.5); }
+
+.row { border-bottom-color: rgba(201,165,90,.1); }
+.row .name { color: rgba(233,222,202,.85); }
+.row .amount { color: #d9b96a; }
+.ledger-col .row:hover { background: rgba(201,165,90,.1); }
+.ledger-col .row:hover .amount { color: #f2d588; }
+
+.legend-name { color: rgba(233,222,202,.85); }
+.legend-amt { color: #d9b96a; }
+.legend-pct { color: rgba(212,184,150,.5); }
+.legend-item:hover, .legend-item.hot { background: rgba(201,165,90,.12); }
+
+.dc-label { color: rgba(212,184,150,.55); }
+.dc-value { color: #ecdcbf; text-shadow: 0 0 26px rgba(201,165,90,.25); }
+
+.yearcost-total { border-top: 1px solid rgba(201,165,90,.14); }
+.yearcost-total .lbl { color: #ecdcbf; }
+.yearcost-total .val { color: #e6c578; }
+.yearcost .permonth, .legend .permonth { color: rgba(212,184,150,.45); }
+
+.annual-note { color: rgba(212,184,150,.62); }
+.annual-note strong { color: #e6c578; }
+.privacy-note { color: rgba(212,184,150,.55); }
+.updated-note { color: rgba(212,184,150,.4); }
+
+.summary-stat .num { text-shadow: 0 0 26px rgba(201,165,90,.16); }
+
+/* glöd bakom donuten */
+.donut-wrap::before {
+  content: ''; position: absolute; inset: 16%; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,165,90,.16), transparent 70%);
+  pointer-events: none;
+}
+.donut-wrap canvas { position: relative; filter: drop-shadow(0 10px 28px rgba(0,0,0,.5)); }
 </style>
 </head>
 <body class="anim">
@@ -563,14 +625,14 @@ body::before {
   </div>
 
   <div class="ledger-grid">
-    <div class="ledger-col income">
+    <div class="ledger-col income reveal-up">
       <div class="ledger-head">
         <h2>Inkomster</h2>
         <span class="total" id="incomeTotal">0 kr</span>
       </div>
       <div id="incomeRows"></div>
     </div>
-    <div class="ledger-col expense">
+    <div class="ledger-col expense reveal-up">
       <div class="ledger-head">
         <h2>Utgifter</h2>
         <span class="total" id="expenseTotal">0 kr</span>
@@ -579,7 +641,7 @@ body::before {
     </div>
   </div>
 
-  <div class="yearcost" id="yearcostSection" style="display:none;">
+  <div class="yearcost reveal-up" id="yearcostSection" style="display:none;">
     <div class="yearcost-head">
       <h2>Årskostnader</h2>
       <span class="sub">räknas ej in i månadssumman</span>
@@ -591,7 +653,7 @@ body::before {
     </div>
   </div>
 
-  <div class="annual-note" id="annualNote"></div>
+  <div class="annual-note reveal-up" id="annualNote"></div>
   <div class="privacy-note">
     <span class="pico">🔒</span> Låst med kod och nås bara via dolda ingångar — inte tänkt för andra ögon. Hör av dig när något ska ändras, så uppdaterar vi siffrorna.
   </div>
@@ -823,23 +885,29 @@ const ANNUAL = [
 
   function drawDonut(){
     const cx = CW / 2, cy = CH / 2;
-    const outer = Math.min(CW, CH) / 2 - 6;
-    const ringW = outer * 0.30, r = outer - ringW / 2, gap = 0.016;
+    const outer = Math.min(CW, CH) / 2 - 8;
+    const ringW = outer * 0.28, r = outer - ringW / 2, gap = 0.022;
     ctx.clearRect(0, 0, CW, CH);
+    // bakgrundsring
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.lineWidth = ringW; ctx.strokeStyle = 'rgba(201,165,90,.06)'; ctx.stroke();
     let a0 = -Math.PI / 2;
     segs.forEach((sg, i) => {
-      const frac = sg.value / segTotal;
-      const sweep = frac * Math.PI * 2 * prog;
+      const sweep = (sg.value / segTotal) * Math.PI * 2 * prog;
+      if (sweep <= 0.0002) { a0 += sweep; return; }
       const isHot = hot === i;
+      ctx.save();
       ctx.beginPath();
-      ctx.arc(cx, cy, r + (isHot ? 4 : 0), a0 + gap / 2, Math.max(a0 + gap / 2, a0 + sweep - gap / 2));
-      ctx.lineWidth = ringW + (isHot ? 6 : 0);
+      ctx.arc(cx, cy, r + (isHot ? 5 : 0), a0 + gap / 2, Math.max(a0 + gap / 2, a0 + sweep - gap / 2));
+      ctx.lineWidth = ringW + (isHot ? 7 : 0);
       ctx.lineCap = 'butt';
       ctx.strokeStyle = sg.color;
-      ctx.globalAlpha = (hot === -1 || isHot) ? 1 : 0.30;
+      ctx.globalAlpha = (hot === -1 || isHot) ? 1 : 0.26;
+      ctx.shadowColor = sg.color;
+      ctx.shadowBlur = isHot ? 24 : 10;
       ctx.stroke();
-      ctx.globalAlpha = 1;
-      a0 += frac * Math.PI * 2 * prog;
+      ctx.restore();
+      a0 += sweep;
     });
   }
 
@@ -874,24 +942,12 @@ const ANNUAL = [
   }
 
   // ── Starta animationer vid visning ──
-  let started = false;
-  function start(){
-    if (started) return; started = true;
+  let started = false, donutStarted = false;
+  function runDonut(){
+    if (donutStarted) return; donutStarted = true;
     sizeCanvas();
-    requestAnimationFrame(() => document.getElementById('breakdown').classList.add('in'));
-    countUp(document.getElementById('sumIncome'), inc, 1100);
-    countUp(document.getElementById('sumExpense'), exp, 1100);
-    countUp(netEl, net, 1100, true);
-    countUp(document.getElementById('incomeTotal'), inc, 1100);
-    countUp(document.getElementById('expenseTotal'), exp, 1100);
-    countUp(cVal, inc, 1200);
-    const expPct = inc > 0 ? Math.min(exp / inc * 100, 100) : 0;
-    setTimeout(() => {
-      document.getElementById('splitExpense').style.width = expPct + '%';
-      document.getElementById('splitSaving').style.width = Math.max(0, 100 - expPct) + '%';
-    }, 250);
-    document.querySelectorAll('.reveal-row').forEach((row, i) => setTimeout(() => row.classList.add('in'), 140 + i * 55));
-    const d0 = performance.now(), dur = 1300;
+    countUp(cVal, inc, 1300);
+    const d0 = performance.now(), dur = 1400;
     (function anim(now){
       const k = Math.min((now - d0) / dur, 1);
       prog = 1 - Math.pow(1 - k, 3);
@@ -899,6 +955,41 @@ const ANNUAL = [
       if (k < 1) requestAnimationFrame(anim);
       else { prog = 1; drawDonut(); ready = true; setHot(hot); }
     })(performance.now());
+  }
+  function revealCol(el){
+    el.querySelectorAll('.reveal-row').forEach((row, i) => setTimeout(() => row.classList.add('in'), 90 + i * 55));
+    const tot = el.querySelector('.total');
+    if (tot && !tot.dataset.done){ tot.dataset.done = '1'; countUp(tot, el.classList.contains('income') ? inc : exp, 1100); }
+  }
+  function start(){
+    if (started) return; started = true;
+    sizeCanvas();
+    // summering – alltid synlig ovanför vikningen
+    countUp(document.getElementById('sumIncome'), inc, 1200);
+    countUp(document.getElementById('sumExpense'), exp, 1200);
+    countUp(netEl, net, 1200, true);
+    const expPct = inc > 0 ? Math.min(exp / inc * 100, 100) : 0;
+    setTimeout(() => {
+      document.getElementById('splitExpense').style.width = expPct + '%';
+      document.getElementById('splitSaving').style.width = Math.max(0, 100 - expPct) + '%';
+    }, 300);
+    // scroll-utlösta in-toningar
+    const reveals = document.querySelectorAll('.reveal-up');
+    if (!('IntersectionObserver' in window)){
+      reveals.forEach(el => { el.classList.add('in'); if (el.classList.contains('ledger-col')) revealCol(el); });
+      runDonut(); return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        el.classList.add('in');
+        if (el.id === 'breakdown') runDonut();
+        if (el.classList.contains('ledger-col')) revealCol(el);
+        io.unobserve(el);
+      });
+    }, { threshold: .16, rootMargin: '0px 0px -6% 0px' });
+    reveals.forEach(el => io.observe(el));
   }
 
   window.addEventListener('resize', () => { DPR = Math.min(window.devicePixelRatio||1,2); sizeCanvas(); if (prog >= 1) drawDonut(); });
@@ -924,7 +1015,7 @@ const ANNUAL = [
 </script>
 
 <script>
-// ── Bakgrund (samma lugna ivory-canvas som renoveringssidan) ──
+// ── Mörk lyx-bakgrund: guldglöd + gulddamm ──
 (function(){
   const canvas = document.getElementById('bgCanvas');
   if (!canvas) return;
@@ -933,44 +1024,43 @@ const ANNUAL = [
   function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
   resize();
   window.addEventListener('resize', resize);
-  const blobs = Array.from({length: 6}, (_, i) => ({
-    x: Math.random(), y: Math.random(), r: 200 + Math.random() * 280,
-    vx: (Math.random() - .5) * .00012, vy: (Math.random() - .5) * .00008,
-    hue: i % 2 === 0 ? [210,190,160] : [225,210,185],
-    a: .30 + Math.random() * .20, phase: Math.random() * Math.PI * 2,
+  const blobs = Array.from({length: 5}, (_, i) => ({
+    x: Math.random(), y: Math.random(), r: 260 + Math.random() * 340,
+    vx: (Math.random() - .5) * .00010, vy: (Math.random() - .5) * .00007,
+    col: i % 2 ? [201,165,90] : [168,135,46],
+    a: .09 + Math.random() * .07, phase: Math.random() * Math.PI * 2,
   }));
-  const lines = Array.from({length: 5}, () => ({
-    y: Math.random(), vy: (Math.random() - .5) * .00006,
-    a: .04 + Math.random() * .04, phase: Math.random() * Math.PI * 2,
+  const dust = Array.from({length: 64}, () => ({
+    x: Math.random(), y: Math.random(), r: .4 + Math.random() * 1.6,
+    sp: .00006 + Math.random() * .00018, drift: (Math.random() - .5) * .0001,
+    a: .12 + Math.random() * .32, ph: Math.random() * Math.PI * 2,
   }));
   let t = 0;
   function frame() {
-    t += 0.003;
-    ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#f7f3ee';
-    ctx.fillRect(0, 0, W, H);
+    t += 0.0024;
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#0c0b0a'); bg.addColorStop(.5, '#151310'); bg.addColorStop(1, '#0b0a09');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
     blobs.forEach(b => {
-      b.x += b.vx + Math.sin(b.phase + t * .4) * .00005;
-      b.y += b.vy + Math.cos(b.phase + t * .3) * .00004;
-      if (b.x < -.3) b.x = 1.3; if (b.x > 1.3) b.x = -.3;
-      if (b.y < -.3) b.y = 1.3; if (b.y > 1.3) b.y = -.3;
+      b.x += b.vx + Math.sin(b.phase + t * .4) * .00004;
+      b.y += b.vy + Math.cos(b.phase + t * .3) * .00003;
+      if (b.x < -.4) b.x = 1.4; if (b.x > 1.4) b.x = -.4;
+      if (b.y < -.4) b.y = 1.4; if (b.y > 1.4) b.y = -.4;
       const px = b.x * W, py = b.y * H;
       const g = ctx.createRadialGradient(px, py, 0, px, py, b.r);
-      g.addColorStop(0, `rgba(${b.hue},${b.a})`);
-      g.addColorStop(1, `rgba(${b.hue},0)`);
+      g.addColorStop(0, `rgba(${b.col},${b.a})`);
+      g.addColorStop(1, `rgba(${b.col},0)`);
       ctx.beginPath(); ctx.arc(px, py, b.r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
     });
-    lines.forEach(l => {
-      l.y += l.vy + Math.sin(l.phase + t * .5) * .00003;
-      if (l.y < -.1) l.y = 1.1; if (l.y > 1.1) l.y = -.1;
-      const py = l.y * H;
-      const g = ctx.createLinearGradient(0, 0, W, 0);
-      g.addColorStop(0, `rgba(180,165,140,0)`);
-      g.addColorStop(.3, `rgba(180,165,140,${l.a})`);
-      g.addColorStop(.7, `rgba(180,165,140,${l.a})`);
-      g.addColorStop(1, `rgba(180,165,140,0)`);
-      ctx.beginPath(); ctx.lineWidth = .6; ctx.strokeStyle = g;
-      ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+    dust.forEach(d => {
+      d.y -= d.sp; d.x += d.drift + Math.sin(d.ph + d.y * 7) * .00005; d.ph += .01;
+      if (d.y < -.05) { d.y = 1.05; d.x = Math.random(); }
+      if (d.x < 0) d.x = 1; if (d.x > 1) d.x = 0;
+      const px = d.x * W, py = d.y * H, tw = (Math.sin(d.ph) + 1) / 2;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, d.r * 3);
+      g.addColorStop(0, `rgba(232,203,128,${d.a * (.4 + tw * .6)})`);
+      g.addColorStop(1, 'rgba(232,203,128,0)');
+      ctx.beginPath(); ctx.arc(px, py, d.r * 3, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
     });
     requestAnimationFrame(frame);
   }

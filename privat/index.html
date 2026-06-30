@@ -149,6 +149,11 @@ body::before {
   background: linear-gradient(90deg, var(--gold2), var(--gold));
   width: 0; transition: width 1s cubic-bezier(.4,0,.2,1);
 }
+.split-saving {
+  height: 100%;
+  background: linear-gradient(90deg, #2e7d4f, #6cc795);
+  width: 0; transition: width 1s cubic-bezier(.4,0,.2,1);
+}
 .split-legend {
   display: flex; gap: 24px; margin-top: 12px; flex-wrap: wrap;
 }
@@ -433,7 +438,7 @@ body::before {
         <div class="sub" id="sumRate"></div>
       </div>
     </div>
-    <div class="split-track"><div class="split-expense" id="splitExpense"></div></div>
+    <div class="split-track"><div class="split-expense" id="splitExpense"></div><div class="split-saving" id="splitSaving"></div></div>
     <div class="split-legend">
       <span><span class="dot exp"></span> Utgifter</span>
       <span><span class="dot sav"></span> Kvar att spara</span>
@@ -533,9 +538,8 @@ body::before {
 const LAST_UPDATED = '2026-06-30';
 const BUDGET = {
   income: [
-    { name: 'Lön (person 1)',        amount: 45000 },
-    { name: 'Lön (person 2)',        amount: 38000 },
-    { name: 'Barnbidrag',            amount: 1250 },
+    { name: 'Lön (person 1)',        amount: 38500 },
+    { name: 'Lön (person 2)',        amount: 36700 },
   ],
   expense: [
     { name: 'Bolån / ränta',                     amount: 11200 },
@@ -590,7 +594,11 @@ const BUDGET = {
   }
 
   const expPct = inc > 0 ? Math.min(exp / inc * 100, 100) : 0;
-  setTimeout(() => { document.getElementById('splitExpense').style.width = expPct + '%'; }, 200);
+  const savePct = Math.max(0, 100 - expPct);
+  setTimeout(() => {
+    document.getElementById('splitExpense').style.width = expPct + '%';
+    document.getElementById('splitSaving').style.width = savePct + '%';
+  }, 200);
 
   const an = document.getElementById('annualNote');
   if (net !== 0 && inc > 0){

@@ -635,6 +635,63 @@ body::before {
 /* Scroll-utlösta in-toningar */
 .luxe-anim .r-up { opacity: 0; transform: translateY(26px); }
 .luxe-anim .r-up.r-in { opacity: 1; transform: none; transition: opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1); }
+
+/* ════════════ HERO – WOW ════════════ */
+.page-hero {
+  overflow: hidden;
+  background:
+    radial-gradient(130% 130% at 80% -15%, rgba(201,165,90,.14), transparent 55%),
+    radial-gradient(95% 120% at 8% 125%, rgba(168,135,46,.10), transparent 60%),
+    linear-gradient(180deg, rgba(23,21,18,.95), rgba(13,12,11,.96)) !important;
+}
+/* pulserande guld-aura bakom titeln */
+.page-hero::before {
+  content: ''; position: absolute; top: 48%; left: 32%;
+  width: min(640px, 82vw); aspect-ratio: 1 / 1; transform: translate(-50%,-50%);
+  background: radial-gradient(circle, rgba(201,165,90,.17), rgba(201,165,90,.05) 40%, transparent 66%);
+  pointer-events: none; z-index: 0; filter: blur(6px);
+  animation: heroAura 7.5s ease-in-out infinite;
+}
+@keyframes heroAura {
+  0%,100% { opacity: .5;  transform: translate(-50%,-50%) scale(1); }
+  50%     { opacity: 1;   transform: translate(-50%,-50%) scale(1.14); }
+}
+/* långsamt ljussvep över hero */
+.page-hero::after {
+  content: ''; position: absolute; top: -30%; left: -45%;
+  width: 42%; height: 160%; transform: skewX(-16deg);
+  background: linear-gradient(100deg, transparent, rgba(232,203,128,.07), transparent);
+  pointer-events: none; z-index: 0;
+  animation: heroSheen 9s ease-in-out 1.6s infinite;
+}
+@keyframes heroSheen { 0%,72% { left: -45%; } 100% { left: 130%; } }
+.page-hero-inner { position: relative; z-index: 1; }
+
+/* entré: tona + glid + skärpa in */
+@keyframes heroIn { from { opacity: 0; transform: translateY(28px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+.page-hero .eyebrow { opacity: 0; animation: heroIn 1s cubic-bezier(.22,1,.36,1) .15s forwards; }
+.page-hero h1       { opacity: 0; animation: heroIn 1.15s cubic-bezier(.22,1,.36,1) .35s forwards; }
+.page-hero p        { opacity: 0; animation: heroIn 1s cubic-bezier(.22,1,.36,1) .7s forwards; }
+
+/* eyebrow-linje ritas in */
+.page-hero .eyebrow::after { flex-basis: 0; animation: eyebrowLine 1.1s ease .95s forwards; }
+@keyframes eyebrowLine { to { flex-basis: 56px; } }
+
+/* skimrande guldtitel + understreck som ritas */
+.page-hero h1 em {
+  position: relative; color: transparent;
+  background: linear-gradient(90deg, #a8872e 0%, #c9a55a 38%, #f4d98c 52%, #c9a55a 66%, #a8872e 100%);
+  background-size: 220% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: heroShimmer 5.5s linear infinite;
+}
+@keyframes heroShimmer { 0% { background-position: 220% center; } 100% { background-position: -220% center; } }
+.page-hero h1 em::after {
+  content: ''; position: absolute; left: 0; bottom: -12px; height: 2px; width: 0;
+  background: linear-gradient(90deg, rgba(201,165,90,0), #c9a55a 28%, #f4d98c 50%, #c9a55a 72%, rgba(201,165,90,0));
+  box-shadow: 0 0 14px rgba(201,165,90,.55);
+  animation: underlineDraw 1.5s cubic-bezier(.22,1,.36,1) 1.15s forwards;
+}
+@keyframes underlineDraw { to { width: 100%; } }
 </style>
 </head>
 <body>

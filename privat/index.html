@@ -374,7 +374,7 @@ body::before {
   width: 100%; background: rgba(255,255,255,.05);
   border: 1px solid var(--border); border-radius: 4px;
   padding: 14px 16px; color: var(--champagne2);
-  font-family: "Montserrat", sans-serif; font-size: .85rem;
+  font-family: "Montserrat", sans-serif; font-size: 16px;
   letter-spacing: .08em; text-align: center; transition: border-color .2s;
 }
 .lock-input:focus { outline: none; border-color: var(--gold); }
@@ -537,7 +537,7 @@ body::before {
     <div class="lock-title">Ange kod</div>
     <div class="lock-sub">Den här sidan är låst. Ange koden för att se hushållets ekonomi.</div>
     <form class="lock-form" id="lockForm">
-      <input class="lock-input" id="lockInput" type="password" inputmode="numeric" placeholder="Kod" autocomplete="off" autofocus>
+      <input class="lock-input" id="lockInput" type="password" inputmode="numeric" placeholder="Kod" autocomplete="off">
       <button class="lock-btn" type="submit">Lås upp</button>
     </form>
     <div class="lock-error" id="lockError"></div>

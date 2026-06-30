@@ -204,6 +204,34 @@ body::before {
   font-variant-numeric: tabular-nums;
 }
 
+/* ─── ÅRSKOSTNADER ─── */
+.yearcost {
+  margin-top: 32px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 24px 26px;
+}
+.yearcost-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 4px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.yearcost-head h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.1rem; font-weight: 400; color: var(--charcoal);
+}
+.yearcost-head .sub {
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
+}
+.yearcost .permonth { color: var(--stone); font-weight: 400; margin-left: 10px; font-size: .7rem; }
+.yearcost-total {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-top: 14px; margin-top: 2px;
+}
+.yearcost-total .lbl { font-family: "Libre Baskerville", serif; font-size: .9rem; color: var(--charcoal); }
+.yearcost-total .val { font-family: "Libre Baskerville", serif; font-size: 1.05rem; font-weight: 700; color: var(--gold2); }
+
 /* ─── ANNUAL NOTE ─── */
 .annual-note {
   margin-top: 36px; text-align: center;
@@ -465,6 +493,18 @@ body::before {
     </div>
   </div>
 
+  <div class="yearcost" id="yearcostSection" style="display:none;">
+    <div class="yearcost-head">
+      <h2>Årskostnader</h2>
+      <span class="sub">räknas ej in i månadssumman</span>
+    </div>
+    <div id="yearcostRows"></div>
+    <div class="yearcost-total">
+      <span class="lbl">Totalt per år</span>
+      <span class="val" id="yearcostTotal">0 kr</span>
+    </div>
+  </div>
+
   <div class="annual-note" id="annualNote"></div>
   <div class="privacy-note">
     <span class="pico">🔒</span> Låst med kod och nås bara via dolda ingångar — inte tänkt för andra ögon. Hör av dig när något ska ändras, så uppdaterar vi siffrorna.
@@ -555,10 +595,15 @@ const BUDGET = {
     { name: 'Abonnemang & streaming',            amount: 500 },  // schablon – justera
     { name: 'Studielån (CSN)',                   amount: 2000 },
     { name: 'Fackförbundsavgift',                amount: 400 },
-    { name: 'Golfmedlemskap',                    amount: 417 },  // ~5 000/år ÷ 12
     { name: 'Övrigt',                            amount: 5000 },
   ],
 };
+
+/* Årskostnader — betalas en gång om året (belopp = kr/ÅR).
+   Räknas INTE in i månadssumman, men dras av från årssparandet. */
+const ANNUAL = [
+  { name: 'Golfmedlemskap', amount: 5000 },
+];
 
 (function(){
   const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
@@ -606,11 +651,30 @@ const BUDGET = {
     document.getElementById('splitSaving').style.width = savePct + '%';
   }, 200);
 
+  // Årskostnader (belopp = kr/år) — visas separat, ej i månadssumman
+  const yearTotal = ANNUAL.reduce((s, it) => s + (it.amount || 0), 0);
+  if (ANNUAL.length){
+    const yc = document.getElementById('yearcostRows');
+    yc.innerHTML = '';
+    ANNUAL.forEach(it => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = '<span class="name"></span><span class="amount"></span>';
+      row.querySelector('.name').textContent = it.name;
+      row.querySelector('.amount').innerHTML = fmt(it.amount || 0) + '/år<span class="permonth">≈ ' + fmt((it.amount || 0) / 12) + '/mån</span>';
+      yc.appendChild(row);
+    });
+    document.getElementById('yearcostTotal').innerHTML = fmt(yearTotal) + '/år<span class="permonth">≈ ' + fmt(yearTotal / 12) + '/mån</span>';
+    document.getElementById('yearcostSection').style.display = '';
+  }
+
+  // Årssparande = månadsnetto × 12 − årskostnader
+  const yearlyNet = net * 12 - yearTotal;
   const an = document.getElementById('annualNote');
-  if (net !== 0 && inc > 0){
-    an.innerHTML = net >= 0
-      ? 'På ett år blir det <strong>' + fmt(net * 12) + '</strong> kvar att spara.'
-      : 'På ett år går budgeten back <strong>' + fmt(Math.abs(net) * 12) + '</strong>.';
+  if (inc > 0){
+    an.innerHTML = yearlyNet >= 0
+      ? 'På ett år blir det <strong>' + fmt(yearlyNet) + '</strong> kvar att spara (efter årskostnader).'
+      : 'På ett år går budgeten back <strong>' + fmt(Math.abs(yearlyNet)) + '</strong> (efter årskostnader).';
   }
 
   // Senast uppdaterad

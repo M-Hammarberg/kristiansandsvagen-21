@@ -570,6 +570,71 @@ body::before {
   text-decoration: none;
 }
 .nav-home-icon:hover { color: var(--champagne); }
+
+/* ════════════ MÖRKT LYX-TEMA (glas) ════════════ */
+/* Rubriker & tidslinje */
+.section-heading h2 { color: #ecdcbf; }
+.section-heading .line { background: rgba(201,165,90,.18); }
+.timeline::before { background: rgba(201,165,90,.2); }
+.timeline-dot { background: #1a1714; border-color: rgba(201,165,90,.35); }
+.timeline-dot.active { background: #1a1714; }
+.timeline-item h3 { color: #ecdcbf; }
+.timeline-item p { color: rgba(231,220,200,.62); }
+.timeline-order { color: rgba(212,184,150,.55); }
+
+/* Glaskort: kostnad, ticker, projekt, bildplats */
+.cost-summary, .ticker-card, .project-card, .img-slot {
+  position: relative; overflow: hidden;
+  background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74)) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
+  border: 1px solid rgba(201,165,90,.18) !important;
+  box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
+  transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
+}
+.cost-summary:hover, .ticker-card:hover, .project-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201,165,90,.34) !important;
+  box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
+}
+.img-slot { background: rgba(255,255,255,.035) !important; }
+.img-slot:hover { background: rgba(201,165,90,.06) !important; }
+.card-img { background: #15120f !important; }
+
+/* diagonalt ljussvep över korten */
+.cost-summary::after, .ticker-card::before, .project-card::before {
+  content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
+  background: linear-gradient(100deg, transparent, rgba(232,203,128,.07), transparent);
+  transform: skewX(-16deg); pointer-events: none; z-index: 2;
+  animation: cardShine 8s ease-in-out infinite;
+}
+.ticker-card::before { animation-delay: 1.4s; }
+.project-card::before { animation-delay: 2.2s; }
+@keyframes cardShine { 0%, 70% { left: -130%; } 100% { left: 140%; } }
+
+/* Kostnadssammanställning – mörk */
+.cost-sublabel { color: #c9a55a; }
+.cost-row { color: rgba(231,220,200,.8); }
+.cost-note { color: rgba(212,184,150,.5); }
+.cost-done-total, .cost-total, .cost-saving, .cost-value > span:first-child, .cost-grand > span:first-child { color: #ecdcbf !important; }
+.cost-done-total > span:last-child, .cost-total > span:last-child, .cost-grand > span:last-child { color: #e6c578 !important; }
+.cost-value > span:last-child { color: #6cc795 !important; text-shadow: 0 0 22px rgba(108,199,149,.25); }
+.cost-grand > span:last-child { text-shadow: 0 0 22px rgba(201,165,90,.22); }
+
+/* Värde-ticker – mörk */
+.ticker-label { color: #c9a55a; }
+.ticker-value { color: #ecdcbf; text-shadow: 0 0 26px rgba(201,165,90,.18); }
+.ticker-note { color: rgba(212,184,150,.5); }
+.tf-range, .tc-sub { color: rgba(212,184,150,.5); }
+
+/* CAD + projekt */
+.cad-intro { color: rgba(231,220,200,.72); }
+.card-tag { color: #c9a55a; }
+.card-body h4 { color: #ecdcbf; }
+.card-body p { color: rgba(231,220,200,.6); }
+
+/* Scroll-utlösta in-toningar */
+.luxe-anim .r-up { opacity: 0; transform: translateY(26px); }
+.luxe-anim .r-up.r-in { opacity: 1; transform: none; transition: opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1); }
 </style>
 </head>
 <body>
@@ -1157,6 +1222,19 @@ function loadCardImg(input) {
 document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner').forEach(el => {
   el.classList.add('reveal', 'visible');
 });
+
+// Scroll-utlösta in-toningar (mörkt lyx-tema)
+(function(){
+  if (!('IntersectionObserver' in window)) return;
+  const els = document.querySelectorAll('.timeline-item, .project-card, .cost-summary, .ticker-card, .cad-section');
+  if (!els.length) return;
+  document.body.classList.add('luxe-anim');
+  els.forEach(el => el.classList.add('r-up'));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('r-in'); io.unobserve(en.target); } });
+  }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  els.forEach(el => io.observe(el));
+})();
 </script>
 
 <script>
@@ -1367,82 +1445,53 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
 </script>
 
 <script>
+// ── Mörk lyx-bakgrund: guldglöd + gulddamm (samma som privata sidan) ──
 (function(){
   const canvas = document.getElementById('bgCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let W, H;
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
   resize();
   window.addEventListener('resize', resize);
-
-  // Slow drifting blobs
-  const blobs = Array.from({length: 6}, (_, i) => ({
-    x: Math.random(),
-    y: Math.random(),
-    r: 200 + Math.random() * 280,
-    vx: (Math.random() - .5) * .00012,
-    vy: (Math.random() - .5) * .00008,
-    hue: i % 2 === 0 ? [210,190,160] : [225,210,185],
-    a: .30 + Math.random() * .20,
-    phase: Math.random() * Math.PI * 2,
+  const blobs = Array.from({length: 5}, (_, i) => ({
+    x: Math.random(), y: Math.random(), r: 260 + Math.random() * 340,
+    vx: (Math.random() - .5) * .00010, vy: (Math.random() - .5) * .00007,
+    col: i % 2 ? [201,165,90] : [168,135,46],
+    a: .09 + Math.random() * .07, phase: Math.random() * Math.PI * 2,
   }));
-
-  // Thin drifting lines
-  const lines = Array.from({length: 5}, () => ({
-    y: Math.random(),
-    vy: (Math.random() - .5) * .00006,
-    a: .04 + Math.random() * .04,
-    phase: Math.random() * Math.PI * 2,
+  const dust = Array.from({length: 64}, () => ({
+    x: Math.random(), y: Math.random(), r: .4 + Math.random() * 1.6,
+    sp: .00006 + Math.random() * .00018, drift: (Math.random() - .5) * .0001,
+    a: .12 + Math.random() * .32, ph: Math.random() * Math.PI * 2,
   }));
-
   let t = 0;
   function frame() {
-    t += 0.003;
-    ctx.clearRect(0, 0, W, H);
-
-    // Draw ivory base
-    ctx.fillStyle = '#f7f3ee';
-    ctx.fillRect(0, 0, W, H);
-
+    t += 0.0024;
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#0c0b0a'); bg.addColorStop(.5, '#151310'); bg.addColorStop(1, '#0b0a09');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
     blobs.forEach(b => {
-      b.x += b.vx + Math.sin(b.phase + t * .4) * .00005;
-      b.y += b.vy + Math.cos(b.phase + t * .3) * .00004;
-      if (b.x < -.3) b.x = 1.3;
-      if (b.x > 1.3) b.x = -.3;
-      if (b.y < -.3) b.y = 1.3;
-      if (b.y > 1.3) b.y = -.3;
+      b.x += b.vx + Math.sin(b.phase + t * .4) * .00004;
+      b.y += b.vy + Math.cos(b.phase + t * .3) * .00003;
+      if (b.x < -.4) b.x = 1.4; if (b.x > 1.4) b.x = -.4;
+      if (b.y < -.4) b.y = 1.4; if (b.y > 1.4) b.y = -.4;
       const px = b.x * W, py = b.y * H;
       const g = ctx.createRadialGradient(px, py, 0, px, py, b.r);
-      g.addColorStop(0, `rgba(${b.hue},${b.a})`);
-      g.addColorStop(1, `rgba(${b.hue},0)`);
-      ctx.beginPath();
-      ctx.arc(px, py, b.r, 0, Math.PI*2);
-      ctx.fillStyle = g;
-      ctx.fill();
+      g.addColorStop(0, `rgba(${b.col},${b.a})`);
+      g.addColorStop(1, `rgba(${b.col},0)`);
+      ctx.beginPath(); ctx.arc(px, py, b.r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
     });
-
-    lines.forEach(l => {
-      l.y += l.vy + Math.sin(l.phase + t * .5) * .00003;
-      if (l.y < -.1) l.y = 1.1;
-      if (l.y > 1.1) l.y = -.1;
-      const py = l.y * H;
-      const g = ctx.createLinearGradient(0, 0, W, 0);
-      g.addColorStop(0,   `rgba(180,165,140,0)`);
-      g.addColorStop(.3,  `rgba(180,165,140,${l.a})`);
-      g.addColorStop(.7,  `rgba(180,165,140,${l.a})`);
-      g.addColorStop(1,   `rgba(180,165,140,0)`);
-      ctx.beginPath();
-      ctx.lineWidth = .6;
-      ctx.strokeStyle = g;
-      ctx.moveTo(0, py);
-      ctx.lineTo(W, py);
-      ctx.stroke();
+    dust.forEach(d => {
+      d.y -= d.sp; d.x += d.drift + Math.sin(d.ph + d.y * 7) * .00005; d.ph += .01;
+      if (d.y < -.05) { d.y = 1.05; d.x = Math.random(); }
+      if (d.x < 0) d.x = 1; if (d.x > 1) d.x = 0;
+      const px = d.x * W, py = d.y * H, tw = (Math.sin(d.ph) + 1) / 2;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, d.r * 3);
+      g.addColorStop(0, `rgba(232,203,128,${d.a * (.4 + tw * .6)})`);
+      g.addColorStop(1, 'rgba(232,203,128,0)');
+      ctx.beginPath(); ctx.arc(px, py, d.r * 3, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
     });
-
     requestAnimationFrame(frame);
   }
   frame();
@@ -1536,10 +1585,10 @@ document.querySelectorAll('.section-heading, .progress-inner, .page-hero-inner')
       ctx.beginPath();
       ctx.setLineDash(zero ? [] : [3, 4]);
       ctx.moveTo(padX, gy); ctx.lineTo(W - padR + 4, gy);
-      ctx.strokeStyle = zero ? 'rgba(80,75,68,.35)' : 'rgba(80,75,68,.12)';
+      ctx.strokeStyle = zero ? 'rgba(201,165,90,.32)' : 'rgba(201,165,90,.1)';
       ctx.lineWidth = 1; ctx.stroke();
       ctx.setLineDash([]);
-      ctx.fillStyle = zero ? 'rgba(80,75,68,.7)' : 'rgba(80,75,68,.45)';
+      ctx.fillStyle = zero ? 'rgba(212,184,150,.7)' : 'rgba(212,184,150,.45)';
       ctx.textAlign = 'left';
       ctx.fillText((p > 0 ? '+' : '') + p + ' %', W - padR + 10, gy);
     });

@@ -769,11 +769,16 @@ body::before {
     snap => {
       statusEl.textContent = 'synkas mellan er';
       const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      // Varor som skapades innan butiksordningen fanns saknar "category" — gissa och spara den nu.
+      // Varor utan kategori (skapade innan butiksordningen fanns) eller som
+      // hamnat i "Övrigt" räknas om varje gång — så när nyckelord läggs till
+      // flyttar sig gamla varor automatiskt till rätt avsnitt av sig själva.
       items.forEach(it => {
-        if (!it.category){
-          it.category = guessCategory(it.name);
-          shopCol.doc(it.id).update({ category: it.category }).catch(e => console.error('Kategori-backfill:', it.name, e));
+        if (!it.category || it.category === 'ovrigt'){
+          const guess = guessCategory(it.name);
+          if (guess !== it.category){
+            it.category = guess;
+            shopCol.doc(it.id).update({ category: guess }).catch(e => console.error('Kategori-backfill:', it.name, e));
+          }
         }
       });
       items.sort((a, b) => {

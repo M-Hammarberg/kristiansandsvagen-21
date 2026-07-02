@@ -769,6 +769,13 @@ body::before {
     snap => {
       statusEl.textContent = 'synkas mellan er';
       const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      // Varor som skapades innan butiksordningen fanns saknar "category" — gissa och spara den nu.
+      items.forEach(it => {
+        if (!it.category){
+          it.category = guessCategory(it.name);
+          shopCol.doc(it.id).update({ category: it.category }).catch(e => console.error('Kategori-backfill:', it.name, e));
+        }
+      });
       items.sort((a, b) => {
         if (a.checked !== b.checked) return a.checked ? 1 : -1;
         return sectionIndex(a.category) - sectionIndex(b.category);

@@ -595,7 +595,7 @@ body::before {
   /* Standardartiklar — stående varor som alltid finns kvar i listan.
      De går bara att bocka av/på, inte ta bort. Lägg till/ta bort
      varor i listan här (kräver att sidan publiceras på nytt). */
-  const STANDARD_ITEMS = ['Mjölk', 'Ägg', 'Bröd', 'Smör', 'Kaffe', 'Toalettpapper'];
+  const STANDARD_ITEMS = ['Mjölk', 'Ägg', 'Bröd', 'Ost', 'Yoghurt', 'Bananer', 'Diskmedel', 'Hushållspapper'];
   const slug = name => 'standard_' + name.toLowerCase()
     .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
     .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
@@ -651,15 +651,21 @@ body::before {
     lastEl.textContent = (data && data.lastShoppedAt) ? formatLast(data.lastShoppedAt.toDate()) : '';
   }, e => console.error('Shoppinglista meta:', e));
 
-  // Se till att standardartiklarna finns (skapas bara om de saknas — rör inte deras avbockade-status)
-  STANDARD_ITEMS.forEach(name => {
-    const ref = shopCol.doc(slug(name));
-    ref.get().then(doc => {
-      if (!doc.exists){
-        ref.set({ name, checked: false, standard: true, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+  // Håll standardartiklarna i synk med STANDARD_ITEMS ovan: lägg till nya,
+  // ta bort de som inte längre finns i listan (rör inte avbockade-status för de som finns kvar).
+  shopCol.where('standard', '==', true).get().then(snap => {
+    const existing = new Set();
+    snap.forEach(doc => {
+      const name = doc.data().name;
+      existing.add(name);
+      if (!STANDARD_ITEMS.includes(name)) doc.ref.delete().catch(e => console.error('Ta bort standardartikel:', name, e));
+    });
+    STANDARD_ITEMS.forEach(name => {
+      if (!existing.has(name)){
+        shopCol.doc(slug(name)).set({ name, checked: false, standard: true, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
       }
-    }).catch(e => console.error('Standardartikel:', name, e));
-  });
+    });
+  }).catch(e => console.error('Standardartiklar:', e));
 
   function renderRows(items){
     rowsEl.innerHTML = '';

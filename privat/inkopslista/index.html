@@ -6,7 +6,7 @@
 <link rel="icon" type="image/png" href="../../images/misc/favicon.jpg">
 <link rel="apple-touch-icon" href="../../images/misc/favicon.jpg">
 <link rel="manifest" href="manifest.json">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
 <meta name="robots" content="noindex, nofollow">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -33,7 +33,7 @@
   --red: #b5483b;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; overscroll-behavior: none; scrollbar-width: none; -ms-overflow-style: none; }
+html { scroll-behavior: smooth; overscroll-behavior: none; scrollbar-width: none; -ms-overflow-style: none; touch-action: manipulation; }
 html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
 body {
   font-family: "Montserrat", sans-serif;
@@ -41,6 +41,7 @@ body {
   color: var(--charcoal);
   overflow-x: hidden;
   overscroll-behavior-y: none;
+  touch-action: manipulation;
   -webkit-font-smoothing: antialiased;
 }
 body::before {

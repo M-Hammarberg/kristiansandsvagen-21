@@ -4,10 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="../../images/misc/favicon.jpg">
+<link rel="apple-touch-icon" href="../../images/misc/favicon.jpg">
+<link rel="manifest" href="manifest.json">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
 <meta name="robots" content="noindex, nofollow">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Inköpslista">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Privat — Inköpslista</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -503,10 +508,18 @@ body::before {
     PW_HASH med sha256 av den nya koden.
    Delar samma session som /privat — upplåst där
    räknas som upplåst här också.
+
+   Öppnad som installerad hemskärms-app (standalone)
+   sparas upplåsningen i localStorage istället för
+   sessionStorage, så man slipper ange koden varje
+   gång man trycker på ikonen — vanlig webbläsare
+   beter sig som förut (session, delad med /privat).
    ───────────────────────────────────────────── */
 (function(){
   const PW_HASH = 'b8dc2c143be8994682b08461f46487e05874e59dd9ab65cf973e3a3c67a763aa'; // = "2121"
   const SESSION_KEY = 'kv21_privat_unlocked';
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const store = isStandalone ? localStorage : sessionStorage;
   const lock = document.getElementById('lock');
   const form = document.getElementById('lockForm');
   const inp = document.getElementById('lockInput');
@@ -517,7 +530,7 @@ body::before {
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
   function unlock(){
-    sessionStorage.setItem(SESSION_KEY, '1');
+    store.setItem(SESSION_KEY, '1');
     if (inp) inp.blur();
     lock.classList.add('hidden');
     document.dispatchEvent(new Event('kv21:unlocked'));
@@ -527,7 +540,7 @@ body::before {
     setTimeout(toTop, 80);
     setTimeout(toTop, 250);
   }
-  if (sessionStorage.getItem(SESSION_KEY)) lock.classList.add('hidden');
+  if (sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY)) lock.classList.add('hidden');
 
   form.addEventListener('submit', async function(e){
     e.preventDefault();
@@ -546,6 +559,7 @@ body::before {
   const lockNowBtn = document.getElementById('lockNowBtn');
   if (lockNowBtn) lockNowBtn.addEventListener('click', function(){
     sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_KEY);
     location.reload();
   });
 })();
@@ -624,6 +638,7 @@ body::before {
         shopCol.doc(it.id).update({ checked: !it.checked });
       });
       row.querySelector('.shop-del').addEventListener('click', () => {
+        if (!confirm('Ta bort "' + it.name + '"?')) return;
         shopCol.doc(it.id).delete();
       });
       rowsEl.appendChild(row);
@@ -651,6 +666,8 @@ body::before {
   clearBtn.addEventListener('click', async () => {
     const snap = await shopCol.where('checked', '==', true).get();
     if (snap.empty) return;
+    const word = snap.size === 1 ? 'vara' : 'varor';
+    if (!confirm('Rensa ' + snap.size + ' avbockade ' + word + '?')) return;
     const batch = db.batch();
     snap.forEach(doc => batch.delete(doc.ref));
     await batch.commit();

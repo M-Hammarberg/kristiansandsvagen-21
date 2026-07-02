@@ -1,0 +1,13 @@
+{
+  "name": "Inköpslista — Kristiansandsvägen 21",
+  "short_name": "Inköpslista",
+  "start_url": "/privat/inkopslista/",
+  "scope": "/privat/inkopslista/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "lang": "sv",
+  "icons": [
+    { "src": "../../images/misc/favicon.jpg", "sizes": "735x735", "type": "image/jpeg", "purpose": "any" }
+  ]
+}

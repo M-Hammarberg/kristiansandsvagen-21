@@ -186,6 +186,12 @@ body::before {
   transition: background .2s; white-space: nowrap;
 }
 .shop-add-btn:hover { background: var(--gold); }
+.shop-section {
+  font-size: .56rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--gold2); font-weight: 600;
+  margin: 16px 0 4px; padding-top: 10px; border-top: 1px solid rgba(216,208,196,.5);
+}
+.shop-section:first-child { margin-top: 0; padding-top: 0; border-top: none; }
 .shop-row {
   display: flex; align-items: center; gap: 12px;
   padding: 9px 4px; border-bottom: 1px solid rgba(216,208,196,.5);
@@ -395,6 +401,7 @@ body::before {
 
 .shop-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
 .shop-input::placeholder { color: rgba(212,184,150,.35); }
+.shop-section { color: #d9b96a; border-top-color: rgba(201,165,90,.14); }
 .shop-row { border-bottom-color: rgba(201,165,90,.1); }
 .shop-name { color: rgba(233,222,202,.9); }
 .shop-empty { color: rgba(212,184,150,.5); }
@@ -600,6 +607,64 @@ body::before {
     .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
     .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
+  /* Butiksordning — varorna sorteras efter var i butiken de brukar
+     ligga (baserat på City Gross i Trollhättan), så listan följer
+     vägen genom butiken istället för när varan lades till. Nya
+     varor man skriver in gissas in i rätt avsnitt via nyckelorden
+     nedan. Lägg till fler nyckelord om något hamnar fel. */
+  const STORE_SECTIONS = [
+    { id: 'halsokost',  label: 'Glutenfritt & Hälsokost' },
+    { id: 'mejeri',     label: 'Mejeri & Ägg' },
+    { id: 'brod',       label: 'Bageri & Bröd' },
+    { id: 'frukt',      label: 'Frukt & Grönt' },
+    { id: 'kott',       label: 'Kött, Fisk & Chark' },
+    { id: 'varlden',    label: 'Smaksättning & Världens mat' },
+    { id: 'kaffe',      label: 'Kaffe & Te' },
+    { id: 'bakning',    label: 'Bakning' },
+    { id: 'skafferi',   label: 'Flingor, Pasta & Konserver' },
+    { id: 'dryck',      label: 'Dryck' },
+    { id: 'snacks',     label: 'Snacks & Godis' },
+    { id: 'fryst',      label: 'Fryst' },
+    { id: 'stad',       label: 'Städ & Tvätt' },
+    { id: 'kroppsvard', label: 'Kroppsvård' },
+    { id: 'ovrigt',     label: 'Övrigt' },
+  ];
+  const CATEGORY_KEYWORDS = {
+    halsokost:  ['glutenfri', 'hälsokost', 'protein', 'kosttillskott'],
+    mejeri:     ['mjölk', 'ägg', 'grädde', 'fil', 'yoghurt', 'yogurt', 'smör', 'philadelphia', 'keso', 'crème', 'gräddfil'],
+    brod:       ['bröd', 'fralla', 'frallor', 'baguette', 'skorpa', 'skorpor', 'tortilla', 'wrap', 'kex', 'knäckebröd'],
+    frukt:      ['banan', 'äpple', 'apelsin', 'tomat', 'gurka', 'sallad', 'potatis', 'lök', 'morot', 'paprika', 'citron', 'avokado', 'vitlök', 'frukt', 'grönsak', 'svamp', 'melon', 'druvor', 'broccoli', 'blomkål'],
+    kott:       ['kyckling', 'köttfärs', 'fläsk', 'bacon', 'korv', 'skinka', 'ost', 'kött', 'biff', 'karré', 'prinskorv', 'salami', 'fisk', 'lax', 'räkor', 'torsk'],
+    varlden:    ['krydd', 'ketchup', 'senap', 'majonnäs', 'soja', 'taco', 'curry', 'chilisås', 'salsa'],
+    kaffe:      ['kaffe', 'te'],
+    bakning:    ['mjöl', 'socker', 'bakpulver', 'vanilj', 'jäst'],
+    skafferi:   ['pasta', 'ris', 'flingor', 'müsli', 'konserv', 'böna', 'bönor', 'linser', 'nudlar', 'spaghetti'],
+    dryck:      ['läsk', 'cola', 'pepsi', 'fanta', 'sprite', 'juice', 'vatten', 'öl', 'vin', 'cider', 'saft', 'must'],
+    snacks:     ['chips', 'godis', 'choklad', 'nötter', 'popcorn', 'kaka', 'kakor', 'glass'],
+    fryst:      ['fryst', 'frys'],
+    stad:       ['diskmedel', 'tvättmedel', 'toalettpapper', 'hushållspapper', 'tvättlapp', 'sopor', 'soppåse'],
+    kroppsvard: ['schampo', 'tandkräm', 'tvål', 'deo', 'rakhyvel', 'balsam', 'bindor'],
+  };
+  function guessCategory(name){
+    // Delar upp på ord (inte \b-regex — den hanterar inte å/ä/ö-ord korrekt i JS)
+    // och matchar om något ord i namnet börjar med ett nyckelord.
+    const nameWords = name.toLowerCase().split(/[^a-zåäö]+/).filter(Boolean);
+    for (const sec of STORE_SECTIONS){
+      const keywords = CATEGORY_KEYWORDS[sec.id];
+      if (!keywords) continue;
+      if (nameWords.some(nw => keywords.some(k => nw.startsWith(k)))) return sec.id;
+    }
+    return 'ovrigt';
+  }
+  function sectionIndex(cat){
+    const i = STORE_SECTIONS.findIndex(s => s.id === cat);
+    return i === -1 ? STORE_SECTIONS.length : i;
+  }
+  function sectionLabel(cat){
+    const sec = STORE_SECTIONS.find(s => s.id === cat);
+    return sec ? sec.label : 'Övrigt';
+  }
+
   const rowsEl = document.getElementById('shopRows');
   const emptyEl = document.getElementById('shopEmpty');
   const countEl = document.getElementById('shopCount');
@@ -662,7 +727,7 @@ body::before {
     });
     STANDARD_ITEMS.forEach(name => {
       if (!existing.has(name)){
-        shopCol.doc(slug(name)).set({ name, checked: false, standard: true, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+        shopCol.doc(slug(name)).set({ name, checked: false, standard: true, category: guessCategory(name), createdAt: firebase.firestore.FieldValue.serverTimestamp() });
       }
     });
   }).catch(e => console.error('Standardartiklar:', e));
@@ -672,7 +737,15 @@ body::before {
     emptyEl.style.display = items.length ? 'none' : '';
     const doneCount = items.filter(it => it.checked).length;
     countEl.textContent = items.length ? (items.length - doneCount) + ' kvar av ' + items.length : '';
+    let lastCat = null;
     items.forEach(it => {
+      if (!it.checked && it.category !== lastCat){
+        lastCat = it.category;
+        const head = document.createElement('div');
+        head.className = 'shop-section';
+        head.textContent = sectionLabel(it.category);
+        rowsEl.appendChild(head);
+      }
       const row = document.createElement('div');
       row.className = 'shop-row' + (it.checked ? ' done' : '');
       row.innerHTML =
@@ -696,7 +769,10 @@ body::before {
     snap => {
       statusEl.textContent = 'synkas mellan er';
       const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      items.sort((a, b) => (a.checked === b.checked) ? 0 : (a.checked ? 1 : -1));
+      items.sort((a, b) => {
+        if (a.checked !== b.checked) return a.checked ? 1 : -1;
+        return sectionIndex(a.category) - sectionIndex(b.category);
+      });
       renderRows(items);
     },
     err => { statusEl.textContent = 'synkfel'; console.error('Shoppinglista:', err); }
@@ -706,7 +782,7 @@ body::before {
     e.preventDefault();
     const name = input.value.trim();
     if (!name) return;
-    shopCol.add({ name, checked: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+    shopCol.add({ name, checked: false, category: guessCategory(name), createdAt: firebase.firestore.FieldValue.serverTimestamp() });
     input.value = '';
   });
 

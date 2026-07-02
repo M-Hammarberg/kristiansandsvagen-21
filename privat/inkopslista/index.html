@@ -609,24 +609,27 @@ body::before {
 
   /* Butiksordning — varorna sorteras efter var i butiken de brukar
      ligga (baserat på City Gross i Trollhättan), så listan följer
-     vägen genom butiken istället för när varan lades till. Nya
-     varor man skriver in gissas in i rätt avsnitt via nyckelorden
-     nedan. Lägg till fler nyckelord om något hamnar fel. */
+     vägen genom butiken istället för när varan lades till. Man går
+     in på högersidan (Kroppsvård/Kläder) och runt hela väggen —
+     dryck, fryst och tidningar (→ Övrigt) kommer sist, precis innan
+     kassan. Nya varor man skriver in gissas in i rätt avsnitt via
+     nyckelorden nedan. Lägg till fler nyckelord om något hamnar fel,
+     eller säg till om ordningen på ett avsnitt är fel. */
   const STORE_SECTIONS = [
-    { id: 'halsokost',  label: 'Glutenfritt & Hälsokost' },
-    { id: 'mejeri',     label: 'Mejeri & Ägg' },
-    { id: 'brod',       label: 'Bageri & Bröd' },
+    { id: 'kroppsvard', label: 'Kroppsvård' },
     { id: 'frukt',      label: 'Frukt & Grönt' },
     { id: 'kott',       label: 'Kött, Fisk & Chark' },
     { id: 'varlden',    label: 'Smaksättning & Världens mat' },
     { id: 'kaffe',      label: 'Kaffe & Te' },
     { id: 'bakning',    label: 'Bakning' },
     { id: 'skafferi',   label: 'Flingor, Pasta & Konserver' },
+    { id: 'brod',       label: 'Bageri & Bröd' },
+    { id: 'mejeri',     label: 'Mejeri & Ägg' },
+    { id: 'halsokost',  label: 'Glutenfritt & Hälsokost' },
     { id: 'dryck',      label: 'Dryck' },
     { id: 'snacks',     label: 'Snacks & Godis' },
-    { id: 'fryst',      label: 'Fryst' },
     { id: 'stad',       label: 'Städ & Tvätt' },
-    { id: 'kroppsvard', label: 'Kroppsvård' },
+    { id: 'fryst',      label: 'Fryst' },
     { id: 'ovrigt',     label: 'Övrigt' },
   ];
   const CATEGORY_KEYWORDS = {

@@ -1132,12 +1132,12 @@ const ANNUAL = [
 <script>
 (function(){
   const firebaseConfig = {
-    apiKey: "FYLL_I_MIG",
-    authDomain: "FYLL_I_MIG",
-    projectId: "FYLL_I_MIG",
-    storageBucket: "FYLL_I_MIG",
-    messagingSenderId: "FYLL_I_MIG",
-    appId: "FYLL_I_MIG",
+    apiKey: "AIzaSyC2fUO9rtUbhPxn32b32j-d1UUuqxsjgY8",
+    authDomain: "kristiansandsvagen-21.firebaseapp.com",
+    projectId: "kristiansandsvagen-21",
+    storageBucket: "kristiansandsvagen-21.firebasestorage.app",
+    messagingSenderId: "726739177351",
+    appId: "1:726739177351:web:57da52bea559b2db5b4d22",
   };
 
   const rowsEl = document.getElementById('shopRows');
@@ -1149,19 +1149,34 @@ const ANNUAL = [
   const clearBtn = document.getElementById('shopClearBtn');
   if (!rowsEl || !form) return;
 
-  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'FYLL_I_MIG'){
-    statusEl.textContent = 'ej ansluten — se instruktion';
+  function showUnavailable(msg){
+    statusEl.textContent = 'ej ansluten';
     rowsEl.innerHTML = '';
     emptyEl.style.display = '';
-    emptyEl.textContent = 'Inköpslistan är inte kopplad till Firebase ännu.';
+    emptyEl.textContent = msg;
     form.querySelector('.shop-input').disabled = true;
     form.querySelector('.shop-add-btn').disabled = true;
+  }
+
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'FYLL_I_MIG'){
+    showUnavailable('Inköpslistan är inte kopplad till Firebase ännu.');
+    return;
+  }
+  if (typeof firebase === 'undefined'){
+    showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
     return;
   }
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const shopCol = db.collection('shoppingList');
+  let db, shopCol;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    shopCol = db.collection('shoppingList');
+  } catch (e) {
+    console.error('Shoppinglista init:', e);
+    showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
+    return;
+  }
 
   function renderRows(items){
     rowsEl.innerHTML = '';

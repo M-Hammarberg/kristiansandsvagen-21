@@ -595,7 +595,7 @@ body::before {
   /* Standardartiklar — stående varor som alltid finns kvar i listan.
      De går bara att bocka av/på, inte ta bort. Lägg till/ta bort
      varor i listan här (kräver att sidan publiceras på nytt). */
-  const STANDARD_ITEMS = ['Mjölk', 'Ägg', 'Bröd', 'Ost', 'Bananer', 'Läsk', 'Chips', 'Godis'];
+  const STANDARD_ITEMS = ['Mjölk', 'Ägg', 'Bröd', 'Ost', 'Bananer', 'Läsk'];
   const slug = name => 'standard_' + name.toLowerCase()
     .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
     .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');

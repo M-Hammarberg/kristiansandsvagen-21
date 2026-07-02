@@ -650,14 +650,22 @@ body::before {
   };
   function guessCategory(name){
     // Delar upp på ord (inte \b-regex — den hanterar inte å/ä/ö-ord korrekt i JS)
-    // och matchar om något ord i namnet börjar med ett nyckelord.
+    // och matchar om något ord i namnet börjar med ett nyckelord. Om flera
+    // nyckelord (i olika avsnitt) matchar samma ord vinner det längsta —
+    // annars skulle t.ex. "mjöl" (bakning) alltid vinna över "mjölk" (mejeri)
+    // bara för att bakning råkar stå tidigare i listan.
     const nameWords = name.toLowerCase().split(/[^a-zåäö]+/).filter(Boolean);
+    let best = null, bestLen = 0;
     for (const sec of STORE_SECTIONS){
       const keywords = CATEGORY_KEYWORDS[sec.id];
       if (!keywords) continue;
-      if (nameWords.some(nw => keywords.some(k => nw.startsWith(k)))) return sec.id;
+      for (const k of keywords){
+        if (k.length > bestLen && nameWords.some(nw => nw.startsWith(k))){
+          best = sec.id; bestLen = k.length;
+        }
+      }
     }
-    return 'ovrigt';
+    return best || 'ovrigt';
   }
   function sectionIndex(cat){
     const i = STORE_SECTIONS.findIndex(s => s.id === cat);
@@ -772,16 +780,14 @@ body::before {
     snap => {
       statusEl.textContent = 'synkas mellan er';
       const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      // Varor utan kategori (skapade innan butiksordningen fanns) eller som
-      // hamnat i "Övrigt" räknas om varje gång — så när nyckelord läggs till
-      // flyttar sig gamla varor automatiskt till rätt avsnitt av sig själva.
+      // Kategorin räknas om för varje vara vid varje laddning (inte bara sparad
+      // en gång) — så när nyckelorden ändras rättar gamla varor sig själva,
+      // oavsett om de tidigare hamnat helt fel eller bara i "Övrigt".
       items.forEach(it => {
-        if (!it.category || it.category === 'ovrigt'){
-          const guess = guessCategory(it.name);
-          if (guess !== it.category){
-            it.category = guess;
-            shopCol.doc(it.id).update({ category: guess }).catch(e => console.error('Kategori-backfill:', it.name, e));
-          }
+        const guess = guessCategory(it.name);
+        if (guess !== it.category){
+          it.category = guess;
+          shopCol.doc(it.id).update({ category: guess }).catch(e => console.error('Kategori-backfill:', it.name, e));
         }
       });
       items.sort((a, b) => {

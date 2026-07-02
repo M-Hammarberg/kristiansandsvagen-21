@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<script>document.documentElement.style.background="#0d0d0d"</script>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../../images/misc/favicon.jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Privat — Inköpslista</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --obsidian: #0d0d0d;
+  --charcoal: #1a1917;
+  --champagne: #d4b896;
+  --champagne2: #e8d5bb;
+  --ivory: #f7f3ee;
+  --ivory2: #ede8e1;
+  --stone: #7a7670;
+  --cream: #f2ece4;
+  --gold: #c9a55a;
+  --gold2: #a8872e;
+  --border: #2e2c28;
+  --border-light: #d8d0c4;
+  --green: #2e7d4f;
+  --red: #b5483b;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overscroll-behavior: none; scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+body {
+  font-family: "Montserrat", sans-serif;
+  background: transparent;
+  color: var(--charcoal);
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ''; position: fixed; top: 0; left: 0; right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: #0d0d0d; z-index: 1000; pointer-events: none;
+}
+
+/* ─── NAV ─── */
+.site-nav {
+  position: sticky; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center;
+  padding: env(safe-area-inset-top, 0px) 40px 0;
+  height: calc(64px + env(safe-area-inset-top, 0px));
+  background: var(--obsidian);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: "Libre Baskerville", serif; font-size: .95rem; font-style: italic;
+  color: var(--champagne); letter-spacing: .06em; margin-right: auto;
+  text-decoration: none;
+}
+.nav-logo em { font-style: normal; color: var(--gold); }
+.nav-links { display: flex; align-items: center; }
+.nav-links a {
+  color: rgba(255,255,255,.35); text-decoration: none;
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  padding: 20px 22px; transition: color .25s; font-weight: 400;
+}
+.nav-links a:hover { color: var(--champagne); }
+.nav-links a.active { color: var(--gold); }
+.nav-links a.active::after {
+  content: ''; display: block; height: 1px;
+  background: var(--gold); margin-top: 3px;
+}
+.nav-lock-btn {
+  background: none; border: 1px solid rgba(201,165,90,.3); cursor: pointer;
+  color: rgba(212,184,150,.6); font-family: "Montserrat", sans-serif;
+  font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+  padding: 8px 14px; border-radius: 3px; transition: all .2s; margin-left: 8px;
+}
+.nav-lock-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+/* ─── PAGE HERO ─── */
+.page-hero {
+  position: relative; z-index: 1;
+  background: rgba(26,25,23,.92);
+  padding: calc(64px + env(safe-area-inset-top, 0px)) 40px 70px;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero-inner { max-width: 980px; margin: 0 auto; }
+.eyebrow {
+  font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold); display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px; font-weight: 500;
+}
+.eyebrow::before {
+  content: ''; display: inline-block; width: 13px; height: 13px;
+  border: 1.5px solid var(--gold); border-radius: 3px 3px 4px 4px;
+  border-bottom-width: 4px; position: relative;
+}
+.eyebrow::after { content: ''; flex: 0 0 40px; height: 1px; background: var(--gold2); }
+.page-hero h1 {
+  font-family: "Libre Baskerville", serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--champagne2);
+  margin-bottom: 24px;
+}
+.page-hero h1 em {
+  font-style: italic; color: var(--gold);
+  background: linear-gradient(90deg, var(--gold2) 0%, var(--gold) 40%, #e8cb80 60%, var(--gold2) 100%);
+  background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; animation: shimmer 6s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.page-hero .eyebrow { opacity: 0; animation: fadeUp .9s ease .15s forwards; }
+.page-hero h1       { opacity: 0; animation: fadeUp .9s ease .30s forwards; }
+.page-hero p        { opacity: 0; animation: fadeUp .9s ease .50s forwards; }
+.page-hero p {
+  font-size: .85rem; line-height: 1.9; color: rgba(212,184,150,.6);
+  max-width: 600px; font-weight: 300;
+}
+
+/* ─── PRIVAT-FLIKAR ─── */
+.privat-subnav {
+  position: relative; z-index: 1;
+  background: var(--obsidian);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 40px;
+}
+.privat-tabs { display: flex; gap: 8px; max-width: 980px; margin: 0 auto; }
+.ptab {
+  background: transparent; color: rgba(255,255,255,.4); text-decoration: none;
+  border: 1px solid rgba(201,165,90,.25); padding: 9px 20px;
+  font-family: "Montserrat", sans-serif; font-size: .6rem;
+  letter-spacing: .18em; text-transform: uppercase;
+  border-radius: 3px; transition: all .2s;
+}
+.ptab:hover { color: var(--champagne); border-color: rgba(201,165,90,.5); }
+.ptab.on { background: var(--gold2); color: #fff; border-color: var(--gold2); }
+
+/* ─── MAIN CONTENT ─── */
+.content-wrap { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 70px 40px; }
+
+/* ─── REVEAL ANIMATIONER ─── */
+.anim .reveal-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+.anim .reveal-up.in { opacity: 1; transform: none; }
+
+/* ─── INKÖPSLISTA ─── */
+.shoplist {
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 24px 26px;
+}
+.shoplist-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.shoplist-head h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.1rem; font-weight: 400; color: var(--charcoal);
+}
+.shoplist-head .sub {
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
+}
+.shop-add-form { display: flex; gap: 8px; margin-bottom: 16px; }
+.shop-input {
+  flex: 1; background: rgba(0,0,0,.03);
+  border: 1px solid var(--border-light); border-radius: 4px;
+  padding: 11px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
+  color: var(--charcoal); transition: border-color .2s;
+}
+.shop-input:focus { outline: none; border-color: var(--gold2); }
+.shop-add-btn {
+  background: var(--gold2); border: none; border-radius: 4px;
+  padding: 11px 20px; color: #fff; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .62rem;
+  letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
+  transition: background .2s; white-space: nowrap;
+}
+.shop-add-btn:hover { background: var(--gold); }
+.shop-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 4px; border-bottom: 1px solid rgba(216,208,196,.5);
+}
+.shop-row:last-child { border-bottom: none; }
+.shop-checkbox {
+  flex-shrink: 0; width: 19px; height: 19px; border-radius: 5px;
+  border: 1.5px solid var(--gold2); position: relative; cursor: pointer;
+  background: transparent; transition: all .2s ease;
+}
+.shop-checkbox.on { background: var(--gold2); border-color: var(--gold2); }
+.shop-checkbox::after {
+  content: '✓'; position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center; color: #fff;
+  font-size: .62rem; font-weight: 700; opacity: 0; transform: scale(.6);
+  transition: all .2s ease;
+}
+.shop-checkbox.on::after { opacity: 1; transform: scale(1); }
+.shop-name { flex: 1; font-size: .82rem; color: var(--charcoal); transition: color .2s, opacity .2s; }
+.shop-row.done .shop-name { text-decoration: line-through; opacity: .45; }
+.shop-del {
+  flex-shrink: 0; background: none; border: none; cursor: pointer;
+  color: var(--stone); font-size: 1rem; line-height: 1; padding: 4px 6px;
+  opacity: .4; transition: opacity .2s, color .2s;
+}
+.shop-del:hover { opacity: 1; color: var(--red); }
+.shop-empty {
+  padding: 18px 4px; text-align: center; font-size: .74rem;
+  color: var(--stone); font-weight: 300;
+}
+.shop-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-light);
+}
+.shop-count { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
+.shop-clear-btn {
+  background: none; border: 1px solid rgba(122,118,112,.3); cursor: pointer;
+  color: var(--stone); font-family: "Montserrat", sans-serif;
+  font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+  padding: 8px 14px; border-radius: 4px; transition: all .2s;
+}
+.shop-clear-btn:hover { color: var(--red); border-color: var(--red); }
+
+.privacy-note {
+  margin-top: 22px; max-width: 640px; margin-left: auto; margin-right: auto;
+  text-align: center; font-size: .64rem; line-height: 1.7;
+  color: rgba(122,118,112,.8); font-weight: 300;
+}
+.privacy-note .pico { color: var(--gold2); }
+
+/* ─── FOOTER ─── */
+.site-footer {
+  position: relative; z-index: 1;
+  background: var(--obsidian);
+  border-top: 1px solid var(--border);
+  padding: 40px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: "Libre Baskerville", serif; font-style: italic;
+  color: rgba(212,184,150,.3); font-size: .85rem; letter-spacing: .06em;
+}
+.footer-logo em { font-style: normal; color: rgba(201,165,90,.4); }
+
+/* ─── LOCK SCREEN ─── */
+.lock {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #0d0d0d;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.lock.hidden { display: none; }
+.lock-inner {
+  max-width: 360px; width: 100%; text-align: center;
+  animation: lockUp .8s cubic-bezier(.22,1,.36,1);
+}
+@keyframes lockUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.lock-icon {
+  width: 58px; height: 58px; margin: 0 auto 26px;
+  border: 1.5px solid rgba(201,165,90,.5); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+}
+.lock-eyebrow {
+  font-size: .58rem; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px; font-weight: 500;
+}
+.lock-title {
+  font-family: "Libre Baskerville", serif; font-style: italic;
+  font-size: 1.7rem; color: var(--champagne2); margin-bottom: 12px;
+}
+.lock-sub {
+  font-size: .72rem; line-height: 1.7; color: rgba(212,184,150,.5);
+  margin-bottom: 26px; font-weight: 300;
+}
+.lock-form { display: flex; flex-direction: column; gap: 12px; }
+.lock-input {
+  width: 100%; background: rgba(255,255,255,.05);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 14px 16px; color: var(--champagne2);
+  font-family: "Montserrat", sans-serif; font-size: 16px;
+  letter-spacing: .08em; text-align: center; transition: border-color .2s;
+}
+.lock-input:focus { outline: none; border-color: var(--gold); }
+.lock-input::placeholder { color: rgba(212,184,150,.3); letter-spacing: .04em; }
+.lock-btn {
+  width: 100%; background: var(--gold); border: none; border-radius: 4px;
+  padding: 14px; color: #1a1917; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .62rem;
+  letter-spacing: .2em; text-transform: uppercase; font-weight: 600;
+  transition: background .2s;
+}
+.lock-btn:hover { background: var(--champagne); }
+.lock-error {
+  font-size: .68rem; color: #d98377; min-height: 16px;
+  letter-spacing: .04em; margin-top: 2px;
+}
+.lock-home {
+  display: inline-block; margin-top: 24px;
+  font-size: .55rem; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(212,184,150,.4); text-decoration: none; transition: color .2s;
+}
+.lock-home:hover { color: var(--champagne); }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:640px){
+  .site-nav { padding: env(safe-area-inset-top, 0px) 20px 0; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .page-hero { padding: calc(52px + env(safe-area-inset-top, 0px)) 20px 46px; }
+  .page-hero h1 { font-size: clamp(1.8rem, 8vw, 2.5rem); }
+  .page-hero p { font-size: .8rem; max-width: 100%; }
+  .privat-subnav { padding: 14px 20px; }
+  .content-wrap { padding: 44px 20px; }
+  .shoplist { padding: 20px 18px; }
+}
+
+/* ─── HAMBURGER ─── */
+.nav-hamburger {
+  display: none; flex-direction: column; justify-content: center; gap: 5px;
+  width: 36px; height: 36px; cursor: pointer; background: none; border: none;
+  padding: 4px; margin-left: auto; position: relative; z-index: 600;
+}
+.nav-hamburger span {
+  display: block; width: 100%; height: 1px; background: var(--champagne);
+  transition: transform .3s ease, opacity .3s ease; transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.mobile-nav {
+  display: none; position: fixed; inset: 0;
+  background: rgba(13,13,13,.97); z-index: 500;
+  flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .3s ease; pointer-events: none;
+}
+.mobile-nav.open { display: flex; opacity: 1; pointer-events: all; }
+.mobile-nav-logo {
+  font-family: "Libre Baskerville", serif; font-size: 1rem; font-style: italic;
+  color: var(--champagne); letter-spacing: .06em; margin-bottom: 40px;
+}
+.mobile-nav-logo em { font-style: normal; color: var(--gold); }
+.mobile-nav a {
+  color: rgba(255,255,255,.45); text-decoration: none; font-size: .7rem;
+  letter-spacing: .28em; text-transform: uppercase; font-weight: 400;
+  padding: 16px 40px; width: 100%; text-align: center;
+  border-bottom: 1px solid var(--border); transition: color .2s, background .2s;
+}
+.mobile-nav a:first-of-type { border-top: 1px solid var(--border); }
+.mobile-nav a:hover, .mobile-nav a.active { color: var(--gold); }
+.nav-home-icon {
+  color: rgba(255,255,255,.35); display: flex; align-items: center;
+  padding: 0 16px; height: 100%; transition: color .25s; text-decoration: none;
+}
+.nav-home-icon:hover { color: var(--champagne); }
+
+/* ════════ MÖRKT LYX-TEMA (glas) ════════ */
+.shoplist {
+  position: relative; overflow: hidden;
+  background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74));
+  -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
+  border: 1px solid rgba(201,165,90,.16);
+  box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
+  transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
+}
+.shoplist:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201,165,90,.34);
+  box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
+}
+.shoplist::before {
+  content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
+  background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
+  transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite;
+}
+@keyframes cardShine { 0%, 70% { left: -130%; } 100% { left: 140%; } }
+
+.shoplist-head { border-bottom-color: rgba(201,165,90,.16) !important; }
+.shoplist-head h2 { color: #ecdcbf; }
+.shoplist-head .sub { color: rgba(212,184,150,.5); }
+
+.shop-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
+.shop-input::placeholder { color: rgba(212,184,150,.35); }
+.shop-row { border-bottom-color: rgba(201,165,90,.1); }
+.shop-name { color: rgba(233,222,202,.9); }
+.shop-empty { color: rgba(212,184,150,.5); }
+.shop-actions { border-top-color: rgba(201,165,90,.14); }
+.shop-count { color: rgba(212,184,150,.45); }
+.privacy-note { color: rgba(212,184,150,.55); }
+</style>
+</head>
+<body class="anim">
+
+<!-- ═══ BG CANVAS ═══ -->
+<canvas id="bgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
+<!-- ═══ LOCK SCREEN ═══ -->
+<div class="lock" id="lock">
+  <div class="lock-inner">
+    <div class="lock-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="10" width="16" height="11" rx="2"/>
+        <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+        <circle cx="12" cy="15.5" r="1.3"/>
+      </svg>
+    </div>
+    <div class="lock-eyebrow">Privat sida</div>
+    <div class="lock-title">Ange kod</div>
+    <div class="lock-sub">Den här sidan är låst. Ange koden för att se inköpslistan.</div>
+    <form class="lock-form" id="lockForm">
+      <input class="lock-input" id="lockInput" type="password" inputmode="numeric" placeholder="Kod" autocomplete="off">
+      <button class="lock-btn" type="submit">Lås upp</button>
+    </form>
+    <div class="lock-error" id="lockError"></div>
+    <a href="/" class="lock-home">← Tillbaka till startsidan</a>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="site-nav">
+  <a href="/" class="nav-logo"><em>Kristiansandsvägen</em> <span>21</span></a>
+  <div class="nav-links">
+    <a href="/#om">Om bostaden</a>
+    <a href="/#galleri">Galleri</a>
+    <a href="/renovering">Renovering</a>
+    <a href="/privat" class="active">Privat</a>
+    <button class="nav-lock-btn" id="lockNowBtn" type="button">Lås</button>
+  </div>
+  <a href="/" class="nav-home-icon" aria-label="Till startsidan">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+      <path d="M9 22V12h6v10"/>
+    </svg>
+  </a>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Öppna meny">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-logo"><em>Kristiansandsvägen</em> 21</div>
+  <a href="/#om">Om bostaden</a>
+  <a href="/#galleri">Galleri</a>
+  <a href="/renovering">Renovering</a>
+  <a href="/privat" class="active">Privat</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">Privat — endast för oss</div>
+    <h1>Inköpslista<br><em>delad mellan er</em></h1>
+    <p>Allt som brukar behöva handlas varje vecka. Lägg till varor, bocka av när de är köpta — listan syncas mellan era mobiler i realtid.</p>
+  </div>
+</div>
+
+<!-- ═══ PRIVAT-FLIKAR ═══ -->
+<div class="privat-subnav">
+  <div class="privat-tabs">
+    <a href="/privat" class="ptab">Budget</a>
+    <a href="/privat/inkopslista" class="ptab on">Inköpslista</a>
+  </div>
+</div>
+
+<!-- ═══ INKÖPSLISTA ═══ -->
+<div class="content-wrap">
+  <div class="shoplist reveal-up" id="shoplistSection">
+    <div class="shoplist-head">
+      <h2>Inköpslista</h2>
+      <span class="sub" id="shopSyncStatus">synkas mellan er</span>
+    </div>
+    <form class="shop-add-form" id="shopAddForm">
+      <input class="shop-input" id="shopInput" type="text" placeholder="Lägg till vara…" autocomplete="off">
+      <button class="shop-add-btn" type="submit">Lägg till</button>
+    </form>
+    <div id="shopRows"></div>
+    <div class="shop-empty" id="shopEmpty" style="display:none;">Listan är tom — lägg till något ovan.</div>
+    <div class="shop-actions">
+      <span class="shop-count" id="shopCount"></span>
+      <button class="shop-clear-btn" id="shopClearBtn" type="button">Rensa avbockade</button>
+    </div>
+  </div>
+
+  <div class="privacy-note">
+    <span class="pico">🔒</span> Låst med kod och nås bara via dolda ingångar — inte tänkt för andra ögon.
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="site-footer">
+  <div class="footer-logo"><em>Kristiansandsvägen</em> 21 — Privat</div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   KODLÅS
+   Lösenord/kod: 2121
+   (jämförs mot SHA-256-hashen nedan så koden inte
+    står i klartext). Byt kod genom att ersätta
+    PW_HASH med sha256 av den nya koden.
+   Delar samma session som /privat — upplåst där
+   räknas som upplåst här också.
+   ───────────────────────────────────────────── */
+(function(){
+  const PW_HASH = 'b8dc2c143be8994682b08461f46487e05874e59dd9ab65cf973e3a3c67a763aa'; // = "2121"
+  const SESSION_KEY = 'kv21_privat_unlocked';
+  const lock = document.getElementById('lock');
+  const form = document.getElementById('lockForm');
+  const inp = document.getElementById('lockInput');
+  const err = document.getElementById('lockError');
+
+  async function sha256(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  function unlock(){
+    sessionStorage.setItem(SESSION_KEY, '1');
+    if (inp) inp.blur();
+    lock.classList.add('hidden');
+    document.dispatchEvent(new Event('kv21:unlocked'));
+    const toTop = () => window.scrollTo(0, 0);
+    toTop();
+    requestAnimationFrame(toTop);
+    setTimeout(toTop, 80);
+    setTimeout(toTop, 250);
+  }
+  if (sessionStorage.getItem(SESSION_KEY)) lock.classList.add('hidden');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    err.textContent = '';
+    const val = inp.value;
+    if (!val){ err.textContent = 'Skriv koden.'; return; }
+    if (await sha256(val) === PW_HASH){
+      unlock();
+    } else {
+      err.textContent = 'Fel kod.';
+      inp.value = '';
+      inp.focus();
+    }
+  });
+
+  const lockNowBtn = document.getElementById('lockNowBtn');
+  if (lockNowBtn) lockNowBtn.addEventListener('click', function(){
+    sessionStorage.removeItem(SESSION_KEY);
+    location.reload();
+  });
+})();
+</script>
+
+<!-- ═════════════════════════════════════════════════════════════
+     INKÖPSLISTA — delad & synkad via Firebase Firestore
+     ─────────────────────────────────────────────────────────────
+     Samma Firebase-projekt/samling som tidigare (shoppingList).
+     ═════════════════════════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const firebaseConfig = {
+    apiKey: "AIzaSyC2fUO9rtUbhPxn32b32j-d1UUuqxsjgY8",
+    authDomain: "kristiansandsvagen-21.firebaseapp.com",
+    projectId: "kristiansandsvagen-21",
+    storageBucket: "kristiansandsvagen-21.firebasestorage.app",
+    messagingSenderId: "726739177351",
+    appId: "1:726739177351:web:57da52bea559b2db5b4d22",
+  };
+
+  const rowsEl = document.getElementById('shopRows');
+  const emptyEl = document.getElementById('shopEmpty');
+  const countEl = document.getElementById('shopCount');
+  const statusEl = document.getElementById('shopSyncStatus');
+  const form = document.getElementById('shopAddForm');
+  const input = document.getElementById('shopInput');
+  const clearBtn = document.getElementById('shopClearBtn');
+  if (!rowsEl || !form) return;
+
+  function showUnavailable(msg){
+    statusEl.textContent = 'ej ansluten';
+    rowsEl.innerHTML = '';
+    emptyEl.style.display = '';
+    emptyEl.textContent = msg;
+    form.querySelector('.shop-input').disabled = true;
+    form.querySelector('.shop-add-btn').disabled = true;
+  }
+
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'FYLL_I_MIG'){
+    showUnavailable('Inköpslistan är inte kopplad till Firebase ännu.');
+    return;
+  }
+  if (typeof firebase === 'undefined'){
+    showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
+    return;
+  }
+
+  let db, shopCol;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    shopCol = db.collection('shoppingList');
+  } catch (e) {
+    console.error('Shoppinglista init:', e);
+    showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
+    return;
+  }
+
+  function renderRows(items){
+    rowsEl.innerHTML = '';
+    emptyEl.style.display = items.length ? 'none' : '';
+    const doneCount = items.filter(it => it.checked).length;
+    countEl.textContent = items.length ? (items.length - doneCount) + ' kvar av ' + items.length : '';
+    items.forEach(it => {
+      const row = document.createElement('div');
+      row.className = 'shop-row' + (it.checked ? ' done' : '');
+      row.innerHTML =
+        '<button type="button" class="shop-checkbox' + (it.checked ? ' on' : '') + '" aria-label="Bocka av"></button>' +
+        '<span class="shop-name"></span>' +
+        '<button type="button" class="shop-del" aria-label="Ta bort">×</button>';
+      row.querySelector('.shop-name').textContent = it.name;
+      row.querySelector('.shop-checkbox').addEventListener('click', () => {
+        shopCol.doc(it.id).update({ checked: !it.checked });
+      });
+      row.querySelector('.shop-del').addEventListener('click', () => {
+        shopCol.doc(it.id).delete();
+      });
+      rowsEl.appendChild(row);
+    });
+  }
+
+  shopCol.orderBy('createdAt', 'asc').onSnapshot(
+    snap => {
+      statusEl.textContent = 'synkas mellan er';
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      items.sort((a, b) => (a.checked === b.checked) ? 0 : (a.checked ? 1 : -1));
+      renderRows(items);
+    },
+    err => { statusEl.textContent = 'synkfel'; console.error('Shoppinglista:', err); }
+  );
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = input.value.trim();
+    if (!name) return;
+    shopCol.add({ name, checked: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+    input.value = '';
+  });
+
+  clearBtn.addEventListener('click', async () => {
+    const snap = await shopCol.where('checked', '==', true).get();
+    if (snap.empty) return;
+    const batch = db.batch();
+    snap.forEach(doc => batch.delete(doc.ref));
+    await batch.commit();
+  });
+})();
+</script>
+
+<script>
+// ── Mobilmeny ──
+(function() {
+  var btn = document.getElementById('navHamburger');
+  var nav = document.getElementById('mobileNav');
+  if (!btn || !nav) return;
+  function openMenu()  { btn.classList.add('open'); nav.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeMenu() { btn.classList.remove('open'); nav.classList.remove('open'); document.body.style.overflow=''; }
+  btn.addEventListener('click', function() { btn.classList.contains('open') ? closeMenu() : openMenu(); });
+  nav.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if(e.key==='Escape') closeMenu(); });
+})();
+</script>
+
+<script>
+// ── Reveal-animation för inköpslistkortet ──
+(function(){
+  const reveals = document.querySelectorAll('.reveal-up');
+  if (!('IntersectionObserver' in window)){
+    reveals.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+    });
+  }, { threshold: .16, rootMargin: '0px 0px -6% 0px' });
+  reveals.forEach(el => io.observe(el));
+})();
+</script>
+
+<script>
+// ── Mörk lyx-bakgrund: guldglöd + gulddamm ──
+(function(){
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const blobs = Array.from({length: 5}, (_, i) => ({
+    x: Math.random(), y: Math.random(), r: 260 + Math.random() * 340,
+    vx: (Math.random() - .5) * .00010, vy: (Math.random() - .5) * .00007,
+    col: i % 2 ? [201,165,90] : [168,135,46],
+    a: .09 + Math.random() * .07, phase: Math.random() * Math.PI * 2,
+  }));
+  const dust = Array.from({length: 64}, () => ({
+    x: Math.random(), y: Math.random(), r: .4 + Math.random() * 1.6,
+    sp: .00006 + Math.random() * .00018, drift: (Math.random() - .5) * .0001,
+    a: .12 + Math.random() * .32, ph: Math.random() * Math.PI * 2,
+  }));
+  let t = 0;
+  function frame() {
+    t += 0.0024;
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#0c0b0a'); bg.addColorStop(.5, '#151310'); bg.addColorStop(1, '#0b0a09');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    blobs.forEach(b => {
+      b.x += b.vx + Math.sin(b.phase + t * .4) * .00004;
+      b.y += b.vy + Math.cos(b.phase + t * .3) * .00003;
+      if (b.x < -.4) b.x = 1.4; if (b.x > 1.4) b.x = -.4;
+      if (b.y < -.4) b.y = 1.4; if (b.y > 1.4) b.y = -.4;
+      const px = b.x * W, py = b.y * H;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, b.r);
+      g.addColorStop(0, `rgba(${b.col},${b.a})`);
+      g.addColorStop(1, `rgba(${b.col},0)`);
+      ctx.beginPath(); ctx.arc(px, py, b.r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
+    });
+    dust.forEach(d => {
+      d.y -= d.sp; d.x += d.drift + Math.sin(d.ph + d.y * 7) * .00005; d.ph += .01;
+      if (d.y < -.05) { d.y = 1.05; d.x = Math.random(); }
+      if (d.x < 0) d.x = 1; if (d.x > 1) d.x = 0;
+      const px = d.x * W, py = d.y * H, tw = (Math.sin(d.ph) + 1) / 2;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, d.r * 3);
+      g.addColorStop(0, `rgba(232,203,128,${d.a * (.4 + tw * .6)})`);
+      g.addColorStop(1, 'rgba(232,203,128,0)');
+      ctx.beginPath(); ctx.arc(px, py, d.r * 3, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>

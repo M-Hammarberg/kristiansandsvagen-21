@@ -216,18 +216,24 @@ body::before {
   padding: 18px 4px; text-align: center; font-size: .74rem;
   color: var(--stone); font-weight: 300;
 }
-.shop-actions {
-  display: flex; align-items: center; justify-content: space-between;
+.shop-foot {
   margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-light);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.shop-done-btn {
+  width: 100%; background: var(--gold2); border: none; border-radius: 4px;
+  padding: 13px; color: #fff; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .64rem;
+  letter-spacing: .16em; text-transform: uppercase; font-weight: 600;
+  transition: background .2s;
+}
+.shop-done-btn:hover { background: var(--gold); }
+.shop-meta {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px 16px; flex-wrap: wrap; text-align: center;
 }
 .shop-count { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
-.shop-clear-btn {
-  background: none; border: 1px solid rgba(122,118,112,.3); cursor: pointer;
-  color: var(--stone); font-family: "Montserrat", sans-serif;
-  font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
-  padding: 8px 14px; border-radius: 4px; transition: all .2s;
-}
-.shop-clear-btn:hover { color: var(--red); border-color: var(--red); }
+.shop-last { font-size: .58rem; letter-spacing: .04em; color: var(--stone); }
 
 .privacy-note {
   margin-top: 22px; max-width: 640px; margin-left: auto; margin-right: auto;
@@ -392,8 +398,8 @@ body::before {
 .shop-row { border-bottom-color: rgba(201,165,90,.1); }
 .shop-name { color: rgba(233,222,202,.9); }
 .shop-empty { color: rgba(212,184,150,.5); }
-.shop-actions { border-top-color: rgba(201,165,90,.14); }
-.shop-count { color: rgba(212,184,150,.45); }
+.shop-foot { border-top-color: rgba(201,165,90,.14); }
+.shop-count, .shop-last { color: rgba(212,184,150,.45); }
 .privacy-note { color: rgba(212,184,150,.55); }
 </style>
 </head>
@@ -483,9 +489,12 @@ body::before {
     </form>
     <div id="shopRows"></div>
     <div class="shop-empty" id="shopEmpty" style="display:none;">Listan är tom — lägg till något ovan.</div>
-    <div class="shop-actions">
-      <span class="shop-count" id="shopCount"></span>
-      <button class="shop-clear-btn" id="shopClearBtn" type="button">Återställ avbockade</button>
+    <div class="shop-foot">
+      <button class="shop-done-btn" id="shopDoneBtn" type="button">Handlat färdigt</button>
+      <div class="shop-meta">
+        <span class="shop-count" id="shopCount"></span>
+        <span class="shop-last" id="shopLast"></span>
+      </div>
     </div>
   </div>
 
@@ -594,11 +603,18 @@ body::before {
   const rowsEl = document.getElementById('shopRows');
   const emptyEl = document.getElementById('shopEmpty');
   const countEl = document.getElementById('shopCount');
+  const lastEl = document.getElementById('shopLast');
   const statusEl = document.getElementById('shopSyncStatus');
   const form = document.getElementById('shopAddForm');
   const input = document.getElementById('shopInput');
-  const clearBtn = document.getElementById('shopClearBtn');
+  const doneBtn = document.getElementById('shopDoneBtn');
   if (!rowsEl || !form) return;
+
+  function formatLast(d){
+    const datePart = d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'long' });
+    const timePart = d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+    return 'Handlades senast ' + datePart + ' kl. ' + timePart;
+  }
 
   function showUnavailable(msg){
     statusEl.textContent = 'ej ansluten';
@@ -618,16 +634,22 @@ body::before {
     return;
   }
 
-  let db, shopCol;
+  let db, shopCol, metaRef;
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
     shopCol = db.collection('shoppingList');
+    metaRef = db.collection('shoppingMeta').doc('status');
   } catch (e) {
     console.error('Shoppinglista init:', e);
     showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
     return;
   }
+
+  metaRef.onSnapshot(doc => {
+    const data = doc.data();
+    lastEl.textContent = (data && data.lastShoppedAt) ? formatLast(data.lastShoppedAt.toDate()) : '';
+  }, e => console.error('Shoppinglista meta:', e));
 
   // Se till att standardartiklarna finns (skapas bara om de saknas — rör inte deras avbockade-status)
   STANDARD_ITEMS.forEach(name => {
@@ -682,13 +704,12 @@ body::before {
     input.value = '';
   });
 
-  clearBtn.addEventListener('click', async () => {
+  doneBtn.addEventListener('click', async () => {
+    if (!confirm('Handlat färdigt? Alla avbockade varor återställs för nästa gång.')) return;
     const snap = await shopCol.where('checked', '==', true).get();
-    if (snap.empty) return;
-    const word = snap.size === 1 ? 'vara' : 'varor';
-    if (!confirm('Återställ ' + snap.size + ' avbockade ' + word + ' till ej köpt?')) return;
     const batch = db.batch();
     snap.forEach(doc => batch.update(doc.ref, { checked: false }));
+    batch.set(metaRef, { lastShoppedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
     await batch.commit();
   });
 })();

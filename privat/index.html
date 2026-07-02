@@ -305,6 +305,85 @@ body::before {
 .yearcost-total .lbl { font-family: "Libre Baskerville", serif; font-size: .9rem; color: var(--charcoal); }
 .yearcost-total .val { font-family: "Libre Baskerville", serif; font-size: 1.05rem; font-weight: 700; color: var(--gold2); }
 
+/* ─── INKÖPSLISTA ─── */
+.shoplist {
+  margin-top: 32px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 24px 26px;
+}
+.shoplist-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.shoplist-head h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.1rem; font-weight: 400; color: var(--charcoal);
+}
+.shoplist-head .sub {
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
+}
+.shop-add-form { display: flex; gap: 8px; margin-bottom: 16px; }
+.shop-input {
+  flex: 1; background: rgba(0,0,0,.03);
+  border: 1px solid var(--border-light); border-radius: 4px;
+  padding: 11px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
+  color: var(--charcoal); transition: border-color .2s;
+}
+.shop-input:focus { outline: none; border-color: var(--gold2); }
+.shop-add-btn {
+  background: var(--gold2); border: none; border-radius: 4px;
+  padding: 11px 20px; color: #fff; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .62rem;
+  letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
+  transition: background .2s; white-space: nowrap;
+}
+.shop-add-btn:hover { background: var(--gold); }
+.shop-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 4px; border-bottom: 1px solid rgba(216,208,196,.5);
+}
+.shop-row:last-child { border-bottom: none; }
+.shop-checkbox {
+  flex-shrink: 0; width: 19px; height: 19px; border-radius: 5px;
+  border: 1.5px solid var(--gold2); position: relative; cursor: pointer;
+  background: transparent; transition: all .2s ease;
+}
+.shop-checkbox.on { background: var(--gold2); border-color: var(--gold2); }
+.shop-checkbox::after {
+  content: '✓'; position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center; color: #fff;
+  font-size: .62rem; font-weight: 700; opacity: 0; transform: scale(.6);
+  transition: all .2s ease;
+}
+.shop-checkbox.on::after { opacity: 1; transform: scale(1); }
+.shop-name { flex: 1; font-size: .82rem; color: var(--charcoal); transition: color .2s, opacity .2s; }
+.shop-row.done .shop-name { text-decoration: line-through; opacity: .45; }
+.shop-del {
+  flex-shrink: 0; background: none; border: none; cursor: pointer;
+  color: var(--stone); font-size: 1rem; line-height: 1; padding: 4px 6px;
+  opacity: .4; transition: opacity .2s, color .2s;
+}
+.shop-del:hover { opacity: 1; color: var(--red); }
+.shop-empty {
+  padding: 18px 4px; text-align: center; font-size: .74rem;
+  color: var(--stone); font-weight: 300;
+}
+.shop-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-light);
+}
+.shop-count { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
+.shop-clear-btn {
+  background: none; border: 1px solid rgba(122,118,112,.3); cursor: pointer;
+  color: var(--stone); font-family: "Montserrat", sans-serif;
+  font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+  padding: 8px 14px; border-radius: 4px; transition: all .2s;
+}
+.shop-clear-btn:hover { color: var(--red); border-color: var(--red); }
+
 /* ─── ANNUAL NOTE ─── */
 .annual-note {
   margin-top: 36px; text-align: center;
@@ -414,6 +493,7 @@ body::before {
   .summary-stats { grid-template-columns: 1fr; gap: 18px; }
   .content-wrap { padding: 44px 20px; }
   .ledger-col { padding: 22px 18px 18px; }
+  .shoplist { padding: 20px 18px; }
 }
 
 /* ─── HAMBURGER ─── */
@@ -456,7 +536,7 @@ body::before {
 .nav-home-icon:hover { color: var(--champagne); }
 
 /* ════════ MÖRKT LYX-TEMA (glas) ════════ */
-.breakdown, .ledger-col, .yearcost {
+.breakdown, .ledger-col, .yearcost, .shoplist {
   position: relative; overflow: hidden;
   background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74));
   -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
@@ -464,24 +544,33 @@ body::before {
   box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
   transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
 }
-.breakdown:hover, .ledger-col:hover, .yearcost:hover {
+.breakdown:hover, .ledger-col:hover, .yearcost:hover, .shoplist:hover {
   transform: translateY(-3px);
   border-color: rgba(201,165,90,.34);
   box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
 }
 /* mjukt ljussvep diagonalt över korten */
-.breakdown::before, .ledger-col::before, .yearcost::before {
+.breakdown::before, .ledger-col::before, .yearcost::before, .shoplist::before {
   content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
   background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
   transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite;
 }
 .ledger-col.expense::before { animation-delay: 1.6s; }
 .yearcost::before { animation-delay: 2.8s; }
+.shoplist::before { animation-delay: 2.2s; }
 @keyframes cardShine { 0%, 70% { left: -130%; } 100% { left: 140%; } }
 
-.breakdown-head, .ledger-head, .yearcost-head { border-bottom-color: rgba(201,165,90,.16) !important; }
-.breakdown-head h2, .ledger-head h2, .yearcost-head h2 { color: #ecdcbf; }
-.breakdown-head .sub, .yearcost-head .sub { color: rgba(212,184,150,.5); }
+.breakdown-head, .ledger-head, .yearcost-head, .shoplist-head { border-bottom-color: rgba(201,165,90,.16) !important; }
+.breakdown-head h2, .ledger-head h2, .yearcost-head h2, .shoplist-head h2 { color: #ecdcbf; }
+.breakdown-head .sub, .yearcost-head .sub, .shoplist-head .sub { color: rgba(212,184,150,.5); }
+
+.shop-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
+.shop-input::placeholder { color: rgba(212,184,150,.35); }
+.shop-row { border-bottom-color: rgba(201,165,90,.1); }
+.shop-name { color: rgba(233,222,202,.9); }
+.shop-empty { color: rgba(212,184,150,.5); }
+.shop-actions { border-top-color: rgba(201,165,90,.14); }
+.shop-count { color: rgba(212,184,150,.45); }
 
 .row { border-bottom-color: rgba(201,165,90,.1); }
 .row .name { color: rgba(233,222,202,.85); }
@@ -643,6 +732,23 @@ body::before {
         <span class="total" id="expenseTotal">0 kr</span>
       </div>
       <div id="expenseRows"></div>
+    </div>
+  </div>
+
+  <div class="shoplist reveal-up" id="shoplistSection">
+    <div class="shoplist-head">
+      <h2>Inköpslista</h2>
+      <span class="sub" id="shopSyncStatus">synkas mellan er</span>
+    </div>
+    <form class="shop-add-form" id="shopAddForm">
+      <input class="shop-input" id="shopInput" type="text" placeholder="Lägg till vara…" autocomplete="off">
+      <button class="shop-add-btn" type="submit">Lägg till</button>
+    </form>
+    <div id="shopRows"></div>
+    <div class="shop-empty" id="shopEmpty" style="display:none;">Listan är tom — lägg till något ovan.</div>
+    <div class="shop-actions">
+      <span class="shop-count" id="shopCount"></span>
+      <button class="shop-clear-btn" id="shopClearBtn" type="button">Rensa avbockade</button>
     </div>
   </div>
 
@@ -1010,6 +1116,101 @@ const ANNUAL = [
   setHot(-1);
   if (document.getElementById('lock').classList.contains('hidden')) start();
   else document.addEventListener('kv21:unlocked', start, { once: true });
+})();
+</script>
+
+<!-- ═════════════════════════════════════════════════════════════
+     INKÖPSLISTA — delad & synkad via Firebase Firestore
+     ─────────────────────────────────────────────────────────────
+     Fyll i firebaseConfig nedan med värdena från ert Firebase-
+     projekt (Projektinställningar → Dina appar → webbappens
+     konfiguration). Firestore-regler måste tillåta läs/skriv på
+     samlingen "shoppingList" (se separat instruktion).
+     ═════════════════════════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const firebaseConfig = {
+    apiKey: "FYLL_I_MIG",
+    authDomain: "FYLL_I_MIG",
+    projectId: "FYLL_I_MIG",
+    storageBucket: "FYLL_I_MIG",
+    messagingSenderId: "FYLL_I_MIG",
+    appId: "FYLL_I_MIG",
+  };
+
+  const rowsEl = document.getElementById('shopRows');
+  const emptyEl = document.getElementById('shopEmpty');
+  const countEl = document.getElementById('shopCount');
+  const statusEl = document.getElementById('shopSyncStatus');
+  const form = document.getElementById('shopAddForm');
+  const input = document.getElementById('shopInput');
+  const clearBtn = document.getElementById('shopClearBtn');
+  if (!rowsEl || !form) return;
+
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'FYLL_I_MIG'){
+    statusEl.textContent = 'ej ansluten — se instruktion';
+    rowsEl.innerHTML = '';
+    emptyEl.style.display = '';
+    emptyEl.textContent = 'Inköpslistan är inte kopplad till Firebase ännu.';
+    form.querySelector('.shop-input').disabled = true;
+    form.querySelector('.shop-add-btn').disabled = true;
+    return;
+  }
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const shopCol = db.collection('shoppingList');
+
+  function renderRows(items){
+    rowsEl.innerHTML = '';
+    emptyEl.style.display = items.length ? 'none' : '';
+    const doneCount = items.filter(it => it.checked).length;
+    countEl.textContent = items.length ? (items.length - doneCount) + ' kvar av ' + items.length : '';
+    items.forEach(it => {
+      const row = document.createElement('div');
+      row.className = 'shop-row' + (it.checked ? ' done' : '');
+      row.innerHTML =
+        '<button type="button" class="shop-checkbox' + (it.checked ? ' on' : '') + '" aria-label="Bocka av"></button>' +
+        '<span class="shop-name"></span>' +
+        '<button type="button" class="shop-del" aria-label="Ta bort">×</button>';
+      row.querySelector('.shop-name').textContent = it.name;
+      row.querySelector('.shop-checkbox').addEventListener('click', () => {
+        shopCol.doc(it.id).update({ checked: !it.checked });
+      });
+      row.querySelector('.shop-del').addEventListener('click', () => {
+        shopCol.doc(it.id).delete();
+      });
+      rowsEl.appendChild(row);
+    });
+  }
+
+  shopCol.orderBy('createdAt', 'asc').onSnapshot(
+    snap => {
+      statusEl.textContent = 'synkas mellan er';
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      items.sort((a, b) => (a.checked === b.checked) ? 0 : (a.checked ? 1 : -1));
+      renderRows(items);
+    },
+    err => { statusEl.textContent = 'synkfel'; console.error('Shoppinglista:', err); }
+  );
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = input.value.trim();
+    if (!name) return;
+    shopCol.add({ name, checked: false, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+    input.value = '';
+  });
+
+  clearBtn.addEventListener('click', async () => {
+    const snap = await shopCol.where('checked', '==', true).get();
+    if (snap.empty) return;
+    const batch = db.batch();
+    snap.forEach(doc => batch.delete(doc.ref));
+    await batch.commit();
+  });
 })();
 </script>
 

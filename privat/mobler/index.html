@@ -4,16 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="../../images/misc/favicon.jpg">
-<link rel="apple-touch-icon" href="../../images/misc/favicon.jpg">
-<link rel="manifest" href="manifest.json">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0d0d0d">
 <meta name="robots" content="noindex, nofollow">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Inköpslista">
-<meta name="mobile-web-app-capable" content="yes">
-<title>Privat — Inköpslista</title>
+<title>Privat — Möbler</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -33,7 +28,7 @@
   --red: #b5483b;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; overscroll-behavior: none; scrollbar-width: none; -ms-overflow-style: none; touch-action: manipulation; }
+html { scroll-behavior: smooth; overscroll-behavior: none; scrollbar-width: none; -ms-overflow-style: none; }
 html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
 body {
   font-family: "Montserrat", sans-serif;
@@ -41,7 +36,6 @@ body {
   color: var(--charcoal);
   overflow-x: hidden;
   overscroll-behavior-y: none;
-  touch-action: manipulation;
   -webkit-font-smoothing: antialiased;
 }
 body::before {
@@ -152,95 +146,93 @@ body::before {
 .anim .reveal-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
 .anim .reveal-up.in { opacity: 1; transform: none; }
 
-/* ─── INKÖPSLISTA ─── */
-.shoplist {
+/* ─── KORT (delad bas-stil) ─── */
+.furn-summary, .furn-add, .furn-room {
   background: rgba(255,255,255,.96);
   border: 1px solid var(--border-light);
   border-radius: 6px;
   padding: 24px 26px;
+  margin-bottom: 24px;
 }
-.shoplist-head {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-  margin-bottom: 18px; padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-light);
+
+/* ─── SAMMANSTÄLLNING ─── */
+.furn-summary-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 8px 0; font-size: .82rem; color: var(--charcoal);
+  border-bottom: 1px solid rgba(216,208,196,.5);
 }
-.shoplist-head h2 {
-  font-family: "Libre Baskerville", serif;
-  font-size: 1.1rem; font-weight: 400; color: var(--charcoal);
-}
-.shoplist-head .sub {
-  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
-}
-.shop-add-form { display: flex; gap: 8px; margin-bottom: 16px; }
-.shop-input {
-  flex: 1; background: rgba(0,0,0,.03);
+.furn-summary-row:last-child { border-bottom: none; }
+.furn-summary-row span:last-child { font-weight: 500; color: var(--gold2); font-variant-numeric: tabular-nums; }
+.furn-summary-row.grand { padding-top: 14px; }
+.furn-summary-row.grand span:first-child { font-family: "Libre Baskerville", serif; font-size: .95rem; color: var(--charcoal); }
+.furn-summary-row.grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.15rem; font-weight: 700; color: #e6c578; }
+
+/* ─── LÄGG TILL ─── */
+.furn-add-form { display: flex; gap: 8px; flex-wrap: wrap; }
+.furn-select, .furn-input {
+  background: rgba(0,0,0,.03);
   border: 1px solid var(--border-light); border-radius: 4px;
   padding: 11px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
   color: var(--charcoal); transition: border-color .2s;
 }
-.shop-input:focus { outline: none; border-color: var(--gold2); }
-.shop-add-btn {
+.furn-select:focus, .furn-input:focus { outline: none; border-color: var(--gold2); }
+.furn-select { flex: 0 0 150px; }
+.furn-input { flex: 1 1 160px; min-width: 0; }
+.furn-input.furn-price { flex: 0 0 120px; }
+.furn-add-btn {
   background: var(--gold2); border: none; border-radius: 4px;
   padding: 11px 20px; color: #fff; cursor: pointer;
   font-family: "Montserrat", sans-serif; font-size: .62rem;
   letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
   transition: background .2s; white-space: nowrap;
 }
-.shop-add-btn:hover { background: var(--gold); }
-.shop-section {
-  font-size: .56rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--gold2); font-weight: 600;
-  margin: 16px 0 4px; padding-top: 10px; border-top: 1px solid rgba(216,208,196,.5);
+.furn-add-btn:hover { background: var(--gold); }
+
+/* ─── RUM-KORT ─── */
+.furn-room { display: none; }
+.furn-room.has-items { display: block; }
+.furn-room-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 8px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
 }
-.shop-section:first-child { margin-top: 0; padding-top: 0; border-top: none; }
-.shop-row {
+.furn-room-head h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.1rem; font-weight: 400; color: var(--charcoal);
+}
+.furn-room-head .sub {
+  font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone);
+}
+.furn-item-row {
   display: flex; align-items: center; gap: 12px;
   padding: 9px 4px; border-bottom: 1px solid rgba(216,208,196,.5);
 }
-.shop-row:last-child { border-bottom: none; }
-.shop-checkbox {
+.furn-item-row:last-child { border-bottom: none; }
+.furn-checkbox {
   flex-shrink: 0; width: 19px; height: 19px; border-radius: 5px;
   border: 1.5px solid var(--gold2); position: relative; cursor: pointer;
   background: transparent; transition: all .2s ease;
 }
-.shop-checkbox.on { background: var(--gold2); border-color: var(--gold2); }
-.shop-checkbox::after {
+.furn-checkbox.on { background: var(--gold2); border-color: var(--gold2); }
+.furn-checkbox::after {
   content: '✓'; position: absolute; inset: 0; display: flex;
   align-items: center; justify-content: center; color: #fff;
   font-size: .62rem; font-weight: 700; opacity: 0; transform: scale(.6);
   transition: all .2s ease;
 }
-.shop-checkbox.on::after { opacity: 1; transform: scale(1); }
-.shop-name { flex: 1; font-size: .82rem; color: var(--charcoal); transition: color .2s, opacity .2s; }
-.shop-row.done .shop-name { text-decoration: line-through; opacity: .45; }
-.shop-del {
+.furn-checkbox.on::after { opacity: 1; transform: scale(1); }
+.furn-item-name { flex: 1; font-size: .82rem; color: var(--charcoal); transition: color .2s, opacity .2s; }
+.furn-item-row.done .furn-item-name, .furn-item-row.done .furn-item-price { text-decoration: line-through; opacity: .45; }
+.furn-item-price {
+  flex-shrink: 0; font-size: .8rem; font-weight: 500; color: var(--gold2);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.furn-del {
   flex-shrink: 0; background: none; border: none; cursor: pointer;
   color: var(--stone); font-size: 1rem; line-height: 1; padding: 4px 6px;
   opacity: .4; transition: opacity .2s, color .2s;
 }
-.shop-del:hover { opacity: 1; color: var(--red); }
-.shop-empty {
-  padding: 18px 4px; text-align: center; font-size: .74rem;
-  color: var(--stone); font-weight: 300;
-}
-.shop-foot {
-  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-light);
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-}
-.shop-done-btn {
-  width: 100%; background: var(--gold2); border: none; border-radius: 4px;
-  padding: 13px; color: #fff; cursor: pointer;
-  font-family: "Montserrat", sans-serif; font-size: .64rem;
-  letter-spacing: .16em; text-transform: uppercase; font-weight: 600;
-  transition: background .2s;
-}
-.shop-done-btn:hover { background: var(--gold); }
-.shop-meta {
-  display: flex; align-items: center; justify-content: center;
-  gap: 6px 16px; flex-wrap: wrap; text-align: center;
-}
-.shop-count { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
-.shop-last { font-size: .58rem; letter-spacing: .04em; color: var(--stone); }
+.furn-del:hover { opacity: 1; color: var(--red); }
 
 .privacy-note {
   margin-top: 22px; max-width: 640px; margin-left: auto; margin-right: auto;
@@ -333,7 +325,9 @@ body::before {
   .page-hero p { font-size: .8rem; max-width: 100%; }
   .privat-subnav { padding: 14px 20px; }
   .content-wrap { padding: 44px 20px; }
-  .shoplist { padding: 20px 18px; }
+  .furn-summary, .furn-add, .furn-room { padding: 20px 18px; }
+  .furn-select { flex: 1 1 100%; }
+  .furn-input.furn-price { flex: 1 1 100px; }
 }
 
 /* ─── HAMBURGER ─── */
@@ -376,38 +370,37 @@ body::before {
 .nav-home-icon:hover { color: var(--champagne); }
 
 /* ════════ MÖRKT LYX-TEMA (glas) ════════ */
-.shoplist {
+.furn-summary, .furn-add, .furn-room {
   position: relative; overflow: hidden;
-  background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74));
+  background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74)) !important;
   -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
-  border: 1px solid rgba(201,165,90,.16);
+  border: 1px solid rgba(201,165,90,.16) !important;
   box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
   transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
 }
-.shoplist:hover {
+.furn-summary:hover, .furn-add:hover, .furn-room:hover {
   transform: translateY(-3px);
-  border-color: rgba(201,165,90,.34);
+  border-color: rgba(201,165,90,.34) !important;
   box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
 }
-.shoplist::before {
+.furn-summary::before, .furn-add::before, .furn-room::before {
   content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
   background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
-  transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite;
+  transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite; z-index: 0;
 }
 @keyframes cardShine { 0%, 70% { left: -130%; } 100% { left: 140%; } }
 
-.shoplist-head { border-bottom-color: rgba(201,165,90,.16) !important; }
-.shoplist-head h2 { color: #ecdcbf; }
-.shoplist-head .sub { color: rgba(212,184,150,.5); }
-
-.shop-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
-.shop-input::placeholder { color: rgba(212,184,150,.35); }
-.shop-section { color: #d9b96a; border-top-color: rgba(201,165,90,.14); }
-.shop-row { border-bottom-color: rgba(201,165,90,.1); }
-.shop-name { color: rgba(233,222,202,.9); }
-.shop-empty { color: rgba(212,184,150,.5); }
-.shop-foot { border-top-color: rgba(201,165,90,.14); }
-.shop-count, .shop-last { color: rgba(212,184,150,.45); }
+.furn-summary-row { border-bottom-color: rgba(201,165,90,.1); color: rgba(233,222,202,.85); position: relative; z-index: 1; }
+.furn-summary-row.grand span:first-child { color: #ecdcbf; }
+.furn-room-head { border-bottom-color: rgba(201,165,90,.16) !important; position: relative; z-index: 1; }
+.furn-room-head h2 { color: #ecdcbf; }
+.furn-room-head .sub { color: rgba(212,184,150,.5); }
+.furn-select, .furn-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; position: relative; z-index: 1; }
+.furn-select option { background: #1a1917; color: #ecdcbf; }
+.furn-input::placeholder { color: rgba(212,184,150,.35); }
+.furn-item-row { border-bottom-color: rgba(201,165,90,.1); position: relative; z-index: 1; }
+.furn-item-name { color: rgba(233,222,202,.9); }
+.furn-item-price { color: #d9b96a; }
 .privacy-note { color: rgba(212,184,150,.55); }
 </style>
 </head>
@@ -428,7 +421,7 @@ body::before {
     </div>
     <div class="lock-eyebrow">Privat sida</div>
     <div class="lock-title">Ange kod</div>
-    <div class="lock-sub">Den här sidan är låst. Ange koden för att se inköpslistan.</div>
+    <div class="lock-sub">Den här sidan är låst. Ange koden för att se vad som ska köpas.</div>
     <form class="lock-form" id="lockForm">
       <input class="lock-input" id="lockInput" type="password" inputmode="numeric" placeholder="Kod" autocomplete="off">
       <button class="lock-btn" type="submit">Lås upp</button>
@@ -471,8 +464,8 @@ body::before {
 <div class="page-hero">
   <div class="page-hero-inner">
     <div class="eyebrow">Privat — endast för oss</div>
-    <h1>Inköpslista<br><em>delad mellan er</em></h1>
-    <p>Allt som brukar behöva handlas varje vecka. Lägg till varor, bocka av när de är köpta — listan syncas mellan era mobiler i realtid.</p>
+    <h1>Möbler <em>&amp; inredning</em></h1>
+    <p>Vad som behöver köpas till huset, rum för rum — möbler, inredning och annat. Bocka av när det är köpt, priserna räknas ihop automatiskt. Delas mellan er i realtid.</p>
   </div>
 </div>
 
@@ -480,32 +473,30 @@ body::before {
 <div class="privat-subnav">
   <div class="privat-tabs">
     <a href="/privat" class="ptab">Budget</a>
-    <a href="/privat/inkopslista" class="ptab on">Inköpslista</a>
-    <a href="/privat/mobler" class="ptab">Möbler</a>
+    <a href="/privat/inkopslista" class="ptab">Inköpslista</a>
+    <a href="/privat/mobler" class="ptab on">Möbler</a>
   </div>
 </div>
 
-<!-- ═══ INKÖPSLISTA ═══ -->
+<!-- ═══ INNEHÅLL ═══ -->
 <div class="content-wrap">
-  <div class="shoplist reveal-up" id="shoplistSection">
-    <div class="shoplist-head">
-      <h2>Inköpslista</h2>
-      <span class="sub" id="shopSyncStatus">synkas mellan er</span>
-    </div>
-    <form class="shop-add-form" id="shopAddForm">
-      <input class="shop-input" id="shopInput" type="text" placeholder="Lägg till vara…" autocomplete="off">
-      <button class="shop-add-btn" type="submit">Lägg till</button>
-    </form>
-    <div id="shopRows"></div>
-    <div class="shop-empty" id="shopEmpty" style="display:none;">Listan är tom — lägg till något ovan.</div>
-    <div class="shop-foot">
-      <button class="shop-done-btn" id="shopDoneBtn" type="button">Handlat färdigt</button>
-      <div class="shop-meta">
-        <span class="shop-count" id="shopCount"></span>
-        <span class="shop-last" id="shopLast"></span>
-      </div>
-    </div>
+
+  <div class="furn-summary reveal-up" id="furnSummarySection" style="display:none;">
+    <div class="furn-summary-row"><span>Totalt</span><span id="furnTotal">0 kr</span></div>
+    <div class="furn-summary-row"><span>Redan köpt</span><span id="furnBought">0 kr</span></div>
+    <div class="furn-summary-row grand"><span>Kvar att köpa</span><span id="furnRemaining">0 kr</span></div>
   </div>
+
+  <div class="furn-add reveal-up">
+    <form class="furn-add-form" id="furnAddForm">
+      <select class="furn-select" id="furnRoom"></select>
+      <input class="furn-input" id="furnName" type="text" placeholder="Namn…" autocomplete="off">
+      <input class="furn-input furn-price" id="furnPrice" type="number" inputmode="decimal" placeholder="Pris (kr)" min="0" step="1">
+      <button class="furn-add-btn" type="submit">Lägg till</button>
+    </form>
+  </div>
+
+  <div id="roomsContainer"></div>
 
   <div class="privacy-note">
     <span class="pico">🔒</span> Låst med kod och nås bara via dolda ingångar — inte tänkt för andra ögon.
@@ -524,14 +515,7 @@ body::before {
    (jämförs mot SHA-256-hashen nedan så koden inte
     står i klartext). Byt kod genom att ersätta
     PW_HASH med sha256 av den nya koden.
-   Delar samma session som /privat — upplåst där
-   räknas som upplåst här också.
-
-   Öppnad som installerad hemskärms-app (standalone)
-   sparas upplåsningen i localStorage istället för
-   sessionStorage, så man slipper ange koden varje
-   gång man trycker på ikonen — vanlig webbläsare
-   beter sig som förut (session, delad med /privat).
+   Delar samma session som /privat och /privat/inkopslista.
    ───────────────────────────────────────────── */
 (function(){
   const PW_HASH = 'b8dc2c143be8994682b08461f46487e05874e59dd9ab65cf973e3a3c67a763aa'; // = "2121"
@@ -584,9 +568,11 @@ body::before {
 </script>
 
 <!-- ═════════════════════════════════════════════════════════════
-     INKÖPSLISTA — delad & synkad via Firebase Firestore
+     MÖBLER — delad & synkad via Firebase Firestore
      ─────────────────────────────────────────────────────────────
-     Samma Firebase-projekt/samling som tidigare (shoppingList).
+     Samma Firebase-projekt som inköpslistan, egen samling
+     "furnitureItems". Kräver att Firestore-reglerna även tillåter
+     den samlingen (se separat instruktion).
      ═════════════════════════════════════════════════════════════ -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -601,221 +587,150 @@ body::before {
     appId: "1:726739177351:web:57da52bea559b2db5b4d22",
   };
 
-  /* Standardartiklar — stående varor som alltid finns kvar i listan.
-     De går bara att bocka av/på, inte ta bort. Lägg till/ta bort
-     varor i listan här (kräver att sidan publiceras på nytt). */
-  const STANDARD_ITEMS = [];
-  const slug = name => 'standard_' + name.toLowerCase()
-    .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
-    .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-
-  /* Butiksordning — varorna sorteras efter var i butiken de brukar
-     ligga (baserat på City Gross i Trollhättan), så listan följer
-     vägen genom butiken istället för när varan lades till. Man går
-     in på högersidan (Kroppsvård/Kläder) och runt hela väggen —
-     dryck, fryst och tidningar (→ Övrigt) kommer sist, precis innan
-     kassan. Nya varor man skriver in gissas in i rätt avsnitt via
-     nyckelorden nedan. Lägg till fler nyckelord om något hamnar fel,
-     eller säg till om ordningen på ett avsnitt är fel. */
-  const STORE_SECTIONS = [
-    { id: 'skafferi',   label: 'Flingor, Pasta & Konserver' },
-    { id: 'kaffe',      label: 'Kaffe & Te' },
-    { id: 'bakning',    label: 'Bakning' },
-    { id: 'varlden',    label: 'Smaksättning & Världens mat' },
-    { id: 'kott',       label: 'Kött, Fisk & Chark' },
-    { id: 'frukt',      label: 'Frukt & Grönt' },
-    { id: 'kroppsvard', label: 'Kroppsvård' },
-    { id: 'brod',       label: 'Bageri & Bröd' },
-    { id: 'mejeri',     label: 'Mejeri & Ägg' },
-    { id: 'halsokost',  label: 'Glutenfritt & Hälsokost' },
-    { id: 'dryck',      label: 'Dryck' },
-    { id: 'snacks',     label: 'Snacks & Godis' },
-    { id: 'stad',       label: 'Städ & Tvätt' },
-    { id: 'fryst',      label: 'Fryst' },
+  /* Rum — kategorierna varor grupperas under. Lägg till/ta bort
+     rum här (kräver att sidan publiceras på nytt). */
+  const ROOMS = [
+    { id: 'hall',       label: 'Hall' },
+    { id: 'vardagsrum', label: 'Vardagsrum' },
+    { id: 'kok',        label: 'Kök' },
+    { id: 'sovrum',     label: 'Sovrum' },
+    { id: 'badrum',     label: 'Badrum' },
+    { id: 'kontor',     label: 'Kontor' },
+    { id: 'utomhus',    label: 'Utomhus' },
+    { id: 'garage',     label: 'Garage' },
     { id: 'ovrigt',     label: 'Övrigt' },
   ];
-  const CATEGORY_KEYWORDS = {
-    halsokost:  ['glutenfri', 'hälsokost', 'protein', 'kosttillskott'],
-    mejeri:     ['mjölk', 'ägg', 'grädde', 'fil', 'yoghurt', 'yogurt', 'smör', 'philadelphia', 'keso', 'crème', 'gräddfil'],
-    brod:       ['bröd', 'fralla', 'frallor', 'baguette', 'skorpa', 'skorpor', 'tortilla', 'wrap', 'kex', 'knäckebröd'],
-    frukt:      ['banan', 'äpple', 'apelsin', 'tomat', 'gurka', 'sallad', 'potatis', 'lök', 'morot', 'paprika', 'citron', 'avokado', 'vitlök', 'frukt', 'grönsak', 'svamp', 'melon', 'druvor', 'broccoli', 'blomkål'],
-    kott:       ['kyckling', 'köttfärs', 'fläsk', 'bacon', 'korv', 'skinka', 'ost', 'kött', 'biff', 'karré', 'prinskorv', 'salami', 'fisk', 'lax', 'räkor', 'torsk'],
-    varlden:    ['krydd', 'ketchup', 'senap', 'majonnäs', 'soja', 'taco', 'curry', 'chilisås', 'salsa'],
-    kaffe:      ['kaffe', 'te'],
-    bakning:    ['mjöl', 'socker', 'bakpulver', 'vanilj', 'jäst'],
-    skafferi:   ['pasta', 'ris', 'flingor', 'müsli', 'konserv', 'böna', 'bönor', 'linser', 'nudlar', 'spaghetti'],
-    dryck:      ['läsk', 'cola', 'pepsi', 'fanta', 'sprite', 'juice', 'vatten', 'öl', 'vin', 'cider', 'saft', 'must'],
-    snacks:     ['chips', 'godis', 'choklad', 'nötter', 'popcorn', 'kaka', 'kakor', 'glass'],
-    fryst:      ['fryst', 'frys'],
-    stad:       ['diskmedel', 'tvättmedel', 'toalettpapper', 'hushållspapper', 'tvättlapp', 'sopor', 'soppåse'],
-    kroppsvard: ['schampo', 'tandkräm', 'tvål', 'deo', 'rakhyvel', 'balsam', 'bindor'],
-  };
-  function guessCategory(name){
-    // Delar upp på ord (inte \b-regex — den hanterar inte å/ä/ö-ord korrekt i JS)
-    // och matchar om något ord i namnet börjar med ett nyckelord. Om flera
-    // nyckelord (i olika avsnitt) matchar samma ord vinner det längsta —
-    // annars skulle t.ex. "mjöl" (bakning) alltid vinna över "mjölk" (mejeri)
-    // bara för att bakning råkar stå tidigare i listan.
-    const nameWords = name.toLowerCase().split(/[^a-zåäö]+/).filter(Boolean);
-    let best = null, bestLen = 0;
-    for (const sec of STORE_SECTIONS){
-      const keywords = CATEGORY_KEYWORDS[sec.id];
-      if (!keywords) continue;
-      for (const k of keywords){
-        if (k.length > bestLen && nameWords.some(nw => nw.startsWith(k))){
-          best = sec.id; bestLen = k.length;
-        }
-      }
-    }
-    return best || 'ovrigt';
-  }
-  function sectionIndex(cat){
-    const i = STORE_SECTIONS.findIndex(s => s.id === cat);
-    return i === -1 ? STORE_SECTIONS.length : i;
-  }
-  function sectionLabel(cat){
-    const sec = STORE_SECTIONS.find(s => s.id === cat);
-    return sec ? sec.label : 'Övrigt';
-  }
+  const fmt = n => Math.round(n || 0).toLocaleString('sv-SE') + ' kr';
 
-  const rowsEl = document.getElementById('shopRows');
-  const emptyEl = document.getElementById('shopEmpty');
-  const countEl = document.getElementById('shopCount');
-  const lastEl = document.getElementById('shopLast');
-  const statusEl = document.getElementById('shopSyncStatus');
-  const form = document.getElementById('shopAddForm');
-  const input = document.getElementById('shopInput');
-  const doneBtn = document.getElementById('shopDoneBtn');
-  if (!rowsEl || !form) return;
+  const roomSelect = document.getElementById('furnRoom');
+  const roomsContainer = document.getElementById('roomsContainer');
+  const summarySection = document.getElementById('furnSummarySection');
+  const totalEl = document.getElementById('furnTotal');
+  const boughtEl = document.getElementById('furnBought');
+  const remainingEl = document.getElementById('furnRemaining');
+  const addForm = document.getElementById('furnAddForm');
+  const nameInput = document.getElementById('furnName');
+  const priceInput = document.getElementById('furnPrice');
+  if (!roomsContainer || !addForm) return;
 
-  function formatLast(d){
-    const datePart = d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'long' });
-    const timePart = d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
-    return 'Handlades senast ' + datePart + ' kl. ' + timePart;
-  }
+  // Bygg rum-väljaren
+  ROOMS.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r.id; opt.textContent = r.label;
+    roomSelect.appendChild(opt);
+  });
+
+  // Bygg tomma rum-kort (visas bara när de har varor)
+  ROOMS.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'furn-room reveal-up';
+    card.id = 'room-' + r.id;
+    card.innerHTML =
+      '<div class="furn-room-head"><h2>' + r.label + '</h2><span class="sub" id="sub-' + r.id + '"></span></div>' +
+      '<div class="furn-rows" id="rows-' + r.id + '"></div>';
+    roomsContainer.appendChild(card);
+  });
 
   function showUnavailable(msg){
-    statusEl.textContent = 'ej ansluten';
-    rowsEl.innerHTML = '';
-    emptyEl.style.display = '';
-    emptyEl.textContent = msg;
-    form.querySelector('.shop-input').disabled = true;
-    form.querySelector('.shop-add-btn').disabled = true;
+    addForm.querySelector('.furn-input').disabled = true;
+    addForm.querySelector('.furn-price').disabled = true;
+    addForm.querySelector('.furn-add-btn').disabled = true;
+    addForm.querySelector('.furn-select').disabled = true;
+    const note = document.createElement('div');
+    note.style.cssText = 'text-align:center;font-size:.74rem;color:var(--stone);padding:8px 4px 0;';
+    note.textContent = msg;
+    addForm.parentElement.appendChild(note);
   }
 
   if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'FYLL_I_MIG'){
-    showUnavailable('Inköpslistan är inte kopplad till Firebase ännu.');
+    showUnavailable('Listan är inte kopplad till Firebase ännu.');
     return;
   }
   if (typeof firebase === 'undefined'){
-    showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
+    showUnavailable('Kunde inte ladda listan just nu — testa att ladda om sidan.');
     return;
   }
 
-  let db, shopCol, metaRef;
+  let db, furnCol;
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
-    shopCol = db.collection('shoppingList');
-    metaRef = db.collection('shoppingMeta').doc('status');
+    furnCol = db.collection('furnitureItems');
   } catch (e) {
-    console.error('Shoppinglista init:', e);
-    showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
+    console.error('Möbler init:', e);
+    showUnavailable('Kunde inte ladda listan just nu — testa att ladda om sidan.');
     return;
   }
 
-  metaRef.onSnapshot(doc => {
-    const data = doc.data();
-    lastEl.textContent = (data && data.lastShoppedAt) ? formatLast(data.lastShoppedAt.toDate()) : '';
-  }, e => console.error('Shoppinglista meta:', e));
+  function renderRoom(roomId, items){
+    const card = document.getElementById('room-' + roomId);
+    const rowsEl = document.getElementById('rows-' + roomId);
+    const subEl = document.getElementById('sub-' + roomId);
+    card.classList.toggle('has-items', items.length > 0);
+    if (!items.length){ rowsEl.innerHTML = ''; subEl.textContent = ''; return; }
 
-  // Håll standardartiklarna i synk med STANDARD_ITEMS ovan: lägg till nya,
-  // ta bort de som inte längre finns i listan (rör inte avbockade-status för de som finns kvar).
-  shopCol.where('standard', '==', true).get().then(snap => {
-    const existing = new Set();
-    snap.forEach(doc => {
-      const name = doc.data().name;
-      existing.add(name);
-      if (!STANDARD_ITEMS.includes(name)) doc.ref.delete().catch(e => console.error('Ta bort standardartikel:', name, e));
-    });
-    STANDARD_ITEMS.forEach(name => {
-      if (!existing.has(name)){
-        shopCol.doc(slug(name)).set({ name, checked: false, standard: true, category: guessCategory(name), createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-      }
-    });
-  }).catch(e => console.error('Standardartiklar:', e));
+    const total = items.reduce((s, it) => s + (it.price || 0), 0);
+    const remaining = items.filter(it => !it.bought).reduce((s, it) => s + (it.price || 0), 0);
+    subEl.textContent = fmt(remaining) + ' kvar av ' + fmt(total);
 
-  function renderRows(items){
     rowsEl.innerHTML = '';
-    emptyEl.style.display = items.length ? 'none' : '';
-    const doneCount = items.filter(it => it.checked).length;
-    countEl.textContent = items.length ? (items.length - doneCount) + ' kvar av ' + items.length : '';
-    let lastCat = null;
     items.forEach(it => {
-      if (!it.checked && it.category !== lastCat){
-        lastCat = it.category;
-        const head = document.createElement('div');
-        head.className = 'shop-section';
-        head.textContent = sectionLabel(it.category);
-        rowsEl.appendChild(head);
-      }
       const row = document.createElement('div');
-      row.className = 'shop-row' + (it.checked ? ' done' : '');
+      row.className = 'furn-item-row' + (it.bought ? ' done' : '');
       row.innerHTML =
-        '<button type="button" class="shop-checkbox' + (it.checked ? ' on' : '') + '" aria-label="Bocka av"></button>' +
-        '<span class="shop-name"></span>' +
-        (it.standard ? '' : '<button type="button" class="shop-del" aria-label="Ta bort">×</button>');
-      row.querySelector('.shop-name').textContent = it.name;
-      row.querySelector('.shop-checkbox').addEventListener('click', () => {
-        shopCol.doc(it.id).update({ checked: !it.checked });
+        '<button type="button" class="furn-checkbox' + (it.bought ? ' on' : '') + '" aria-label="Bocka av"></button>' +
+        '<span class="furn-item-name"></span>' +
+        '<span class="furn-item-price"></span>' +
+        '<button type="button" class="furn-del" aria-label="Ta bort">×</button>';
+      row.querySelector('.furn-item-name').textContent = it.name;
+      row.querySelector('.furn-item-price').textContent = fmt(it.price);
+      row.querySelector('.furn-checkbox').addEventListener('click', () => {
+        furnCol.doc(it.id).update({ bought: !it.bought });
       });
-      const delBtn = row.querySelector('.shop-del');
-      if (delBtn) delBtn.addEventListener('click', () => {
+      row.querySelector('.furn-del').addEventListener('click', () => {
         if (!confirm('Ta bort "' + it.name + '"?')) return;
-        shopCol.doc(it.id).delete();
+        furnCol.doc(it.id).delete();
       });
       rowsEl.appendChild(row);
     });
   }
 
-  shopCol.orderBy('createdAt', 'asc').onSnapshot(
+  furnCol.orderBy('createdAt', 'asc').onSnapshot(
     snap => {
-      statusEl.textContent = 'synkas mellan er';
-      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      // Kategorin räknas om för varje vara vid varje laddning (inte bara sparad
-      // en gång) — så när nyckelorden ändras rättar gamla varor sig själva,
-      // oavsett om de tidigare hamnat helt fel eller bara i "Övrigt".
-      items.forEach(it => {
-        const guess = guessCategory(it.name);
-        if (guess !== it.category){
-          it.category = guess;
-          shopCol.doc(it.id).update({ category: guess }).catch(e => console.error('Kategori-backfill:', it.name, e));
-        }
+      const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const byRoom = {};
+      ROOMS.forEach(r => byRoom[r.id] = []);
+      all.forEach(it => {
+        const roomId = ROOMS.some(r => r.id === it.room) ? it.room : 'ovrigt';
+        byRoom[roomId].push(it);
       });
-      items.sort((a, b) => {
-        if (a.checked !== b.checked) return a.checked ? 1 : -1;
-        return sectionIndex(a.category) - sectionIndex(b.category);
-      });
-      renderRows(items);
+      ROOMS.forEach(r => renderRoom(r.id, byRoom[r.id].sort((a,b) => (a.bought === b.bought) ? 0 : (a.bought ? 1 : -1))));
+
+      const total = all.reduce((s, it) => s + (it.price || 0), 0);
+      const bought = all.filter(it => it.bought).reduce((s, it) => s + (it.price || 0), 0);
+      totalEl.textContent = fmt(total);
+      boughtEl.textContent = fmt(bought);
+      remainingEl.textContent = fmt(total - bought);
+      summarySection.style.display = all.length ? '' : 'none';
     },
-    err => { statusEl.textContent = 'synkfel'; console.error('Shoppinglista:', err); }
+    err => console.error('Möbler:', err)
   );
 
-  form.addEventListener('submit', e => {
+  addForm.addEventListener('submit', e => {
     e.preventDefault();
-    const name = input.value.trim();
+    const name = nameInput.value.trim();
+    const price = parseFloat(priceInput.value);
     if (!name) return;
-    shopCol.add({ name, checked: false, category: guessCategory(name), createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-    input.value = '';
-  });
-
-  doneBtn.addEventListener('click', async () => {
-    if (!confirm('Handlat färdigt? Alla avbockade varor återställs för nästa gång.')) return;
-    const snap = await shopCol.where('checked', '==', true).get();
-    const batch = db.batch();
-    snap.forEach(doc => batch.update(doc.ref, { checked: false }));
-    batch.set(metaRef, { lastShoppedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
-    await batch.commit();
+    furnCol.add({
+      name,
+      price: isNaN(price) ? 0 : price,
+      room: roomSelect.value,
+      bought: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    nameInput.value = '';
+    priceInput.value = '';
+    nameInput.focus();
   });
 })();
 </script>
@@ -835,21 +750,20 @@ body::before {
 </script>
 
 <script>
-// ── Reveal-animation för inköpslistkortet ──
+// ── Reveal-animation ──
 (function(){
-  const reveals = document.querySelectorAll('.reveal-up');
   if (!('IntersectionObserver' in window)){
-    reveals.forEach(el => el.classList.add('in'));
+    document.querySelectorAll('.reveal-up').forEach(el => el.classList.add('in'));
     return;
   }
-  const io = new IntersectionObserver((entries) => {
+  const revealIO = new IntersectionObserver((entries) => {
     entries.forEach(en => {
       if (!en.isIntersecting) return;
       en.target.classList.add('in');
-      io.unobserve(en.target);
+      revealIO.unobserve(en.target);
     });
-  }, { threshold: .16, rootMargin: '0px 0px -6% 0px' });
-  reveals.forEach(el => io.observe(el));
+  }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('.reveal-up').forEach(el => revealIO.observe(el));
 })();
 </script>
 

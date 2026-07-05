@@ -147,15 +147,20 @@ body::before {
 .anim .reveal-up.in { opacity: 1; transform: none; }
 
 /* ─── KORT (delad bas-stil) ─── */
-.furn-summary, .furn-room {
+.furn-summary, .furn-floor {
   background: rgba(255,255,255,.96);
   border: 1px solid var(--border-light);
   border-radius: 6px;
-  padding: 24px 26px;
+  padding: 28px 26px;
   margin-bottom: 24px;
 }
 
 /* ─── SAMMANSTÄLLNING ─── */
+.furn-sync-note {
+  font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--stone); margin-bottom: 14px; min-height: 1em;
+}
+.furn-sync-note.err { color: var(--red); }
 .furn-summary-row {
   display: flex; align-items: baseline; justify-content: space-between;
   padding: 8px 0; font-size: .82rem; color: var(--charcoal);
@@ -167,28 +172,24 @@ body::before {
 .furn-summary-row.grand span:first-child { font-family: "Libre Baskerville", serif; font-size: .95rem; color: var(--charcoal); }
 .furn-summary-row.grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.15rem; font-weight: 700; color: #e6c578; }
 
-/* ─── VÅNINGS-RUBRIK ─── */
-.furn-floor-head {
-  display: flex; align-items: baseline; gap: 20px;
-  margin: 8px 0 20px;
-}
-#roomsContainer .furn-floor-head:first-child { margin-top: 0; }
-.furn-floor-head h2 {
+/* ─── VÅNINGS-KORT ─── */
+.furn-floor-title {
   font-family: "Libre Baskerville", serif; font-style: italic;
-  font-size: 1.4rem; font-weight: 400; color: var(--champagne2);
-  white-space: nowrap;
-}
-.furn-floor-head .line { flex: 1; height: 1px; background: rgba(201,165,90,.2); }
-
-/* ─── RUM-KORT ─── */
-.furn-room-head {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-  margin-bottom: 8px; padding-bottom: 12px;
+  font-size: 1.45rem; font-weight: 400; color: var(--gold2);
+  margin-bottom: 22px; padding-bottom: 16px;
   border-bottom: 1px solid var(--border-light);
 }
-.furn-room-head h2 {
+
+/* ─── RUM-BLOCK (inuti vånings-kortet) ─── */
+.furn-room-block { margin-top: 22px; padding-top: 22px; border-top: 1px solid rgba(216,208,196,.5); }
+.furn-room-block:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+.furn-room-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 6px;
+}
+.furn-room-head h3 {
   font-family: "Libre Baskerville", serif;
-  font-size: 1.1rem; font-weight: 400; color: var(--charcoal);
+  font-size: 1rem; font-weight: 400; color: var(--charcoal);
 }
 .furn-room-head .sub {
   font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone);
@@ -310,7 +311,7 @@ body::before {
   .page-hero p { font-size: .8rem; max-width: 100%; }
   .privat-subnav { padding: 14px 20px; }
   .content-wrap { padding: 44px 20px; }
-  .furn-summary, .furn-room { padding: 20px 18px; }
+  .furn-summary, .furn-floor { padding: 20px 18px; }
 }
 
 /* ─── HAMBURGER ─── */
@@ -353,7 +354,7 @@ body::before {
 .nav-home-icon:hover { color: var(--champagne); }
 
 /* ════════ MÖRKT LYX-TEMA (glas) ════════ */
-.furn-summary, .furn-room {
+.furn-summary, .furn-floor {
   position: relative; overflow: hidden;
   background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74)) !important;
   -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
@@ -361,12 +362,12 @@ body::before {
   box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
   transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
 }
-.furn-summary:hover, .furn-room:hover {
+.furn-summary:hover, .furn-floor:hover {
   transform: translateY(-3px);
   border-color: rgba(201,165,90,.34) !important;
   box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
 }
-.furn-summary::before, .furn-room::before {
+.furn-summary::before, .furn-floor::before {
   content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
   background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
   transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite; z-index: 0;
@@ -375,8 +376,12 @@ body::before {
 
 .furn-summary-row { border-bottom-color: rgba(201,165,90,.1); color: rgba(233,222,202,.85); position: relative; z-index: 1; }
 .furn-summary-row.grand span:first-child { color: #ecdcbf; }
-.furn-room-head { border-bottom-color: rgba(201,165,90,.16) !important; position: relative; z-index: 1; }
-.furn-room-head h2 { color: #ecdcbf; }
+.furn-sync-note { color: rgba(212,184,150,.45); position: relative; z-index: 1; }
+.furn-sync-note.err { color: #d98377; }
+.furn-floor-title { border-bottom-color: rgba(201,165,90,.18) !important; position: relative; z-index: 1; }
+.furn-room-block { border-top-color: rgba(201,165,90,.14); }
+.furn-room-head { position: relative; z-index: 1; }
+.furn-room-head h3 { color: #ecdcbf; }
 .furn-room-head .sub { color: rgba(212,184,150,.5); }
 .furn-item-row { border-bottom-color: rgba(201,165,90,.1); position: relative; z-index: 1; }
 .furn-item-name { color: rgba(233,222,202,.9); }
@@ -463,6 +468,7 @@ body::before {
 <div class="content-wrap">
 
   <div class="furn-summary reveal-up" id="furnSummarySection">
+    <div class="furn-sync-note" id="furnSyncNote"></div>
     <div class="furn-summary-row"><span>Totalt (prissatt)</span><span id="furnTotal">0 kr</span></div>
     <div class="furn-summary-row"><span>Redan köpt</span><span id="furnBought">0 kr</span></div>
     <div class="furn-summary-row grand"><span>Kvar att köpa</span><span id="furnRemaining">0 kr</span></div>
@@ -567,57 +573,57 @@ body::before {
   const FURNITURE = [
     { floor: 'Nere', rooms: [
       { room: 'Hall', items: [
-        { name: 'Byrå — under trapp', price: null },
+        { name: 'Byrå — under trapp', price: 3500 },
       ]},
       { room: 'Allrum nere', items: [
-        { name: 'Tv-bänk', price: null },
-        { name: 'Tv', price: null },
-        { name: 'Soffbord', price: null },
-        { name: 'Finbord (biljard)', price: null },
-        { name: 'Finstolar', price: null },
+        { name: 'Tv-bänk', price: 2000 },
+        { name: 'Tv', price: 10000 },
+        { name: 'Soffbord', price: 1500 },
+        { name: 'Finbord (biljard)', price: 12000 },
+        { name: 'Finstolar', price: 4000 },
       ]},
       { room: 'Badrum nere', items: [
-        { name: 'Stor kommod', price: null },
+        { name: 'Stor kommod', price: 5000 },
       ]},
       { room: 'Relax', items: [
-        { name: 'Badkar', price: null },
-        { name: 'Duschvägg', price: null },
-        { name: 'Duschmunstycke', price: null },
-        { name: 'Skåp', price: null },
-        { name: 'Duschblandare', price: null },
+        { name: 'Badkar', price: 9000 },
+        { name: 'Duschvägg', price: 3500 },
+        { name: 'Duschmunstycke', price: 600 },
+        { name: 'Skåp', price: 2500 },
+        { name: 'Duschblandare', price: 2000 },
       ]},
       { room: 'Kök', items: [
-        { name: 'Mindre köksbord och stolar', price: null },
-        { name: 'Stekpannor', price: null },
-        { name: 'Tallrikar', price: null },
-        { name: 'Dryckesglas', price: null },
-        { name: 'Bestick', price: null },
+        { name: 'Mindre köksbord och stolar', price: 5000 },
+        { name: 'Stekpannor', price: 1200 },
+        { name: 'Tallrikar', price: 800 },
+        { name: 'Dryckesglas', price: 400 },
+        { name: 'Bestick', price: 1000 },
       ]},
       { room: 'Vardagsrum nere', items: [
-        { name: 'Fina mattor', price: null },
+        { name: 'Fina mattor', price: 6000 },
       ]},
     ]},
     { floor: 'Uppe', rooms: [
       { room: 'Allrum uppe', items: [
-        { name: 'Soffbord', price: null },
-        { name: 'Tv-bänk', price: null },
+        { name: 'Soffbord', price: 1500 },
+        { name: 'Tv-bänk', price: 2000 },
       ]},
       { room: 'Master bedroom', items: [
-        { name: 'Dubbelsäng (180)', price: null },
-        { name: 'Sängbord x2', price: null },
+        { name: 'Dubbelsäng (180)', price: 9000 },
+        { name: 'Sängbord x2', price: 2400 },
       ]},
       { room: 'Vardagsrum uppe', items: [
-        { name: 'Fina mattor', price: null },
+        { name: 'Fina mattor', price: 6000 },
       ]},
     ]},
     { floor: 'Ute', rooms: [
       { room: 'Trädgård', items: [
-        { name: 'Utemöbler', price: null },
-        { name: 'Soffgrupp', price: null },
-        { name: 'Sittbänk', price: null },
-        { name: 'Markiser', price: null },
-        { name: 'Robotgräsklippare', price: null },
-        { name: 'Solstolar x2', price: null },
+        { name: 'Utemöbler', price: 7000 },
+        { name: 'Soffgrupp', price: 9000 },
+        { name: 'Sittbänk', price: 1500 },
+        { name: 'Markiser', price: 6000 },
+        { name: 'Robotgräsklippare', price: 10000 },
+        { name: 'Solstolar x2', price: 3000 },
       ]},
     ]},
   ];
@@ -631,33 +637,33 @@ body::before {
   const totalEl = document.getElementById('furnTotal');
   const boughtEl = document.getElementById('furnBought');
   const remainingEl = document.getElementById('furnRemaining');
+  const syncNoteEl = document.getElementById('furnSyncNote');
   if (!roomsContainer) return;
 
-  // Bygg vånings-rubriker + rum-kort en gång utifrån FURNITURE.
+  // Bygg ett vånings-kort per våning, med varje rum som ett block inuti —
+  // så sidan hänger ihop som tre kort istället för många lösa rum-rutor.
   const ALL_ROOMS = [];
   FURNITURE.forEach(floor => {
-    const floorHead = document.createElement('div');
-    floorHead.className = 'furn-floor-head reveal-up';
-    floorHead.innerHTML = '<h2>' + floor.floor + '</h2><div class="line"></div>';
-    roomsContainer.appendChild(floorHead);
+    const card = document.createElement('div');
+    card.className = 'furn-floor reveal-up';
+    let inner = '<h2 class="furn-floor-title">' + floor.floor + '</h2>';
     floor.rooms.forEach(room => {
       const rid = slug(room.room, '');
-      const card = document.createElement('div');
-      card.className = 'furn-room reveal-up';
-      card.innerHTML =
-        '<div class="furn-room-head"><h2>' + room.room + '</h2><span class="sub" id="sub-' + rid + '"></span></div>' +
-        '<div class="furn-rows" id="rows-' + rid + '"></div>';
-      roomsContainer.appendChild(card);
+      inner +=
+        '<div class="furn-room-block">' +
+          '<div class="furn-room-head"><h3>' + room.room + '</h3><span class="sub" id="sub-' + rid + '"></span></div>' +
+          '<div class="furn-rows" id="rows-' + rid + '"></div>' +
+        '</div>';
       room.items.forEach(it => { it.id = slug(room.room, it.name); });
       ALL_ROOMS.push(room);
     });
+    card.innerHTML = inner;
+    roomsContainer.appendChild(card);
   });
 
   function showUnavailable(msg){
-    const note = document.createElement('div');
-    note.style.cssText = 'text-align:center;font-size:.74rem;color:var(--stone);padding:16px 4px;';
-    note.textContent = msg;
-    roomsContainer.after(note);
+    syncNoteEl.textContent = msg;
+    syncNoteEl.classList.add('err');
   }
 
   if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'FYLL_I_MIG'){
@@ -705,7 +711,11 @@ body::before {
         row.querySelector('.furn-item-name').textContent = it.name;
         row.querySelector('.furn-item-price').textContent = hasPrice ? fmt(it.price) : 'Pris ej satt';
         row.querySelector('.furn-checkbox').addEventListener('click', () => {
-          furnCol.doc(it.id).set({ bought: !bought }, { merge: true });
+          furnCol.doc(it.id).set({ bought: !bought }, { merge: true }).catch(e => {
+            console.error('Möbler bocka av:', it.name, e);
+            syncNoteEl.textContent = 'Kunde inte spara — se instruktion om Firestore-regler';
+            syncNoteEl.classList.add('err');
+          });
         });
         rowsEl.appendChild(row);
       });
@@ -720,11 +730,18 @@ body::before {
 
   furnCol.onSnapshot(
     snap => {
+      syncNoteEl.textContent = 'synkas mellan er';
+      syncNoteEl.classList.remove('err');
       const boughtMap = {};
       snap.forEach(doc => { boughtMap[doc.id] = !!doc.data().bought; });
       renderAll(boughtMap);
     },
-    err => { console.error('Möbler:', err); renderAll({}); }
+    err => {
+      console.error('Möbler:', err);
+      syncNoteEl.textContent = 'Synkfel — bocka-av sparas inte just nu (se instruktion om Firestore-regler)';
+      syncNoteEl.classList.add('err');
+      renderAll({});
+    }
   );
 })();
 </script>

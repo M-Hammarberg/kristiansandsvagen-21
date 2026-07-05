@@ -147,7 +147,7 @@ body::before {
 .anim .reveal-up.in { opacity: 1; transform: none; }
 
 /* ─── KORT (delad bas-stil) ─── */
-.furn-summary, .furn-add, .furn-room {
+.furn-summary, .furn-room {
   background: rgba(255,255,255,.96);
   border: 1px solid var(--border-light);
   border-radius: 6px;
@@ -167,30 +167,7 @@ body::before {
 .furn-summary-row.grand span:first-child { font-family: "Libre Baskerville", serif; font-size: .95rem; color: var(--charcoal); }
 .furn-summary-row.grand span:last-child { font-family: "Libre Baskerville", serif; font-size: 1.15rem; font-weight: 700; color: #e6c578; }
 
-/* ─── LÄGG TILL ─── */
-.furn-add-form { display: flex; gap: 8px; flex-wrap: wrap; }
-.furn-select, .furn-input {
-  background: rgba(0,0,0,.03);
-  border: 1px solid var(--border-light); border-radius: 4px;
-  padding: 11px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
-  color: var(--charcoal); transition: border-color .2s;
-}
-.furn-select:focus, .furn-input:focus { outline: none; border-color: var(--gold2); }
-.furn-select { flex: 0 0 150px; }
-.furn-input { flex: 1 1 160px; min-width: 0; }
-.furn-input.furn-price { flex: 0 0 120px; }
-.furn-add-btn {
-  background: var(--gold2); border: none; border-radius: 4px;
-  padding: 11px 20px; color: #fff; cursor: pointer;
-  font-family: "Montserrat", sans-serif; font-size: .62rem;
-  letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
-  transition: background .2s; white-space: nowrap;
-}
-.furn-add-btn:hover { background: var(--gold); }
-
 /* ─── RUM-KORT ─── */
-.furn-room { display: none; }
-.furn-room.has-items { display: block; }
 .furn-room-head {
   display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
   margin-bottom: 8px; padding-bottom: 12px;
@@ -227,12 +204,7 @@ body::before {
   flex-shrink: 0; font-size: .8rem; font-weight: 500; color: var(--gold2);
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }
-.furn-del {
-  flex-shrink: 0; background: none; border: none; cursor: pointer;
-  color: var(--stone); font-size: 1rem; line-height: 1; padding: 4px 6px;
-  opacity: .4; transition: opacity .2s, color .2s;
-}
-.furn-del:hover { opacity: 1; color: var(--red); }
+.furn-item-price.tbd { color: var(--stone); font-style: italic; font-weight: 400; }
 
 .privacy-note {
   margin-top: 22px; max-width: 640px; margin-left: auto; margin-right: auto;
@@ -325,9 +297,7 @@ body::before {
   .page-hero p { font-size: .8rem; max-width: 100%; }
   .privat-subnav { padding: 14px 20px; }
   .content-wrap { padding: 44px 20px; }
-  .furn-summary, .furn-add, .furn-room { padding: 20px 18px; }
-  .furn-select { flex: 1 1 100%; }
-  .furn-input.furn-price { flex: 1 1 100px; }
+  .furn-summary, .furn-room { padding: 20px 18px; }
 }
 
 /* ─── HAMBURGER ─── */
@@ -370,7 +340,7 @@ body::before {
 .nav-home-icon:hover { color: var(--champagne); }
 
 /* ════════ MÖRKT LYX-TEMA (glas) ════════ */
-.furn-summary, .furn-add, .furn-room {
+.furn-summary, .furn-room {
   position: relative; overflow: hidden;
   background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74)) !important;
   -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
@@ -378,12 +348,12 @@ body::before {
   box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
   transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
 }
-.furn-summary:hover, .furn-add:hover, .furn-room:hover {
+.furn-summary:hover, .furn-room:hover {
   transform: translateY(-3px);
   border-color: rgba(201,165,90,.34) !important;
   box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
 }
-.furn-summary::before, .furn-add::before, .furn-room::before {
+.furn-summary::before, .furn-room::before {
   content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
   background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
   transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite; z-index: 0;
@@ -395,12 +365,10 @@ body::before {
 .furn-room-head { border-bottom-color: rgba(201,165,90,.16) !important; position: relative; z-index: 1; }
 .furn-room-head h2 { color: #ecdcbf; }
 .furn-room-head .sub { color: rgba(212,184,150,.5); }
-.furn-select, .furn-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; position: relative; z-index: 1; }
-.furn-select option { background: #1a1917; color: #ecdcbf; }
-.furn-input::placeholder { color: rgba(212,184,150,.35); }
 .furn-item-row { border-bottom-color: rgba(201,165,90,.1); position: relative; z-index: 1; }
 .furn-item-name { color: rgba(233,222,202,.9); }
 .furn-item-price { color: #d9b96a; }
+.furn-item-price.tbd { color: rgba(212,184,150,.4); font-style: italic; font-weight: 400; }
 .privacy-note { color: rgba(212,184,150,.55); }
 </style>
 </head>
@@ -481,19 +449,10 @@ body::before {
 <!-- ═══ INNEHÅLL ═══ -->
 <div class="content-wrap">
 
-  <div class="furn-summary reveal-up" id="furnSummarySection" style="display:none;">
-    <div class="furn-summary-row"><span>Totalt</span><span id="furnTotal">0 kr</span></div>
+  <div class="furn-summary reveal-up" id="furnSummarySection">
+    <div class="furn-summary-row"><span>Totalt (prissatt)</span><span id="furnTotal">0 kr</span></div>
     <div class="furn-summary-row"><span>Redan köpt</span><span id="furnBought">0 kr</span></div>
     <div class="furn-summary-row grand"><span>Kvar att köpa</span><span id="furnRemaining">0 kr</span></div>
-  </div>
-
-  <div class="furn-add reveal-up">
-    <form class="furn-add-form" id="furnAddForm">
-      <select class="furn-select" id="furnRoom"></select>
-      <input class="furn-input" id="furnName" type="text" placeholder="Namn…" autocomplete="off">
-      <input class="furn-input furn-price" id="furnPrice" type="number" inputmode="decimal" placeholder="Pris (kr)" min="0" step="1">
-      <button class="furn-add-btn" type="submit">Lägg till</button>
-    </form>
   </div>
 
   <div id="roomsContainer"></div>
@@ -587,67 +546,63 @@ body::before {
     appId: "1:726739177351:web:57da52bea559b2db5b4d22",
   };
 
-  /* Rum — kategorierna varor grupperas under. Lägg till/ta bort
-     rum här (kräver att sidan publiceras på nytt). */
-  const ROOMS = [
-    { id: 'hall',       label: 'Hall' },
-    { id: 'vardagsrum', label: 'Vardagsrum' },
-    { id: 'kok',        label: 'Kök' },
-    { id: 'sovrum',     label: 'Sovrum' },
-    { id: 'badrum',     label: 'Badrum' },
-    { id: 'kontor',     label: 'Kontor' },
-    { id: 'utomhus',    label: 'Utomhus' },
-    { id: 'garage',     label: 'Garage' },
-    { id: 'ovrigt',     label: 'Övrigt' },
+  /* Möbler & inredning att köpa — rum för rum. Redigera listan
+     här för att lägga till/ta bort rum eller saker (kräver att
+     sidan publiceras på nytt). Pris är valfritt — lämna tomt
+     (utelämna raden, eller sätt price: null) för "pris ej satt";
+     sådana räknas inte in i summeringen överst. */
+  const FURNITURE = [
+    { room: 'Hall', items: [
+      { name: 'Byrå — under trapp', price: null },
+    ]},
+    { room: 'Allrum nere', items: [
+      { name: 'Tv-bänk', price: null },
+      { name: 'Tv', price: null },
+      { name: 'Soffbord', price: null },
+      { name: 'Finbord (biljard)', price: null },
+      { name: 'Finstolar', price: null },
+    ]},
+    { room: 'Badrum nere', items: [
+      { name: 'Stor kommod', price: null },
+    ]},
   ];
-  const fmt = n => Math.round(n || 0).toLocaleString('sv-SE') + ' kr';
+  const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
+  const slug = (room, name) => (room + '_' + name).toLowerCase()
+    .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
+    .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
 
-  const roomSelect = document.getElementById('furnRoom');
   const roomsContainer = document.getElementById('roomsContainer');
   const summarySection = document.getElementById('furnSummarySection');
   const totalEl = document.getElementById('furnTotal');
   const boughtEl = document.getElementById('furnBought');
   const remainingEl = document.getElementById('furnRemaining');
-  const addForm = document.getElementById('furnAddForm');
-  const nameInput = document.getElementById('furnName');
-  const priceInput = document.getElementById('furnPrice');
-  if (!roomsContainer || !addForm) return;
+  if (!roomsContainer) return;
 
-  // Bygg rum-väljaren
-  ROOMS.forEach(r => {
-    const opt = document.createElement('option');
-    opt.value = r.id; opt.textContent = r.label;
-    roomSelect.appendChild(opt);
-  });
-
-  // Bygg tomma rum-kort (visas bara när de har varor)
-  ROOMS.forEach(r => {
+  // Bygg rum-korten en gång utifrån FURNITURE, med tomma rader att fylla i.
+  FURNITURE.forEach(room => {
+    const rid = slug(room.room, '');
     const card = document.createElement('div');
     card.className = 'furn-room reveal-up';
-    card.id = 'room-' + r.id;
     card.innerHTML =
-      '<div class="furn-room-head"><h2>' + r.label + '</h2><span class="sub" id="sub-' + r.id + '"></span></div>' +
-      '<div class="furn-rows" id="rows-' + r.id + '"></div>';
+      '<div class="furn-room-head"><h2>' + room.room + '</h2><span class="sub" id="sub-' + rid + '"></span></div>' +
+      '<div class="furn-rows" id="rows-' + rid + '"></div>';
     roomsContainer.appendChild(card);
+    room.items.forEach(it => { it.id = slug(room.room, it.name); });
   });
 
   function showUnavailable(msg){
-    addForm.querySelector('.furn-input').disabled = true;
-    addForm.querySelector('.furn-price').disabled = true;
-    addForm.querySelector('.furn-add-btn').disabled = true;
-    addForm.querySelector('.furn-select').disabled = true;
     const note = document.createElement('div');
-    note.style.cssText = 'text-align:center;font-size:.74rem;color:var(--stone);padding:8px 4px 0;';
+    note.style.cssText = 'text-align:center;font-size:.74rem;color:var(--stone);padding:16px 4px;';
     note.textContent = msg;
-    addForm.parentElement.appendChild(note);
+    roomsContainer.after(note);
   }
 
   if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'FYLL_I_MIG'){
-    showUnavailable('Listan är inte kopplad till Firebase ännu.');
+    showUnavailable('Listan är inte kopplad till Firebase ännu — bocka-av synkas inte.');
     return;
   }
   if (typeof firebase === 'undefined'){
-    showUnavailable('Kunde inte ladda listan just nu — testa att ladda om sidan.');
+    showUnavailable('Kunde inte ladda synk just nu — testa att ladda om sidan.');
     return;
   }
 
@@ -658,80 +613,56 @@ body::before {
     furnCol = db.collection('furnitureItems');
   } catch (e) {
     console.error('Möbler init:', e);
-    showUnavailable('Kunde inte ladda listan just nu — testa att ladda om sidan.');
+    showUnavailable('Kunde inte ladda synk just nu — testa att ladda om sidan.');
     return;
   }
 
-  function renderRoom(roomId, items){
-    const card = document.getElementById('room-' + roomId);
-    const rowsEl = document.getElementById('rows-' + roomId);
-    const subEl = document.getElementById('sub-' + roomId);
-    card.classList.toggle('has-items', items.length > 0);
-    if (!items.length){ rowsEl.innerHTML = ''; subEl.textContent = ''; return; }
-
-    const total = items.reduce((s, it) => s + (it.price || 0), 0);
-    const remaining = items.filter(it => !it.bought).reduce((s, it) => s + (it.price || 0), 0);
-    subEl.textContent = fmt(remaining) + ' kvar av ' + fmt(total);
-
-    rowsEl.innerHTML = '';
-    items.forEach(it => {
-      const row = document.createElement('div');
-      row.className = 'furn-item-row' + (it.bought ? ' done' : '');
-      row.innerHTML =
-        '<button type="button" class="furn-checkbox' + (it.bought ? ' on' : '') + '" aria-label="Bocka av"></button>' +
-        '<span class="furn-item-name"></span>' +
-        '<span class="furn-item-price"></span>' +
-        '<button type="button" class="furn-del" aria-label="Ta bort">×</button>';
-      row.querySelector('.furn-item-name').textContent = it.name;
-      row.querySelector('.furn-item-price').textContent = fmt(it.price);
-      row.querySelector('.furn-checkbox').addEventListener('click', () => {
-        furnCol.doc(it.id).update({ bought: !it.bought });
+  function renderAll(boughtMap){
+    let grandTotal = 0, grandBought = 0;
+    FURNITURE.forEach(room => {
+      const rid = slug(room.room, '');
+      const rowsEl = document.getElementById('rows-' + rid);
+      const subEl = document.getElementById('sub-' + rid);
+      let roomTotal = 0, roomRemaining = 0;
+      rowsEl.innerHTML = '';
+      const sorted = [...room.items].sort((a, b) => {
+        const ab = !!boughtMap[a.id], bb = !!boughtMap[b.id];
+        return ab === bb ? 0 : (ab ? 1 : -1);
       });
-      row.querySelector('.furn-del').addEventListener('click', () => {
-        if (!confirm('Ta bort "' + it.name + '"?')) return;
-        furnCol.doc(it.id).delete();
+      sorted.forEach(it => {
+        const bought = !!boughtMap[it.id];
+        const hasPrice = typeof it.price === 'number';
+        if (hasPrice){ roomTotal += it.price; if (!bought) roomRemaining += it.price; }
+        const row = document.createElement('div');
+        row.className = 'furn-item-row' + (bought ? ' done' : '');
+        row.innerHTML =
+          '<button type="button" class="furn-checkbox' + (bought ? ' on' : '') + '" aria-label="Bocka av"></button>' +
+          '<span class="furn-item-name"></span>' +
+          '<span class="furn-item-price' + (hasPrice ? '' : ' tbd') + '"></span>';
+        row.querySelector('.furn-item-name').textContent = it.name;
+        row.querySelector('.furn-item-price').textContent = hasPrice ? fmt(it.price) : 'Pris ej satt';
+        row.querySelector('.furn-checkbox').addEventListener('click', () => {
+          furnCol.doc(it.id).set({ bought: !bought }, { merge: true });
+        });
+        rowsEl.appendChild(row);
       });
-      rowsEl.appendChild(row);
+      subEl.textContent = roomTotal ? fmt(roomRemaining) + ' kvar av ' + fmt(roomTotal) : '';
+      grandTotal += roomTotal;
+      grandBought += roomTotal - roomRemaining;
     });
+    totalEl.textContent = fmt(grandTotal);
+    boughtEl.textContent = fmt(grandBought);
+    remainingEl.textContent = fmt(grandTotal - grandBought);
   }
 
-  furnCol.orderBy('createdAt', 'asc').onSnapshot(
+  furnCol.onSnapshot(
     snap => {
-      const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      const byRoom = {};
-      ROOMS.forEach(r => byRoom[r.id] = []);
-      all.forEach(it => {
-        const roomId = ROOMS.some(r => r.id === it.room) ? it.room : 'ovrigt';
-        byRoom[roomId].push(it);
-      });
-      ROOMS.forEach(r => renderRoom(r.id, byRoom[r.id].sort((a,b) => (a.bought === b.bought) ? 0 : (a.bought ? 1 : -1))));
-
-      const total = all.reduce((s, it) => s + (it.price || 0), 0);
-      const bought = all.filter(it => it.bought).reduce((s, it) => s + (it.price || 0), 0);
-      totalEl.textContent = fmt(total);
-      boughtEl.textContent = fmt(bought);
-      remainingEl.textContent = fmt(total - bought);
-      summarySection.style.display = all.length ? '' : 'none';
+      const boughtMap = {};
+      snap.forEach(doc => { boughtMap[doc.id] = !!doc.data().bought; });
+      renderAll(boughtMap);
     },
-    err => console.error('Möbler:', err)
+    err => { console.error('Möbler:', err); renderAll({}); }
   );
-
-  addForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const name = nameInput.value.trim();
-    const price = parseFloat(priceInput.value);
-    if (!name) return;
-    furnCol.add({
-      name,
-      price: isNaN(price) ? 0 : price,
-      room: roomSelect.value,
-      bought: false,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-    nameInput.value = '';
-    priceInput.value = '';
-    nameInput.focus();
-  });
 })();
 </script>
 

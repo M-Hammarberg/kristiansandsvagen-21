@@ -594,6 +594,16 @@ body::before {
         { name: 'Bestick', price: null },
       ]},
     ]},
+    { floor: 'Uppe', rooms: [
+      { room: 'Allrum uppe', items: [
+        { name: 'Soffbord', price: null },
+        { name: 'Tv-bänk', price: null },
+      ]},
+      { room: 'Master bedroom', items: [
+        { name: 'Dubbelsäng (180)', price: null },
+        { name: 'Sängbord x2', price: null },
+      ]},
+    ]},
   ];
   const fmt = n => Math.round(n).toLocaleString('sv-SE') + ' kr';
   const slug = (room, name) => (room + '_' + name).toLowerCase()

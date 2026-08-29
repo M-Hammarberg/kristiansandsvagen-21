@@ -9,14 +9,14 @@
 <meta name="theme-color" content="#0d0d0d">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>25 år &amp; husvisning — Kristiansandsvägen 21</title>
-<meta name="description" content="Kalas för 25-årsdag och husvisning på Kristiansandsvägen 21, Trollhättan. Lördag 19 september kl. 12.00 — fika och lite att äta. OSA på sidan.">
+<meta name="description" content="Kalas för 25-årsdag och husvisning på Kristiansandsvägen 21, Trollhättan. Lördag 19 september kl. 13.00 — fika och lite att äta. OSA på sidan.">
 
 <!-- Open Graph / social share -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="sv_SE">
 <meta property="og:site_name" content="Kristiansandsvägen 21">
 <meta property="og:title" content="25 år &amp; husvisning — Kristiansandsvägen 21">
-<meta property="og:description" content="Lördag 19 september kl. 12.00 — fika och lite att äta. Kom och se det nya huset! OSA på sidan.">
+<meta property="og:description" content="Lördag 19 september kl. 13.00 — fika och lite att äta. Kom och se det nya huset! OSA på sidan.">
 <meta property="og:url" content="https://xn--kristiansandsvgen21-twb.se/evenemang/">
 <meta property="og:image" content="https://xn--kristiansandsvgen21-twb.se/images/utsida/hero.jpg">
 <meta property="og:image:type" content="image/png">
@@ -27,7 +27,7 @@
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="25 år &amp; husvisning — Kristiansandsvägen 21">
-<meta name="twitter:description" content="Lördag 19 september kl. 12.00 — fika och lite att äta. OSA på sidan.">
+<meta name="twitter:description" content="Lördag 19 september kl. 13.00 — fika och lite att äta. OSA på sidan.">
 <meta name="twitter:image" content="https://xn--kristiansandsvgen21-twb.se/images/utsida/hero.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -287,6 +287,37 @@ footer { position: relative; z-index: 1; }
 .count-line strong { color: var(--gold); }
 
 footer { text-align: center; padding: 30px 24px 50px; font-size: .58rem; letter-spacing: .14em; color: rgba(255,255,255,.2); }
+/* ─── Mobil ─── */
+@media (max-width: 560px) {
+  .top { padding: 76px 20px 40px; }
+  .top h1 { font-size: clamp(2.15rem, 11vw, 2.7rem); line-height: 1.14; }
+  .eyebrow { font-size: .56rem; letter-spacing: .28em; gap: 10px; margin-bottom: 20px; }
+  .eyebrow::before, .eyebrow::after { width: 20px; }
+  .top p.sub { font-size: .92rem; line-height: 1.65; margin-top: 16px; }
+
+  .wrap { padding: 0 18px; }
+
+  .facts { grid-template-columns: 1fr; margin: 32px 0; }
+  .fact { padding: 20px 16px; border-left: none; border-top: 1px solid rgba(201,165,90,.16); }
+  .fact:first-child { border-top: none; }
+  .fact-val { font-size: 1.05rem; }
+
+  .story { padding: 40px 0; }
+  .story p { font-size: .88rem; line-height: 1.75; }
+
+  .rsvp { margin: 40px 0; padding: 32px 18px 28px; }
+  .rsvp .eyebrow { margin-bottom: 26px; }
+  .field { margin-bottom: 18px; }
+  .field label { font-size: .58rem; margin-bottom: 8px; }
+  .field input[type="text"], .field textarea { font-size: .88rem; padding: 12px 13px; }
+  .answer-toggle { flex-direction: column; }
+  .answer-toggle button { font-size: .7rem; padding: 13px; }
+  .submit-btn { font-size: .66rem; padding: 15px; }
+
+  .guests { padding: 40px 0 70px; }
+  .guest-row { font-size: .84rem; padding: 13px 0; }
+  .count-line { font-size: .58rem; }
+}
 </style>
 </head>
 <body>
@@ -307,7 +338,7 @@ footer { text-align: center; padding: 30px 24px 50px; font-size: .58rem; letter-
     </div>
     <div class="fact">
       <span class="fact-lbl">Tid</span>
-      <div class="fact-val">12.00</div>
+      <div class="fact-val">13.00</div>
     </div>
     <div class="fact">
       <span class="fact-lbl">Plats</span>

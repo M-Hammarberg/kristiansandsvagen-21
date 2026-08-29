@@ -273,13 +273,30 @@ footer { position: relative; z-index: 1; }
 /* ─── Guest list ─── */
 .guests { padding: 56px 24px 90px; }
 .guests .eyebrow::before { display: none; }
-.guest-list { margin-top: 30px; display: flex; flex-direction: column; }
+.host-row {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  margin-top: 30px;
+}
+.host-item {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px 22px;
+  background: rgba(201,165,90,.08);
+  border: 1px solid rgba(201,165,90,.3);
+  border-radius: 8px;
+}
+.host-crown { display: inline-flex; align-items: center; filter: drop-shadow(0 0 5px rgba(201,165,90,.45)); }
+.host-name { font-family: "Libre Baskerville", serif; font-size: 1rem; color: var(--champagne2); }
+.host-tag {
+  font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid rgba(201,165,90,.35); border-radius: 20px;
+  padding: 3px 10px; margin-left: 4px;
+}
+.guest-list { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--border); display: flex; flex-direction: column; }
 .guest-row {
   display: flex; justify-content: space-between; align-items: baseline;
   padding: 15px 0; border-bottom: 1px solid var(--border);
   font-size: .88rem;
 }
-.guest-row:first-child { border-top: 1px solid var(--border); }
 .guest-name { font-family: "Libre Baskerville", serif; color: var(--ivory); }
 .guest-meta { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); }
 .guest-empty { text-align: center; padding: 30px 0; color: rgba(255,255,255,.3); font-size: .8rem; font-style: italic; font-family: "Libre Baskerville", serif; }
@@ -381,6 +398,29 @@ footer { text-align: center; padding: 30px 24px 50px; font-size: .58rem; letter-
 
   <div class="guests r-up">
     <div class="eyebrow">Vilka kommer<span class="live-dot" title="Uppdateras live"></span></div>
+    <div class="host-row">
+      <div class="host-item">
+        <span class="host-crown" aria-hidden="true">
+          <svg viewBox="0 0 24 16" width="20" height="14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 14L1 4.5L6 8L12 2L18 8L23 4.5L22 14H2Z" stroke="url(#crownGrad)" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+            <line x1="4" y1="14" x2="20" y2="14" stroke="url(#crownGrad)" stroke-width="1.4" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="crownGrad" x1="0" y1="0" x2="24" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#a8872e"/>
+                <stop offset=".5" stop-color="#f4d98c"/>
+                <stop offset="1" stop-color="#a8872e"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="host-name">Maximiliam</span>
+        <span class="host-tag">Värd</span>
+      </div>
+      <div class="host-item">
+        <span class="host-name">Lisa</span>
+        <span class="host-tag">Värd</span>
+      </div>
+    </div>
     <div class="guest-list" id="guestList"></div>
     <div class="count-line" id="countLine"></div>
   </div>

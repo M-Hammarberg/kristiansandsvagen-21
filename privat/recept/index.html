@@ -185,6 +185,12 @@ body::before {
   color: var(--charcoal); transition: border-color .2s;
 }
 .recipe-extra-input:focus { outline: none; border-color: var(--gold2); }
+select.recipe-extra-input {
+  cursor: pointer; padding-right: 34px;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  background-repeat: no-repeat; background-position: right 14px center; background-size: 10px 6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%231a1917' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
 
 .recipe-gen-btn {
   width: 100%; margin-top: 14px; background: var(--gold2); border: none; border-radius: 4px;
@@ -411,6 +417,8 @@ body::before {
 .manual-hint { color: rgba(212,184,150,.45); }
 .recipe-extra-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
 .recipe-extra-input::placeholder { color: rgba(212,184,150,.35); }
+select.recipe-extra-input { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23ecdcbf' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>"); }
+select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
 
 .recipe-card-title { color: #ecdcbf; }
 .recipe-desc { color: rgba(233,222,202,.72); }
@@ -508,8 +516,36 @@ body::before {
     <input type="text" class="recipe-extra-input" id="manualTitle" placeholder="Titel*" autocomplete="off" style="margin-top:0;">
     <input type="text" class="recipe-extra-input" id="manualDesc" placeholder="Kort beskrivning (valfritt)" autocomplete="off">
     <div class="manual-row">
-      <input type="number" class="recipe-extra-input" id="manualPortions" placeholder="Portioner" min="1" inputmode="numeric">
-      <input type="number" class="recipe-extra-input" id="manualTime" placeholder="Tid (minuter)" min="1" inputmode="numeric">
+      <select class="recipe-extra-input" id="manualPortions">
+        <option value="" selected>Portioner</option>
+        <option value="1">1 portion</option>
+        <option value="2">2 portioner</option>
+        <option value="3">3 portioner</option>
+        <option value="4">4 portioner</option>
+        <option value="5">5 portioner</option>
+        <option value="6">6 portioner</option>
+        <option value="8">8 portioner</option>
+        <option value="10">10 portioner</option>
+        <option value="12">12 portioner</option>
+      </select>
+      <select class="recipe-extra-input" id="manualTime">
+        <option value="" selected>Tid</option>
+        <option value="5">5 min</option>
+        <option value="10">10 min</option>
+        <option value="15">15 min</option>
+        <option value="20">20 min</option>
+        <option value="25">25 min</option>
+        <option value="30">30 min</option>
+        <option value="40">40 min</option>
+        <option value="45">45 min</option>
+        <option value="60">1 timme</option>
+        <option value="75">1 tim 15 min</option>
+        <option value="90">1 tim 30 min</option>
+        <option value="120">2 timmar</option>
+        <option value="150">2 tim 30 min</option>
+        <option value="180">3 timmar</option>
+        <option value="240">4 timmar +</option>
+      </select>
     </div>
     <input type="text" class="recipe-extra-input" id="manualTags" placeholder="Taggar, kommaseparerat (valfritt)" autocomplete="off">
     <textarea class="recipe-extra-input recipe-textarea" id="manualIngredients" rows="5" placeholder="Ingredienser* — en rad per ingrediens, t.ex.

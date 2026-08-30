@@ -270,14 +270,20 @@ select.recipe-extra-input {
 .recipe-details h3.instructions-h { margin-top: 16px; }
 .recipe-details ul, .recipe-details ol { padding-left: 18px; margin-bottom: 4px; }
 .recipe-details li { font-size: .76rem; line-height: 1.65; color: rgba(26,25,23,.8); margin-bottom: 5px; }
-.recipe-actions { display: flex; gap: 8px; margin-top: 14px; }
-.recipe-toggle, .recipe-edit {
-  flex: 1; background: none; border: 1px solid rgba(201,165,90,.35);
+.recipe-toggle {
+  width: 100%; margin-top: 14px; background: none; border: 1px solid rgba(201,165,90,.35);
   color: var(--gold2); border-radius: 4px; padding: 9px 14px;
   font-family: "Montserrat", sans-serif; font-size: .58rem;
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s;
 }
-.recipe-toggle:hover, .recipe-edit:hover { border-color: var(--gold2); color: var(--gold); background: rgba(201,165,90,.06); }
+.recipe-toggle:hover { border-color: var(--gold2); color: var(--gold); background: rgba(201,165,90,.06); }
+.recipe-edit {
+  display: block; margin: 12px 0 0 auto; background: none; border: none; cursor: pointer;
+  color: var(--stone); font-family: "Montserrat", sans-serif; font-size: .56rem;
+  letter-spacing: .1em; text-transform: uppercase; padding: 4px 2px;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.recipe-edit:hover { color: var(--gold2); }
 
 .privacy-note {
   margin-top: 30px; max-width: 640px; margin-left: auto; margin-right: auto;
@@ -454,6 +460,8 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
 .recipe-details h3 { color: #ecdcbf; }
 .recipe-details li { color: rgba(233,222,202,.82); }
 .recipe-empty { color: rgba(212,184,150,.5); }
+.recipe-edit { color: rgba(212,184,150,.5); }
+.recipe-edit:hover { color: #e6c578; }
 .privacy-note { color: rgba(212,184,150,.55); }
 </style>
 </head>
@@ -763,11 +771,9 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
         '<div class="recipe-details">' +
           '<h3>Ingredienser</h3><ul class="recipe-ing"></ul>' +
           '<h3 class="instructions-h">Gör så här</h3><ol class="recipe-steps"></ol>' +
-        '</div>' +
-        '<div class="recipe-actions">' +
-          '<button type="button" class="recipe-toggle">Visa recept</button>' +
           '<button type="button" class="recipe-edit">Redigera</button>' +
-        '</div>';
+        '</div>' +
+        '<button type="button" class="recipe-toggle">Visa recept</button>';
 
       card.querySelector('.recipe-card-title').textContent = r.title || 'Namnlöst recept';
       renderStars(card.querySelector('.recipe-stars'), r.rating || 0);

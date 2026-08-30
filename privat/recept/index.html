@@ -173,16 +173,20 @@ body::before {
   font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
 }
 
-.mode-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.mode-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 .mode-tab {
-  flex: 1; background: rgba(0,0,0,.03); border: 1px solid var(--border-light);
-  color: var(--stone); padding: 9px 12px; border-radius: 4px; cursor: pointer;
-  font-family: "Montserrat", sans-serif; font-size: .6rem;
-  letter-spacing: .1em; text-transform: uppercase; transition: all .2s;
+  flex: 1; min-width: 100px; background: rgba(0,0,0,.03); border: 1px solid var(--border-light);
+  color: var(--stone); padding: 9px 10px; border-radius: 4px; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .58rem;
+  letter-spacing: .08em; text-transform: uppercase; transition: all .2s;
 }
 .mode-tab:hover { color: var(--charcoal); border-color: var(--gold2); }
 .mode-tab.on { background: var(--gold2); color: #fff; border-color: var(--gold2); }
 .mode-panel[hidden] { display: none; }
+.manual-row { display: flex; gap: 10px; margin-top: 14px; }
+.manual-row .recipe-extra-input { margin-top: 0; flex: 1; min-width: 0; }
+.recipe-textarea { margin-top: 14px; resize: vertical; line-height: 1.6; }
+.manual-hint { font-size: .6rem; color: var(--stone); margin-top: 6px; line-height: 1.6; }
 .link-input-wrap { }
 .recipe-url-input {
   width: 100%; background: rgba(0,0,0,.03);
@@ -486,6 +490,7 @@ body::before {
 .recipe-url-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
 .recipe-url-input::placeholder { color: rgba(212,184,150,.35); }
 .link-tip { color: rgba(212,184,150,.45); }
+.manual-hint { color: rgba(212,184,150,.45); }
 .dropzone { border-color: rgba(201,165,90,.28); color: rgba(212,184,150,.55); }
 .dropzone:hover, .dropzone.drag { border-color: var(--gold); background: rgba(201,165,90,.08); }
 .dropzone-sub { color: rgba(212,184,150,.4); }
@@ -567,7 +572,7 @@ body::before {
   <div class="page-hero-inner">
     <div class="eyebrow">Privat — endast för oss</div>
     <h1>Recept<br><em>från skärmdump till middag</em></h1>
-    <p>Ladda upp en skärmdump med ingredienser, eller klistra in en länk till ett Instagram- eller TikTok-inlägg — så skapas ett komplett recept utifrån det som syns på bilden eller står i inlägget. Recepten sparas och delas mellan er i realtid.</p>
+    <p>Skriv in ett recept direkt (helt gratis), eller — om du lagt till en egen AI-nyckel — ladda upp en skärmdump med ingredienser eller klistra in en länk till ett Instagram- eller TikTok-inlägg, så skapas receptet automatiskt. Allt sparas och delas mellan er i realtid.</p>
   </div>
 </div>
 
@@ -587,15 +592,32 @@ body::before {
   <div class="recipe-panel reveal-up" id="recipePanel">
     <div class="recipe-panel-head">
       <h2>Nytt recept</h2>
-      <span class="sub">skärmdump → färdigt recept</span>
+      <span class="sub">skriv själv, ladda upp en skärmdump, eller klistra in en länk</span>
     </div>
 
     <div class="mode-tabs">
-      <button type="button" class="mode-tab on" id="modeTabImage" data-mode="image">Skärmdump</button>
-      <button type="button" class="mode-tab" id="modeTabLink" data-mode="link">Länk (Instagram/TikTok)</button>
+      <button type="button" class="mode-tab on" id="modeTabManual" data-mode="manual">Skriv själv (gratis)</button>
+      <button type="button" class="mode-tab" id="modeTabImage" data-mode="image">Skärmdump (AI)</button>
+      <button type="button" class="mode-tab" id="modeTabLink" data-mode="link">Länk (AI)</button>
     </div>
 
-    <div class="mode-panel" id="modeImagePanel">
+    <div class="mode-panel" id="modeManualPanel">
+      <input type="text" class="recipe-extra-input" id="manualTitle" placeholder="Titel*" autocomplete="off" style="margin-top:0;">
+      <input type="text" class="recipe-extra-input" id="manualDesc" placeholder="Kort beskrivning (valfritt)" autocomplete="off">
+      <div class="manual-row">
+        <input type="number" class="recipe-extra-input" id="manualPortions" placeholder="Portioner" min="1" inputmode="numeric">
+        <input type="number" class="recipe-extra-input" id="manualTime" placeholder="Tid (minuter)" min="1" inputmode="numeric">
+      </div>
+      <input type="text" class="recipe-extra-input" id="manualTags" placeholder="Taggar, kommaseparerat (valfritt)" autocomplete="off">
+      <textarea class="recipe-extra-input recipe-textarea" id="manualIngredients" rows="5" placeholder="Ingredienser* — en rad per ingrediens, t.ex.
+2 dl mjöl
+3 ägg
+1 msk socker"></textarea>
+      <textarea class="recipe-extra-input recipe-textarea" id="manualInstructions" rows="5" placeholder="Gör så här — ett steg per rad (valfritt)"></textarea>
+      <div class="manual-hint">Skriv in receptet direkt — helt gratis, ingen AI eller API-nyckel behövs. Tips: be gärna Claude.ai (om du redan har appen/abonnemanget) skriva ett recept åt dig, och klistra sedan in det här.</div>
+    </div>
+
+    <div class="mode-panel" id="modeImagePanel" hidden>
       <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Ladda upp skärmdump">
         <div id="dropzoneDefault">
           <div class="dropzone-icon">
@@ -623,9 +645,11 @@ body::before {
       </div>
     </div>
 
-    <input type="text" class="recipe-extra-input" id="recipeExtra" placeholder="Något extra? (t.ex. vegetariskt, 4 portioner, snabblagat) — valfritt" autocomplete="off">
+    <div class="mode-panel" id="modeExtraWrap" hidden>
+      <input type="text" class="recipe-extra-input" id="recipeExtra" placeholder="Något extra? (t.ex. vegetariskt, 4 portioner, snabblagat) — valfritt" autocomplete="off">
+    </div>
 
-    <button type="button" class="recipe-gen-btn" id="recipeGenBtn" disabled>Skapa recept</button>
+    <button type="button" class="recipe-gen-btn" id="recipeGenBtn" disabled>Spara recept</button>
     <div class="recipe-status" id="recipeStatus"></div>
 
     <div class="key-toggle-row">
@@ -640,7 +664,7 @@ body::before {
         <div class="key-status" id="keyStatus">
           <span id="keyStatusText"></span><button type="button" class="key-remove-btn" id="keyRemoveBtn" style="display:none;">Ta bort</button>
         </div>
-        <div class="key-note">Nyckeln sparas bara i den här webbläsaren (aldrig i vår databas) och skickas direkt till Anthropic när du skapar ett recept. Skaffa en nyckel på <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</div>
+        <div class="key-note">Bara nödvändig om du vill använda flikarna "Skärmdump" eller "Länk" — fliken "Skriv själv" kräver ingen nyckel och är gratis. En egen nyckel kostar några ören per recept (betalas till Anthropic, inte oss). Nyckeln sparas bara i den här webbläsaren (aldrig i vår databas) och skickas direkt till Anthropic när du skapar ett recept. Skaffa en nyckel på <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</div>
       </div>
     </div>
   </div>
@@ -654,7 +678,7 @@ body::before {
   </div>
 
   <div class="privacy-note">
-    <span class="pico">🔒</span> Låst med kod och nås bara via dolda ingångar — inte tänkt för andra ögon. Bilden skickas bara till AI:t för att läsa av ingredienserna och sparas inte hos oss.
+    <span class="pico">🔒</span> Låst med kod och nås bara via dolda ingångar — inte tänkt för andra ögon. Vid AI-lägena skickas bilden/länken bara till Anthropic för att läsa av receptet och sparas inte hos oss.
   </div>
 </div>
 
@@ -873,12 +897,22 @@ body::before {
   const KEY_STORAGE = 'kv21_anthropic_key';
   const MODEL = 'claude-opus-5';
 
+  const modeTabManual = document.getElementById('modeTabManual');
   const modeTabImage = document.getElementById('modeTabImage');
   const modeTabLink = document.getElementById('modeTabLink');
+  const modeManualPanel = document.getElementById('modeManualPanel');
   const modeImagePanel = document.getElementById('modeImagePanel');
   const modeLinkPanel = document.getElementById('modeLinkPanel');
+  const modeExtraWrap = document.getElementById('modeExtraWrap');
   const urlInput = document.getElementById('recipeUrl');
-  let mode = 'image'; // 'image' | 'link'
+  const manualTitle = document.getElementById('manualTitle');
+  const manualDesc = document.getElementById('manualDesc');
+  const manualPortions = document.getElementById('manualPortions');
+  const manualTime = document.getElementById('manualTime');
+  const manualTags = document.getElementById('manualTags');
+  const manualIngredients = document.getElementById('manualIngredients');
+  const manualInstructions = document.getElementById('manualInstructions');
+  let mode = 'manual'; // 'manual' | 'image' | 'link'
 
   const dropzone = document.getElementById('dropzone');
   const dropzoneDefault = document.getElementById('dropzoneDefault');
@@ -966,23 +1000,49 @@ body::before {
   ['dragleave', 'drop'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.remove('drag'); }));
   dropzone.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
 
+  function idleLabel(){
+    return mode === 'manual' ? 'Spara recept' : 'Skapa recept';
+  }
+
   function refreshGenBtn(){
-    if (mode === 'image') genBtn.disabled = !imageBase64;
+    if (mode === 'manual') genBtn.disabled = !manualTitle.value.trim() || !manualIngredients.value.trim();
+    else if (mode === 'image') genBtn.disabled = !imageBase64;
     else genBtn.disabled = !urlInput.value.trim();
   }
 
   function setMode(m){
     mode = m;
+    modeTabManual.classList.toggle('on', m === 'manual');
     modeTabImage.classList.toggle('on', m === 'image');
     modeTabLink.classList.toggle('on', m === 'link');
+    modeManualPanel.hidden = m !== 'manual';
     modeImagePanel.hidden = m !== 'image';
     modeLinkPanel.hidden = m !== 'link';
+    modeExtraWrap.hidden = m === 'manual';
+    genBtn.textContent = idleLabel();
     setStatus('', '');
     refreshGenBtn();
   }
+  modeTabManual.addEventListener('click', () => setMode('manual'));
   modeTabImage.addEventListener('click', () => setMode('image'));
   modeTabLink.addEventListener('click', () => setMode('link'));
   urlInput.addEventListener('input', refreshGenBtn);
+  manualTitle.addEventListener('input', refreshGenBtn);
+  manualIngredients.addEventListener('input', refreshGenBtn);
+
+  function buildManualRecipe(){
+    const lines = str => (str || '').split('\n').map(s => s.trim()).filter(Boolean);
+    const num = v => { const n = parseInt(v, 10); return Number.isFinite(n) && n > 0 ? n : null; };
+    return {
+      title: manualTitle.value.trim(),
+      description: manualDesc.value.trim(),
+      portions: num(manualPortions.value),
+      timeMinutes: num(manualTime.value),
+      tags: manualTags.value.split(',').map(s => s.trim()).filter(Boolean),
+      ingredients: lines(manualIngredients.value),
+      instructions: lines(manualInstructions.value),
+    };
+  }
 
   function jsonInstruction(){
     return [
@@ -1093,11 +1153,41 @@ body::before {
     dropzone.classList.remove('has-image');
     urlInput.value = '';
     extraInput.value = '';
+    manualTitle.value = '';
+    manualDesc.value = '';
+    manualPortions.value = '';
+    manualTime.value = '';
+    manualTags.value = '';
+    manualIngredients.value = '';
+    manualInstructions.value = '';
     refreshGenBtn();
   }
 
   genBtn.addEventListener('click', async () => {
     setStatus('', '');
+
+    if (mode === 'manual'){
+      if (!manualTitle.value.trim() || !manualIngredients.value.trim()){
+        setStatus('Skriv minst en titel och en ingrediens.', 'err');
+        return;
+      }
+      genBtn.disabled = true;
+      genBtn.textContent = 'Sparar recept …';
+      try {
+        const recipe = buildManualRecipe();
+        if (typeof window.kv21SaveRecipe === 'function') await window.kv21SaveRecipe(recipe);
+        setStatus('"' + recipe.title + '" sparades!', 'ok');
+        resetForm();
+      } catch (err){
+        console.error('Receptsparning:', err);
+        setStatus(err.message || 'Något gick fel — försök igen.', 'err');
+      } finally {
+        genBtn.textContent = idleLabel();
+        refreshGenBtn();
+      }
+      return;
+    }
+
     if (mode === 'image' && !imageBase64){
       setStatus('Ladda upp en skärmdump först.', 'err');
       return;
@@ -1110,7 +1200,7 @@ body::before {
     if (!apiKey){
       keyPanel.classList.add('open');
       keyInput.focus();
-      setStatus('Lägg till din API-nyckel ovan för att kunna skapa recept.', 'err');
+      setStatus('Lägg till din API-nyckel ovan för att kunna skapa recept via AI — eller använd fliken "Skriv själv" istället, som är gratis.', 'err');
       return;
     }
     genBtn.disabled = true;
@@ -1126,7 +1216,7 @@ body::before {
       console.error('Receptgenerering:', err);
       setStatus(err.message || 'Något gick fel — försök igen.', 'err');
     } finally {
-      genBtn.textContent = 'Skapa recept';
+      genBtn.textContent = idleLabel();
       refreshGenBtn();
     }
   });

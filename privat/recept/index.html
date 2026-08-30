@@ -192,6 +192,19 @@ select.recipe-extra-input {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%231a1917' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
 }
 
+.edit-note {
+  margin-top: 14px; padding: 10px 14px; border-radius: 4px;
+  background: rgba(201,165,90,.1); border: 1px solid rgba(201,165,90,.3);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: .68rem; color: var(--gold2); font-weight: 500;
+}
+.edit-cancel-btn {
+  background: none; border: none; cursor: pointer; flex-shrink: 0;
+  font-family: "Montserrat", sans-serif; font-size: .6rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--stone); text-decoration: underline; text-underline-offset: 3px;
+}
+.edit-cancel-btn:hover { color: var(--red); }
+
 .recipe-gen-btn {
   width: 100%; margin-top: 14px; background: var(--gold2); border: none; border-radius: 4px;
   padding: 13px; color: #fff; cursor: pointer;
@@ -243,12 +256,9 @@ select.recipe-extra-input {
 }
 .recipe-stars { display: flex; gap: 2px; margin-top: 8px; }
 .recipe-star {
-  background: none; border: none; cursor: pointer; padding: 2px;
-  font-size: 1.05rem; line-height: 1; color: rgba(26,25,23,.18);
-  transition: color .15s, transform .1s;
+  font-size: 1.05rem; line-height: 1; color: rgba(26,25,23,.18); padding: 2px;
 }
 .recipe-star.filled { color: var(--gold2); }
-.recipe-star:hover { transform: scale(1.15); }
 .recipe-meta {
   display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 10px;
   font-size: .62rem; letter-spacing: .04em; color: var(--gold2); font-weight: 500;
@@ -260,13 +270,14 @@ select.recipe-extra-input {
 .recipe-details h3.instructions-h { margin-top: 16px; }
 .recipe-details ul, .recipe-details ol { padding-left: 18px; margin-bottom: 4px; }
 .recipe-details li { font-size: .76rem; line-height: 1.65; color: rgba(26,25,23,.8); margin-bottom: 5px; }
-.recipe-toggle {
-  width: 100%; margin-top: 14px; background: none; border: 1px solid rgba(201,165,90,.35);
+.recipe-actions { display: flex; gap: 8px; margin-top: 14px; }
+.recipe-toggle, .recipe-edit {
+  flex: 1; background: none; border: 1px solid rgba(201,165,90,.35);
   color: var(--gold2); border-radius: 4px; padding: 9px 14px;
   font-family: "Montserrat", sans-serif; font-size: .58rem;
   letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s;
 }
-.recipe-toggle:hover { border-color: var(--gold2); color: var(--gold); background: rgba(201,165,90,.06); }
+.recipe-toggle:hover, .recipe-edit:hover { border-color: var(--gold2); color: var(--gold); background: rgba(201,165,90,.06); }
 
 .privacy-note {
   margin-top: 30px; max-width: 640px; margin-left: auto; margin-right: auto;
@@ -563,6 +574,14 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
         <option value="180">3 timmar</option>
         <option value="240">4 timmar +</option>
       </select>
+      <select class="recipe-extra-input" id="manualRating">
+        <option value="0" selected>Betyg</option>
+        <option value="1">★☆☆☆☆</option>
+        <option value="2">★★☆☆☆</option>
+        <option value="3">★★★☆☆</option>
+        <option value="4">★★★★☆</option>
+        <option value="5">★★★★★</option>
+      </select>
     </div>
     <input type="text" class="recipe-extra-input" id="manualTags" placeholder="Taggar, kommaseparerat (valfritt)" autocomplete="off">
     <textarea class="recipe-extra-input recipe-textarea" id="manualIngredients" rows="5" placeholder="Ingredienser* — en rad per ingrediens, t.ex.
@@ -571,6 +590,10 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
 1 msk socker"></textarea>
     <textarea class="recipe-extra-input recipe-textarea" id="manualInstructions" rows="5" placeholder="Gör så här — ett steg per rad (valfritt)"></textarea>
 
+    <div class="edit-note" id="editNote" hidden>
+      <span id="editNoteText"></span>
+      <button type="button" class="edit-cancel-btn" id="editCancelBtn">Avbryt</button>
+    </div>
     <button type="button" class="recipe-gen-btn" id="recipeGenBtn" disabled>Spara recept</button>
     <div class="recipe-status" id="recipeStatus"></div>
   </div>
@@ -704,16 +727,14 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
     return;
   }
 
-  function renderStars(container, rating, onRate){
+  function renderStars(container, rating){
     container.innerHTML = '';
+    container.setAttribute('aria-label', rating ? (rating + ' av 5 stjärnor') : 'Obetygsatt');
     for (let i = 1; i <= 5; i++){
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'recipe-star' + (i <= rating ? ' filled' : '');
-      btn.textContent = i <= rating ? '★' : '☆';
-      btn.setAttribute('aria-label', 'Betygsätt ' + i + ' av 5');
-      btn.addEventListener('click', () => onRate(i === rating ? 0 : i));
-      container.appendChild(btn);
+      const span = document.createElement('span');
+      span.className = 'recipe-star' + (i <= rating ? ' filled' : '');
+      span.textContent = i <= rating ? '★' : '☆';
+      container.appendChild(span);
     }
   }
 
@@ -743,12 +764,13 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
           '<h3>Ingredienser</h3><ul class="recipe-ing"></ul>' +
           '<h3 class="instructions-h">Gör så här</h3><ol class="recipe-steps"></ol>' +
         '</div>' +
-        '<button type="button" class="recipe-toggle">Visa recept</button>';
+        '<div class="recipe-actions">' +
+          '<button type="button" class="recipe-toggle">Visa recept</button>' +
+          '<button type="button" class="recipe-edit">Redigera</button>' +
+        '</div>';
 
       card.querySelector('.recipe-card-title').textContent = r.title || 'Namnlöst recept';
-      renderStars(card.querySelector('.recipe-stars'), r.rating || 0, (newRating) => {
-        recipesCol.doc(r.id).update({ rating: newRating }).catch(e => console.error('Betygsättning:', e));
-      });
+      renderStars(card.querySelector('.recipe-stars'), r.rating || 0);
       if (metaParts.length) card.querySelector('.recipe-meta').textContent = metaParts.join('   ');
       card.querySelector('.recipe-desc').textContent = r.description || '';
 
@@ -772,6 +794,10 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
       toggleBtn.addEventListener('click', () => {
         const open = details.classList.toggle('open');
         toggleBtn.textContent = open ? 'Dölj recept' : 'Visa recept';
+      });
+
+      card.querySelector('.recipe-edit').addEventListener('click', () => {
+        if (typeof window.kv21StartEditRecipe === 'function') window.kv21StartEditRecipe(r);
       });
 
       const delBtn = card.querySelector('.recipe-del');
@@ -805,19 +831,29 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
     err => { statusEl.textContent = 'synkfel'; console.error('Recept:', err); }
   );
 
-  // Anropas nedan när ett nytt recept ska sparas.
-  window.kv21SaveRecipe = function(recipe){
-    return recipesCol.add({
+  function recipeFields(recipe){
+    return {
       title: recipe.title || '',
       description: recipe.description || '',
       portions: recipe.portions || null,
       timeMinutes: recipe.timeMinutes || null,
-      rating: 0,
+      rating: recipe.rating || 0,
       tags: Array.isArray(recipe.tags) ? recipe.tags : [],
       ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
       instructions: Array.isArray(recipe.instructions) ? recipe.instructions : [],
+    };
+  }
+
+  // Anropas nedan när ett nytt recept ska sparas.
+  window.kv21SaveRecipe = function(recipe){
+    return recipesCol.add(Object.assign(recipeFields(recipe), {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    }));
+  };
+
+  // Anropas nedan när ett befintligt recept redigeras och sparas.
+  window.kv21UpdateRecipe = function(id, recipe){
+    return recipesCol.doc(id).update(recipeFields(recipe));
   };
 })();
 </script>
@@ -827,20 +863,31 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
      ═════════════════════════════════════════════════════════════ -->
 <script>
 (function(){
+  const recipePanel = document.getElementById('recipePanel');
   const manualTitle = document.getElementById('manualTitle');
   const manualDesc = document.getElementById('manualDesc');
   const manualPortions = document.getElementById('manualPortions');
   const manualTime = document.getElementById('manualTime');
+  const manualRating = document.getElementById('manualRating');
   const manualTags = document.getElementById('manualTags');
   const manualIngredients = document.getElementById('manualIngredients');
   const manualInstructions = document.getElementById('manualInstructions');
   const genBtn = document.getElementById('recipeGenBtn');
   const genStatus = document.getElementById('recipeStatus');
+  const editNote = document.getElementById('editNote');
+  const editNoteText = document.getElementById('editNoteText');
+  const editCancelBtn = document.getElementById('editCancelBtn');
   if (!genBtn) return;
+
+  let editingId = null;
 
   function setStatus(msg, kind){
     genStatus.textContent = msg || '';
     genStatus.className = 'recipe-status' + (kind ? ' ' + kind : '');
+  }
+
+  function idleLabel(){
+    return editingId ? 'Uppdatera recept' : 'Spara recept';
   }
 
   function refreshGenBtn(){
@@ -857,6 +904,7 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
       description: manualDesc.value.trim(),
       portions: num(manualPortions.value),
       timeMinutes: num(manualTime.value),
+      rating: parseInt(manualRating.value, 10) || 0,
       tags: manualTags.value.split(',').map(s => s.trim()).filter(Boolean),
       ingredients: lines(manualIngredients.value),
       instructions: lines(manualInstructions.value),
@@ -864,15 +912,47 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
   }
 
   function resetForm(){
+    editingId = null;
     manualTitle.value = '';
     manualDesc.value = '';
     manualPortions.value = '';
     manualTime.value = '';
+    manualRating.value = '0';
     manualTags.value = '';
     manualIngredients.value = '';
     manualInstructions.value = '';
+    editNote.hidden = true;
+    genBtn.textContent = idleLabel();
     refreshGenBtn();
   }
+
+  editCancelBtn.addEventListener('click', () => {
+    resetForm();
+    setStatus('', '');
+  });
+
+  // Anropas från "Redigera" på ett receptkort — fyller i formuläret med
+  // receptets nuvarande data (inklusive betyg) så det bara går att ändra
+  // betyget genom att faktiskt redigera receptet, inte med ett snabbklick.
+  window.kv21StartEditRecipe = function(r){
+    editingId = r.id;
+    manualTitle.value = r.title || '';
+    manualDesc.value = r.description || '';
+    manualPortions.value = r.portions || '';
+    manualTime.value = r.timeMinutes || '';
+    manualRating.value = String(r.rating || 0);
+    manualTags.value = (r.tags || []).join(', ');
+    manualIngredients.value = (r.ingredients || []).map(ing =>
+      typeof ing === 'string' ? ing : ((ing.amount ? ing.amount + ' ' : '') + ing.name)
+    ).join('\n');
+    manualInstructions.value = (r.instructions || []).join('\n');
+    editNoteText.textContent = 'Redigerar "' + (r.title || 'receptet') + '"';
+    editNote.hidden = false;
+    genBtn.textContent = idleLabel();
+    setStatus('', '');
+    refreshGenBtn();
+    if (recipePanel) recipePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   genBtn.addEventListener('click', async () => {
     setStatus('', '');
@@ -881,17 +961,21 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
       return;
     }
     genBtn.disabled = true;
-    genBtn.textContent = 'Sparar recept …';
+    genBtn.textContent = editingId ? 'Uppdaterar recept …' : 'Sparar recept …';
     try {
       const recipe = buildManualRecipe();
-      if (typeof window.kv21SaveRecipe === 'function') await window.kv21SaveRecipe(recipe);
-      setStatus('"' + recipe.title + '" sparades!', 'ok');
+      if (editingId){
+        if (typeof window.kv21UpdateRecipe === 'function') await window.kv21UpdateRecipe(editingId, recipe);
+        setStatus('"' + recipe.title + '" uppdaterades!', 'ok');
+      } else {
+        if (typeof window.kv21SaveRecipe === 'function') await window.kv21SaveRecipe(recipe);
+        setStatus('"' + recipe.title + '" sparades!', 'ok');
+      }
       resetForm();
     } catch (err){
       console.error('Receptsparning:', err);
       setStatus(err.message || 'Något gick fel — försök igen.', 'err');
-    } finally {
-      genBtn.textContent = 'Spara recept';
+      genBtn.textContent = idleLabel();
       refreshGenBtn();
     }
   });

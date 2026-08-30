@@ -898,14 +898,18 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
     col: i % 2 ? [201,165,90] : [168,135,46],
     a: .09 + Math.random() * .07, phase: Math.random() * Math.PI * 2,
   }));
-  const dust = Array.from({length: 64}, () => ({
+  const dust = Array.from({length: 36}, () => ({
     x: Math.random(), y: Math.random(), r: .4 + Math.random() * 1.6,
     sp: .00006 + Math.random() * .00018, drift: (Math.random() - .5) * .0001,
     a: .12 + Math.random() * .32, ph: Math.random() * Math.PI * 2,
   }));
-  let t = 0;
-  function frame() {
-    t += 0.0024;
+  let t = 0, lastFrame = 0;
+  const FRAME_INTERVAL = 1000 / 30; // 30 fps räcker för en långsam bakgrundsanimation — halverar CPU-kostnaden mot 60 fps
+  function frame(now) {
+    if (!document.hidden) requestAnimationFrame(frame);
+    if (now - lastFrame < FRAME_INTERVAL) return;
+    lastFrame = now;
+    t += 0.0048;
     const bg = ctx.createLinearGradient(0, 0, W, H);
     bg.addColorStop(0, '#0c0b0a'); bg.addColorStop(.5, '#151310'); bg.addColorStop(1, '#0b0a09');
     ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
@@ -930,9 +934,9 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
       g.addColorStop(1, 'rgba(232,203,128,0)');
       ctx.beginPath(); ctx.arc(px, py, d.r * 3, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
     });
-    requestAnimationFrame(frame);
   }
-  frame();
+  requestAnimationFrame(frame);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) requestAnimationFrame(frame); });
 })();
 </script>
 </body>

@@ -241,6 +241,14 @@ select.recipe-extra-input {
   font-size: .58rem; letter-spacing: .06em; text-transform: uppercase;
   padding: 6px 10px; white-space: nowrap;
 }
+.recipe-stars { display: flex; gap: 2px; margin-top: 8px; }
+.recipe-star {
+  background: none; border: none; cursor: pointer; padding: 2px;
+  font-size: 1.05rem; line-height: 1; color: rgba(26,25,23,.18);
+  transition: color .15s, transform .1s;
+}
+.recipe-star.filled { color: var(--gold2); }
+.recipe-star:hover { transform: scale(1.15); }
 .recipe-meta {
   display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 10px;
   font-size: .62rem; letter-spacing: .04em; color: var(--gold2); font-weight: 500;
@@ -428,6 +436,8 @@ select.recipe-extra-input { background-image: url("data:image/svg+xml;utf8,<svg 
 select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
 
 .recipe-card-title { color: #ecdcbf; }
+.recipe-star { color: rgba(233,222,202,.22); }
+.recipe-star.filled { color: #e6c578; }
 .recipe-desc { color: rgba(233,222,202,.72); }
 .recipe-details { border-top-color: rgba(201,165,90,.14); }
 .recipe-details h3 { color: #ecdcbf; }
@@ -694,6 +704,19 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
     return;
   }
 
+  function renderStars(container, rating, onRate){
+    container.innerHTML = '';
+    for (let i = 1; i <= 5; i++){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'recipe-star' + (i <= rating ? ' filled' : '');
+      btn.textContent = i <= rating ? '★' : '☆';
+      btn.setAttribute('aria-label', 'Betygsätt ' + i + ' av 5');
+      btn.addEventListener('click', () => onRate(i === rating ? 0 : i));
+      container.appendChild(btn);
+    }
+  }
+
   function renderRecipes(items){
     gridEl.innerHTML = '';
     if (!items.length){
@@ -713,6 +736,7 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
           '<div class="recipe-card-title"></div>' +
           '<button type="button" class="recipe-del" aria-label="Ta bort recept">×</button>' +
         '</div>' +
+        '<div class="recipe-stars"></div>' +
         (metaParts.length ? '<div class="recipe-meta"></div>' : '') +
         '<p class="recipe-desc"></p>' +
         '<div class="recipe-details">' +
@@ -722,6 +746,9 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
         '<button type="button" class="recipe-toggle">Visa recept</button>';
 
       card.querySelector('.recipe-card-title').textContent = r.title || 'Namnlöst recept';
+      renderStars(card.querySelector('.recipe-stars'), r.rating || 0, (newRating) => {
+        recipesCol.doc(r.id).update({ rating: newRating }).catch(e => console.error('Betygsättning:', e));
+      });
       if (metaParts.length) card.querySelector('.recipe-meta').textContent = metaParts.join('   ');
       card.querySelector('.recipe-desc').textContent = r.description || '';
 
@@ -785,6 +812,7 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
       description: recipe.description || '',
       portions: recipe.portions || null,
       timeMinutes: recipe.timeMinutes || null,
+      rating: 0,
       tags: Array.isArray(recipe.tags) ? recipe.tags : [],
       ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
       instructions: Array.isArray(recipe.instructions) ? recipe.instructions : [],

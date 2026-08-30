@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<script>document.documentElement.style.background="#0d0d0d"</script>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../../images/misc/favicon.jpg">
+<link rel="apple-touch-icon" href="../../images/misc/favicon.jpg">
+<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Recept">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Privat — Recept</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --obsidian: #0d0d0d;
+  --charcoal: #1a1917;
+  --champagne: #d4b896;
+  --champagne2: #e8d5bb;
+  --ivory: #f7f3ee;
+  --ivory2: #ede8e1;
+  --stone: #7a7670;
+  --cream: #f2ece4;
+  --gold: #c9a55a;
+  --gold2: #a8872e;
+  --border: #2e2c28;
+  --border-light: #d8d0c4;
+  --green: #2e7d4f;
+  --red: #b5483b;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overscroll-behavior: none; scrollbar-width: none; -ms-overflow-style: none; touch-action: manipulation; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+body {
+  font-family: "Montserrat", sans-serif;
+  background: transparent;
+  color: var(--charcoal);
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ''; position: fixed; top: 0; left: 0; right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: #0d0d0d; z-index: 1000; pointer-events: none;
+}
+
+/* ─── NAV ─── */
+.site-nav {
+  position: sticky; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center;
+  padding: env(safe-area-inset-top, 0px) 40px 0;
+  height: calc(64px + env(safe-area-inset-top, 0px));
+  background: var(--obsidian);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: "Libre Baskerville", serif; font-size: .95rem; font-style: italic;
+  color: var(--champagne); letter-spacing: .06em; margin-right: auto;
+  text-decoration: none;
+}
+.nav-logo em { font-style: normal; color: var(--gold); }
+.nav-links { display: flex; align-items: center; }
+.nav-links a {
+  color: rgba(255,255,255,.35); text-decoration: none;
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  padding: 20px 22px; transition: color .25s; font-weight: 400;
+}
+.nav-links a:hover { color: var(--champagne); }
+.nav-links a.active { color: var(--gold); }
+.nav-links a.active::after {
+  content: ''; display: block; height: 1px;
+  background: var(--gold); margin-top: 3px;
+}
+.nav-lock-btn {
+  background: none; border: 1px solid rgba(201,165,90,.3); cursor: pointer;
+  color: rgba(212,184,150,.6); font-family: "Montserrat", sans-serif;
+  font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+  padding: 8px 14px; border-radius: 3px; transition: all .2s; margin-left: 8px;
+}
+.nav-lock-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+/* ─── PAGE HERO ─── */
+.page-hero {
+  position: relative; z-index: 1;
+  background: rgba(26,25,23,.92);
+  padding: calc(64px + env(safe-area-inset-top, 0px)) 40px 70px;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero-inner { max-width: 980px; margin: 0 auto; }
+.eyebrow {
+  font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold); display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px; font-weight: 500;
+}
+.eyebrow::before {
+  content: ''; display: inline-block; width: 13px; height: 13px;
+  border: 1.5px solid var(--gold); border-radius: 3px 3px 4px 4px;
+  border-bottom-width: 4px; position: relative;
+}
+.eyebrow::after { content: ''; flex: 0 0 40px; height: 1px; background: var(--gold2); }
+.page-hero h1 {
+  font-family: "Libre Baskerville", serif;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 400; line-height: 1.15;
+  color: var(--champagne2);
+  margin-bottom: 24px;
+}
+.page-hero h1 em {
+  font-style: italic; color: var(--gold);
+  background: linear-gradient(90deg, var(--gold2) 0%, var(--gold) 40%, #e8cb80 60%, var(--gold2) 100%);
+  background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; animation: shimmer 6s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.page-hero .eyebrow { opacity: 0; animation: fadeUp .9s ease .15s forwards; }
+.page-hero h1       { opacity: 0; animation: fadeUp .9s ease .30s forwards; }
+.page-hero p        { opacity: 0; animation: fadeUp .9s ease .50s forwards; }
+.page-hero p {
+  font-size: .85rem; line-height: 1.9; color: rgba(212,184,150,.6);
+  max-width: 600px; font-weight: 300;
+}
+
+/* ─── PRIVAT-FLIKAR ─── */
+.privat-subnav {
+  position: relative; z-index: 1;
+  background: var(--obsidian);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 40px;
+}
+.privat-tabs { display: flex; gap: 8px; max-width: 980px; margin: 0 auto; flex-wrap: wrap; }
+.ptab {
+  background: transparent; color: rgba(255,255,255,.4); text-decoration: none;
+  border: 1px solid rgba(201,165,90,.25); padding: 9px 20px;
+  font-family: "Montserrat", sans-serif; font-size: .6rem;
+  letter-spacing: .18em; text-transform: uppercase;
+  border-radius: 3px; transition: all .2s;
+}
+.ptab:hover { color: var(--champagne); border-color: rgba(201,165,90,.5); }
+.ptab.on { background: var(--gold2); color: #fff; border-color: var(--gold2); }
+
+/* ─── MAIN CONTENT ─── */
+.content-wrap { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 70px 40px; }
+
+/* ─── REVEAL ANIMATIONER ─── */
+.anim .reveal-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+.anim .reveal-up.in { opacity: 1; transform: none; }
+
+/* ─── NYTT RECEPT ─── */
+.recipe-panel {
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 24px 26px;
+  margin-bottom: 32px;
+}
+.recipe-panel-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.recipe-panel-head h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.1rem; font-weight: 400; color: var(--charcoal);
+}
+.recipe-panel-head .sub {
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
+}
+
+.mode-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.mode-tab {
+  flex: 1; background: rgba(0,0,0,.03); border: 1px solid var(--border-light);
+  color: var(--stone); padding: 9px 12px; border-radius: 4px; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .6rem;
+  letter-spacing: .1em; text-transform: uppercase; transition: all .2s;
+}
+.mode-tab:hover { color: var(--charcoal); border-color: var(--gold2); }
+.mode-tab.on { background: var(--gold2); color: #fff; border-color: var(--gold2); }
+.mode-panel[hidden] { display: none; }
+.link-input-wrap { }
+.recipe-url-input {
+  width: 100%; background: rgba(0,0,0,.03);
+  border: 1px solid var(--border-light); border-radius: 4px;
+  padding: 13px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
+  color: var(--charcoal); transition: border-color .2s;
+}
+.recipe-url-input:focus { outline: none; border-color: var(--gold2); }
+.link-tip {
+  margin-top: 10px; font-size: .62rem; line-height: 1.6; color: var(--stone); font-weight: 300;
+}
+
+.dropzone {
+  border: 1.5px dashed rgba(201,165,90,.35); border-radius: 6px;
+  padding: 30px 20px; text-align: center; cursor: pointer;
+  color: rgba(26,25,23,.55); transition: border-color .2s, background .2s;
+}
+.dropzone:hover, .dropzone.drag { border-color: var(--gold2); background: rgba(201,165,90,.06); }
+.dropzone.has-image { padding: 16px; }
+.dropzone-icon { color: var(--gold2); margin-bottom: 10px; }
+.dropzone-text { font-size: .78rem; }
+.dropzone-sub { font-size: .6rem; color: var(--stone); margin-top: 6px; letter-spacing: .04em; }
+.preview-wrap { display: none; margin-top: 14px; text-align: center; }
+.preview-wrap img {
+  max-width: 100%; max-height: 260px; border-radius: 6px;
+  border: 1px solid var(--border-light);
+}
+.preview-change {
+  display: inline-block; margin-top: 10px; background: none; border: none; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .58rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold2); text-decoration: underline; text-underline-offset: 3px;
+}
+.preview-change:hover { color: var(--gold); }
+
+.recipe-extra-input {
+  width: 100%; margin-top: 14px; background: rgba(0,0,0,.03);
+  border: 1px solid var(--border-light); border-radius: 4px;
+  padding: 11px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
+  color: var(--charcoal); transition: border-color .2s;
+}
+.recipe-extra-input:focus { outline: none; border-color: var(--gold2); }
+
+.recipe-gen-btn {
+  width: 100%; margin-top: 14px; background: var(--gold2); border: none; border-radius: 4px;
+  padding: 13px; color: #fff; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .64rem;
+  letter-spacing: .16em; text-transform: uppercase; font-weight: 600;
+  transition: background .2s;
+}
+.recipe-gen-btn:hover:not(:disabled) { background: var(--gold); }
+.recipe-gen-btn:disabled { opacity: .55; cursor: default; }
+
+.recipe-status { margin-top: 12px; text-align: center; font-size: .68rem; min-height: 16px; letter-spacing: .02em; }
+.recipe-status.ok { color: var(--green); }
+.recipe-status.err { color: var(--red); }
+
+.key-toggle-row { text-align: center; margin-top: 16px; }
+.key-toggle-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .58rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--stone); text-decoration: underline; text-underline-offset: 3px;
+}
+.key-toggle-btn:hover { color: var(--gold2); }
+.key-panel { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.key-panel.open { max-height: 260px; }
+.key-panel-inner { padding-top: 16px; margin-top: 14px; border-top: 1px solid var(--border-light); }
+.key-panel-row { display: flex; gap: 8px; }
+.key-input {
+  flex: 1; background: rgba(0,0,0,.03);
+  border: 1px solid var(--border-light); border-radius: 4px;
+  padding: 11px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
+  color: var(--charcoal); letter-spacing: .04em;
+}
+.key-input:focus { outline: none; border-color: var(--gold2); }
+.key-save-btn {
+  background: var(--gold2); border: none; border-radius: 4px;
+  padding: 11px 18px; color: #fff; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .6rem;
+  letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
+  transition: background .2s; white-space: nowrap;
+}
+.key-save-btn:hover { background: var(--gold); }
+.key-status { font-size: .62rem; color: var(--stone); margin-top: 10px; }
+.key-remove-btn {
+  background: none; border: none; cursor: pointer; margin-left: 8px;
+  font-size: .62rem; color: var(--red); text-decoration: underline; text-underline-offset: 3px;
+}
+.key-note { font-size: .6rem; line-height: 1.7; color: var(--stone); margin-top: 10px; }
+.key-note a { color: var(--gold2); }
+
+/* ─── SPARADE RECEPT ─── */
+.recipe-list-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 18px;
+}
+.recipe-list-head h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.25rem; font-weight: 400; color: var(--champagne2);
+}
+.recipe-list-head .sub { font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(212,184,150,.5); }
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.recipe-empty {
+  grid-column: 1 / -1; text-align: center; padding: 30px 10px;
+  color: rgba(212,184,150,.5); font-size: .78rem; font-weight: 300;
+}
+.recipe-card {
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 20px 20px 18px;
+}
+.recipe-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.recipe-card-title { font-family: "Libre Baskerville", serif; font-size: 1.02rem; line-height: 1.3; color: var(--charcoal); }
+.recipe-del {
+  flex-shrink: 0; background: none; border: none; cursor: pointer;
+  color: var(--stone); font-size: 1rem; line-height: 1; padding: 2px 4px;
+  opacity: .4; transition: opacity .2s, color .2s;
+}
+.recipe-del:hover { opacity: 1; color: var(--red); }
+.recipe-meta {
+  display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 10px;
+  font-size: .62rem; letter-spacing: .04em; color: var(--gold2); font-weight: 500;
+}
+.recipe-desc { font-size: .78rem; line-height: 1.6; color: rgba(26,25,23,.72); margin-bottom: 4px; font-weight: 300; }
+.recipe-details { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(216,208,196,.5); display: none; }
+.recipe-details.open { display: block; }
+.recipe-details h3 { font-family: "Libre Baskerville", serif; font-size: .82rem; font-weight: 400; color: var(--charcoal); margin-bottom: 8px; }
+.recipe-details h3.instructions-h { margin-top: 16px; }
+.recipe-details ul, .recipe-details ol { padding-left: 18px; margin-bottom: 4px; }
+.recipe-details li { font-size: .76rem; line-height: 1.65; color: rgba(26,25,23,.8); margin-bottom: 5px; }
+.recipe-toggle {
+  width: 100%; margin-top: 14px; background: none; border: 1px solid rgba(201,165,90,.35);
+  color: var(--gold2); border-radius: 4px; padding: 9px 14px;
+  font-family: "Montserrat", sans-serif; font-size: .58rem;
+  letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s;
+}
+.recipe-toggle:hover { border-color: var(--gold2); color: var(--gold); background: rgba(201,165,90,.06); }
+
+.privacy-note {
+  margin-top: 30px; max-width: 640px; margin-left: auto; margin-right: auto;
+  text-align: center; font-size: .64rem; line-height: 1.7;
+  color: rgba(122,118,112,.8); font-weight: 300;
+}
+.privacy-note .pico { color: var(--gold2); }
+
+/* ─── FOOTER ─── */
+.site-footer {
+  position: relative; z-index: 1;
+  background: var(--obsidian);
+  border-top: 1px solid var(--border);
+  padding: 40px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: "Libre Baskerville", serif; font-style: italic;
+  color: rgba(212,184,150,.3); font-size: .85rem; letter-spacing: .06em;
+}
+.footer-logo em { font-style: normal; color: rgba(201,165,90,.4); }
+
+/* ─── LOCK SCREEN ─── */
+.lock {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #0d0d0d;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.lock.hidden { display: none; }
+.lock-inner {
+  max-width: 360px; width: 100%; text-align: center;
+  animation: lockUp .8s cubic-bezier(.22,1,.36,1);
+}
+@keyframes lockUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.lock-icon {
+  width: 58px; height: 58px; margin: 0 auto 26px;
+  border: 1.5px solid rgba(201,165,90,.5); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+}
+.lock-eyebrow {
+  font-size: .58rem; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px; font-weight: 500;
+}
+.lock-title {
+  font-family: "Libre Baskerville", serif; font-style: italic;
+  font-size: 1.7rem; color: var(--champagne2); margin-bottom: 12px;
+}
+.lock-sub {
+  font-size: .72rem; line-height: 1.7; color: rgba(212,184,150,.5);
+  margin-bottom: 26px; font-weight: 300;
+}
+.lock-form { display: flex; flex-direction: column; gap: 12px; }
+.lock-input {
+  width: 100%; background: rgba(255,255,255,.05);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 14px 16px; color: var(--champagne2);
+  font-family: "Montserrat", sans-serif; font-size: 16px;
+  letter-spacing: .08em; text-align: center; transition: border-color .2s;
+}
+.lock-input:focus { outline: none; border-color: var(--gold); }
+.lock-input::placeholder { color: rgba(212,184,150,.3); letter-spacing: .04em; }
+.lock-btn {
+  width: 100%; background: var(--gold); border: none; border-radius: 4px;
+  padding: 14px; color: #1a1917; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .62rem;
+  letter-spacing: .2em; text-transform: uppercase; font-weight: 600;
+  transition: background .2s;
+}
+.lock-btn:hover { background: var(--champagne); }
+.lock-error {
+  font-size: .68rem; color: #d98377; min-height: 16px;
+  letter-spacing: .04em; margin-top: 2px;
+}
+.lock-home {
+  display: inline-block; margin-top: 24px;
+  font-size: .55rem; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(212,184,150,.4); text-decoration: none; transition: color .2s;
+}
+.lock-home:hover { color: var(--champagne); }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:640px){
+  .site-nav { padding: env(safe-area-inset-top, 0px) 20px 0; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .page-hero { padding: calc(52px + env(safe-area-inset-top, 0px)) 20px 46px; }
+  .page-hero h1 { font-size: clamp(1.8rem, 8vw, 2.5rem); }
+  .page-hero p { font-size: .8rem; max-width: 100%; }
+  .privat-subnav { padding: 14px 20px; }
+  .content-wrap { padding: 44px 20px; }
+  .recipe-panel { padding: 20px 18px; }
+  .recipe-grid { grid-template-columns: 1fr; }
+  .key-panel-row { flex-direction: column; }
+}
+
+/* ─── HAMBURGER ─── */
+.nav-hamburger {
+  display: none; flex-direction: column; justify-content: center; gap: 5px;
+  width: 36px; height: 36px; cursor: pointer; background: none; border: none;
+  padding: 4px; margin-left: auto; position: relative; z-index: 600;
+}
+.nav-hamburger span {
+  display: block; width: 100%; height: 1px; background: var(--champagne);
+  transition: transform .3s ease, opacity .3s ease; transform-origin: center;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.mobile-nav {
+  display: none; position: fixed; inset: 0;
+  background: rgba(13,13,13,.97); z-index: 500;
+  flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .3s ease; pointer-events: none;
+}
+.mobile-nav.open { display: flex; opacity: 1; pointer-events: all; }
+.mobile-nav-logo {
+  font-family: "Libre Baskerville", serif; font-size: 1rem; font-style: italic;
+  color: var(--champagne); letter-spacing: .06em; margin-bottom: 40px;
+}
+.mobile-nav-logo em { font-style: normal; color: var(--gold); }
+.mobile-nav a {
+  color: rgba(255,255,255,.45); text-decoration: none; font-size: .7rem;
+  letter-spacing: .28em; text-transform: uppercase; font-weight: 400;
+  padding: 16px 40px; width: 100%; text-align: center;
+  border-bottom: 1px solid var(--border); transition: color .2s, background .2s;
+}
+.mobile-nav a:first-of-type { border-top: 1px solid var(--border); }
+.mobile-nav a:hover, .mobile-nav a.active { color: var(--gold); }
+.nav-home-icon {
+  color: rgba(255,255,255,.35); display: flex; align-items: center;
+  padding: 0 16px; height: 100%; transition: color .25s; text-decoration: none;
+}
+.nav-home-icon:hover { color: var(--champagne); }
+
+/* ════════ MÖRKT LYX-TEMA (glas) ════════ */
+.recipe-panel, .recipe-card {
+  position: relative; overflow: hidden;
+  background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74));
+  -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
+  border: 1px solid rgba(201,165,90,.16);
+  box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
+  transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
+}
+.recipe-panel:hover, .recipe-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201,165,90,.34);
+  box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
+}
+.recipe-panel::before, .recipe-card::before {
+  content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
+  background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
+  transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite;
+}
+@keyframes cardShine { 0%, 70% { left: -130%; } 100% { left: 140%; } }
+
+.recipe-panel-head { border-bottom-color: rgba(201,165,90,.16) !important; }
+.recipe-panel-head h2 { color: #ecdcbf; }
+.recipe-panel-head .sub { color: rgba(212,184,150,.5); }
+
+.mode-tab { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: rgba(212,184,150,.5); }
+.mode-tab:hover { color: #ecdcbf; }
+.recipe-url-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
+.recipe-url-input::placeholder { color: rgba(212,184,150,.35); }
+.link-tip { color: rgba(212,184,150,.45); }
+.dropzone { border-color: rgba(201,165,90,.28); color: rgba(212,184,150,.55); }
+.dropzone:hover, .dropzone.drag { border-color: var(--gold); background: rgba(201,165,90,.08); }
+.dropzone-sub { color: rgba(212,184,150,.4); }
+.preview-wrap img { border-color: rgba(201,165,90,.2); }
+.recipe-extra-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
+.recipe-extra-input::placeholder { color: rgba(212,184,150,.35); }
+.key-panel-inner { border-top-color: rgba(201,165,90,.16); }
+.key-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
+.key-status { color: rgba(212,184,150,.5); }
+.key-note { color: rgba(212,184,150,.4); }
+
+.recipe-card-title { color: #ecdcbf; }
+.recipe-desc { color: rgba(233,222,202,.72); }
+.recipe-details { border-top-color: rgba(201,165,90,.14); }
+.recipe-details h3 { color: #ecdcbf; }
+.recipe-details li { color: rgba(233,222,202,.82); }
+.recipe-empty { color: rgba(212,184,150,.5); }
+.privacy-note { color: rgba(212,184,150,.55); }
+</style>
+</head>
+<body class="anim">
+
+<!-- ═══ BG CANVAS ═══ -->
+<canvas id="bgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
+<!-- ═══ LOCK SCREEN ═══ -->
+<div class="lock" id="lock">
+  <div class="lock-inner">
+    <div class="lock-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="10" width="16" height="11" rx="2"/>
+        <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+        <circle cx="12" cy="15.5" r="1.3"/>
+      </svg>
+    </div>
+    <div class="lock-eyebrow">Privat sida</div>
+    <div class="lock-title">Ange kod</div>
+    <div class="lock-sub">Den här sidan är låst. Ange koden för att se recepten.</div>
+    <form class="lock-form" id="lockForm">
+      <input class="lock-input" id="lockInput" type="password" inputmode="numeric" placeholder="Kod" autocomplete="off">
+      <button class="lock-btn" type="submit">Lås upp</button>
+    </form>
+    <div class="lock-error" id="lockError"></div>
+    <a href="/" class="lock-home">← Tillbaka till startsidan</a>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="site-nav">
+  <a href="/" class="nav-logo"><em>Kristiansandsvägen</em> <span>21</span></a>
+  <div class="nav-links">
+    <a href="/#om">Om bostaden</a>
+    <a href="/#galleri">Galleri</a>
+    <a href="/renovering">Renovering</a>
+    <a href="/privat" class="active">Privat</a>
+    <button class="nav-lock-btn" id="lockNowBtn" type="button">Lås</button>
+  </div>
+  <a href="/" class="nav-home-icon" aria-label="Till startsidan">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
+      <path d="M9 22V12h6v10"/>
+    </svg>
+  </a>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Öppna meny">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-logo"><em>Kristiansandsvägen</em> 21</div>
+  <a href="/#om">Om bostaden</a>
+  <a href="/#galleri">Galleri</a>
+  <a href="/renovering">Renovering</a>
+  <a href="/privat" class="active">Privat</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="eyebrow">Privat — endast för oss</div>
+    <h1>Recept<br><em>från skärmdump till middag</em></h1>
+    <p>Ladda upp en skärmdump med ingredienser, eller klistra in en länk till ett Instagram- eller TikTok-inlägg — så skapas ett komplett recept utifrån det som syns på bilden eller står i inlägget. Recepten sparas och delas mellan er i realtid.</p>
+  </div>
+</div>
+
+<!-- ═══ PRIVAT-FLIKAR ═══ -->
+<div class="privat-subnav">
+  <div class="privat-tabs">
+    <a href="/privat" class="ptab">Budget</a>
+    <a href="/privat/inkopslista" class="ptab">Inköpslista</a>
+    <a href="/privat/mobler" class="ptab">Möbler</a>
+    <a href="/privat/recept" class="ptab on">Recept</a>
+  </div>
+</div>
+
+<!-- ═══ RECEPT ═══ -->
+<div class="content-wrap">
+
+  <div class="recipe-panel reveal-up" id="recipePanel">
+    <div class="recipe-panel-head">
+      <h2>Nytt recept</h2>
+      <span class="sub">skärmdump → färdigt recept</span>
+    </div>
+
+    <div class="mode-tabs">
+      <button type="button" class="mode-tab on" id="modeTabImage" data-mode="image">Skärmdump</button>
+      <button type="button" class="mode-tab" id="modeTabLink" data-mode="link">Länk (Instagram/TikTok)</button>
+    </div>
+
+    <div class="mode-panel" id="modeImagePanel">
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Ladda upp skärmdump">
+        <div id="dropzoneDefault">
+          <div class="dropzone-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto;display:block;">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <circle cx="8.5" cy="10" r="1.5"/>
+              <path d="M21 15l-5-5-9 9"/>
+            </svg>
+          </div>
+          <div class="dropzone-text">Klicka eller släpp en skärmdump här</div>
+          <div class="dropzone-sub">t.ex. en bild på ingredienser från en app eller ett recept</div>
+        </div>
+        <div class="preview-wrap" id="previewWrap">
+          <img id="recipePreview" alt="Vald skärmdump">
+          <button type="button" class="preview-change" id="previewChange">Byt bild</button>
+        </div>
+      </div>
+      <input type="file" id="recipeFile" accept="image/*" hidden>
+    </div>
+
+    <div class="mode-panel" id="modeLinkPanel" hidden>
+      <div class="link-input-wrap">
+        <input type="url" class="recipe-url-input" id="recipeUrl" placeholder="Klistra in länk till Instagram- eller TikTok-inlägg…" autocomplete="off" inputmode="url">
+        <div class="link-tip">Fungerar bäst när receptet eller ingredienserna står i bildtexten/beskrivningen — vissa inlägg går inte att läsa av. Fungerar inte om inlägget kräver inloggning.</div>
+      </div>
+    </div>
+
+    <input type="text" class="recipe-extra-input" id="recipeExtra" placeholder="Något extra? (t.ex. vegetariskt, 4 portioner, snabblagat) — valfritt" autocomplete="off">
+
+    <button type="button" class="recipe-gen-btn" id="recipeGenBtn" disabled>Skapa recept</button>
+    <div class="recipe-status" id="recipeStatus"></div>
+
+    <div class="key-toggle-row">
+      <button type="button" class="key-toggle-btn" id="keyToggleBtn">API-nyckel</button>
+    </div>
+    <div class="key-panel" id="keyPanel">
+      <div class="key-panel-inner">
+        <div class="key-panel-row">
+          <input type="password" class="key-input" id="keyInput" placeholder="sk-ant-…" autocomplete="off">
+          <button type="button" class="key-save-btn" id="keySaveBtn">Spara</button>
+        </div>
+        <div class="key-status" id="keyStatus">
+          <span id="keyStatusText"></span><button type="button" class="key-remove-btn" id="keyRemoveBtn" style="display:none;">Ta bort</button>
+        </div>
+        <div class="key-note">Nyckeln sparas bara i den här webbläsaren (aldrig i vår databas) och skickas direkt till Anthropic när du skapar ett recept. Skaffa en nyckel på <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recipe-list-head reveal-up">
+    <h2>Sparade recept</h2>
+    <span class="sub" id="recipeSyncStatus">synkas mellan er</span>
+  </div>
+  <div class="recipe-grid reveal-up" id="recipeGrid">
+    <div class="recipe-empty" id="recipeEmpty">Inga recept ännu — ladda upp en skärmdump ovan för att skapa det första.</div>
+  </div>
+
+  <div class="privacy-note">
+    <span class="pico">🔒</span> Låst med kod och nås bara via dolda ingångar — inte tänkt för andra ögon. Bilden skickas bara till AI:t för att läsa av ingredienserna och sparas inte hos oss.
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="site-footer">
+  <div class="footer-logo"><em>Kristiansandsvägen</em> 21 — Privat</div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   KODLÅS
+   Lösenord/kod: 2121
+   (jämförs mot SHA-256-hashen nedan så koden inte
+    står i klartext). Byt kod genom att ersätta
+    PW_HASH med sha256 av den nya koden.
+   Delar samma session som /privat — upplåst där
+   räknas som upplåst här också.
+   ───────────────────────────────────────────── */
+(function(){
+  const PW_HASH = 'b8dc2c143be8994682b08461f46487e05874e59dd9ab65cf973e3a3c67a763aa'; // = "2121"
+  const SESSION_KEY = 'kv21_privat_unlocked';
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const store = isStandalone ? localStorage : sessionStorage;
+  const lock = document.getElementById('lock');
+  const form = document.getElementById('lockForm');
+  const inp = document.getElementById('lockInput');
+  const err = document.getElementById('lockError');
+
+  async function sha256(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  function unlock(){
+    store.setItem(SESSION_KEY, '1');
+    if (inp) inp.blur();
+    lock.classList.add('hidden');
+    document.dispatchEvent(new Event('kv21:unlocked'));
+    const toTop = () => window.scrollTo(0, 0);
+    toTop();
+    requestAnimationFrame(toTop);
+    setTimeout(toTop, 80);
+    setTimeout(toTop, 250);
+  }
+  if (sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY)) lock.classList.add('hidden');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    err.textContent = '';
+    const val = inp.value;
+    if (!val){ err.textContent = 'Skriv koden.'; return; }
+    if (await sha256(val) === PW_HASH){
+      unlock();
+    } else {
+      err.textContent = 'Fel kod.';
+      inp.value = '';
+      inp.focus();
+    }
+  });
+
+  const lockNowBtn = document.getElementById('lockNowBtn');
+  if (lockNowBtn) lockNowBtn.addEventListener('click', function(){
+    sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_KEY);
+    location.reload();
+  });
+})();
+</script>
+
+<!-- ═════════════════════════════════════════════════════════════
+     SPARADE RECEPT — delas & synkas via Firebase Firestore
+     Samma Firebase-projekt som inköpslistan (kollektion "recipes").
+     ═════════════════════════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const firebaseConfig = {
+    apiKey: "AIzaSyC2fUO9rtUbhPxn32b32j-d1UUuqxsjgY8",
+    authDomain: "kristiansandsvagen-21.firebaseapp.com",
+    projectId: "kristiansandsvagen-21",
+    storageBucket: "kristiansandsvagen-21.firebasestorage.app",
+    messagingSenderId: "726739177351",
+    appId: "1:726739177351:web:57da52bea559b2db5b4d22",
+  };
+
+  const gridEl = document.getElementById('recipeGrid');
+  const emptyEl = document.getElementById('recipeEmpty');
+  const statusEl = document.getElementById('recipeSyncStatus');
+  if (!gridEl) return;
+
+  function showUnavailable(msg){
+    statusEl.textContent = 'ej ansluten';
+    gridEl.innerHTML = '';
+    const p = document.createElement('div');
+    p.className = 'recipe-empty';
+    p.textContent = msg;
+    gridEl.appendChild(p);
+  }
+
+  if (!firebaseConfig.apiKey){
+    showUnavailable('Recepten är inte kopplade till Firebase ännu.');
+    return;
+  }
+  if (typeof firebase === 'undefined'){
+    showUnavailable('Kunde inte ladda recepten just nu — testa att ladda om sidan.');
+    return;
+  }
+
+  let db, recipesCol;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    recipesCol = db.collection('recipes');
+  } catch (e) {
+    console.error('Recept init:', e);
+    showUnavailable('Kunde inte ladda recepten just nu — testa att ladda om sidan.');
+    return;
+  }
+
+  function renderRecipes(items){
+    gridEl.innerHTML = '';
+    if (!items.length){
+      gridEl.appendChild(emptyEl);
+      return;
+    }
+    items.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      const metaParts = [];
+      if (r.timeMinutes) metaParts.push('⏱ ' + r.timeMinutes + ' min');
+      if (r.portions) metaParts.push('🍽 ' + r.portions + ' port');
+      (r.tags || []).forEach(t => metaParts.push('#' + t));
+
+      card.innerHTML =
+        '<div class="recipe-card-head">' +
+          '<div class="recipe-card-title"></div>' +
+          '<button type="button" class="recipe-del" aria-label="Ta bort recept">×</button>' +
+        '</div>' +
+        (metaParts.length ? '<div class="recipe-meta"></div>' : '') +
+        '<p class="recipe-desc"></p>' +
+        '<div class="recipe-details">' +
+          '<h3>Ingredienser</h3><ul class="recipe-ing"></ul>' +
+          '<h3 class="instructions-h">Gör så här</h3><ol class="recipe-steps"></ol>' +
+        '</div>' +
+        '<button type="button" class="recipe-toggle">Visa recept</button>';
+
+      card.querySelector('.recipe-card-title').textContent = r.title || 'Namnlöst recept';
+      if (metaParts.length) card.querySelector('.recipe-meta').textContent = metaParts.join('   ');
+      card.querySelector('.recipe-desc').textContent = r.description || '';
+
+      const ingEl = card.querySelector('.recipe-ing');
+      (r.ingredients || []).forEach(ing => {
+        const li = document.createElement('li');
+        const name = typeof ing === 'string' ? ing : ing.name;
+        const amount = typeof ing === 'string' ? '' : ing.amount;
+        li.textContent = amount ? (amount + ' ' + name) : name;
+        ingEl.appendChild(li);
+      });
+      const stepsEl = card.querySelector('.recipe-steps');
+      (r.instructions || []).forEach(step => {
+        const li = document.createElement('li');
+        li.textContent = step;
+        stepsEl.appendChild(li);
+      });
+
+      const details = card.querySelector('.recipe-details');
+      const toggleBtn = card.querySelector('.recipe-toggle');
+      toggleBtn.addEventListener('click', () => {
+        const open = details.classList.toggle('open');
+        toggleBtn.textContent = open ? 'Dölj recept' : 'Visa recept';
+      });
+
+      card.querySelector('.recipe-del').addEventListener('click', () => {
+        if (!confirm('Ta bort "' + (r.title || 'receptet') + '"?')) return;
+        recipesCol.doc(r.id).delete().catch(e => console.error('Ta bort recept:', e));
+      });
+
+      gridEl.appendChild(card);
+    });
+  }
+
+  recipesCol.orderBy('createdAt', 'desc').onSnapshot(
+    snap => {
+      statusEl.textContent = 'synkas mellan er';
+      renderRecipes(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    },
+    err => { statusEl.textContent = 'synkfel'; console.error('Recept:', err); }
+  );
+
+  // Anropas från receptgeneratorn nedan när ett nytt recept ska sparas.
+  window.kv21SaveRecipe = function(recipe){
+    return recipesCol.add({
+      title: recipe.title || '',
+      description: recipe.description || '',
+      portions: recipe.portions || null,
+      timeMinutes: recipe.timeMinutes || null,
+      tags: Array.isArray(recipe.tags) ? recipe.tags : [],
+      ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
+      instructions: Array.isArray(recipe.instructions) ? recipe.instructions : [],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+  };
+})();
+</script>
+
+<!-- ═════════════════════════════════════════════════════════════
+     RECEPTGENERATOR — skärmdump → recept via Claude (Anthropic)
+     ─────────────────────────────────────────────────────────────
+     Sidan är statisk (ingen egen server), så anropet görs direkt
+     från webbläsaren med en egen Anthropic-API-nyckel som bara
+     sparas lokalt i den enheten (localStorage). Bilden skalas ner
+     i webbläsaren innan den skickas och sparas aldrig hos oss.
+     ═════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  const KEY_STORAGE = 'kv21_anthropic_key';
+  const MODEL = 'claude-opus-5';
+
+  const modeTabImage = document.getElementById('modeTabImage');
+  const modeTabLink = document.getElementById('modeTabLink');
+  const modeImagePanel = document.getElementById('modeImagePanel');
+  const modeLinkPanel = document.getElementById('modeLinkPanel');
+  const urlInput = document.getElementById('recipeUrl');
+  let mode = 'image'; // 'image' | 'link'
+
+  const dropzone = document.getElementById('dropzone');
+  const dropzoneDefault = document.getElementById('dropzoneDefault');
+  const fileInput = document.getElementById('recipeFile');
+  const previewWrap = document.getElementById('previewWrap');
+  const previewImg = document.getElementById('recipePreview');
+  const previewChange = document.getElementById('previewChange');
+  const extraInput = document.getElementById('recipeExtra');
+  const genBtn = document.getElementById('recipeGenBtn');
+  const genStatus = document.getElementById('recipeStatus');
+
+  const keyToggleBtn = document.getElementById('keyToggleBtn');
+  const keyPanel = document.getElementById('keyPanel');
+  const keyInput = document.getElementById('keyInput');
+  const keySaveBtn = document.getElementById('keySaveBtn');
+  const keyRemoveBtn = document.getElementById('keyRemoveBtn');
+  const keyStatusText = document.getElementById('keyStatusText');
+
+  if (!dropzone) return;
+  let imageBase64 = null; // nedskalad JPEG, base64 utan data-URI-prefix
+
+  function getKey(){ return localStorage.getItem(KEY_STORAGE) || ''; }
+  function setKey(k){ if (k) localStorage.setItem(KEY_STORAGE, k); else localStorage.removeItem(KEY_STORAGE); }
+  function refreshKeyStatus(){
+    const k = getKey();
+    keyStatusText.textContent = k ? ('Sparad nyckel: ••••' + k.slice(-4)) : 'Ingen nyckel sparad ännu.';
+    keyRemoveBtn.style.display = k ? '' : 'none';
+    keyInput.value = '';
+  }
+  refreshKeyStatus();
+
+  keyToggleBtn.addEventListener('click', () => keyPanel.classList.toggle('open'));
+  keySaveBtn.addEventListener('click', () => {
+    const v = keyInput.value.trim();
+    if (!v) return;
+    setKey(v);
+    refreshKeyStatus();
+    keyPanel.classList.remove('open');
+  });
+  keyRemoveBtn.addEventListener('click', () => {
+    setKey('');
+    refreshKeyStatus();
+  });
+
+  function setStatus(msg, kind){
+    genStatus.textContent = msg || '';
+    genStatus.className = 'recipe-status' + (kind ? ' ' + kind : '');
+  }
+
+  function handleFiles(files){
+    const file = files && files[0];
+    if (!file || !file.type || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1400;
+        let w = img.width, h = img.height;
+        if (w > MAX || h > MAX){
+          const scale = MAX / Math.max(w, h);
+          w = Math.round(w * scale); h = Math.round(h * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        imageBase64 = dataUrl.split(',')[1];
+        previewImg.src = dataUrl;
+        dropzoneDefault.style.display = 'none';
+        previewWrap.style.display = '';
+        dropzone.classList.add('has-image');
+        refreshGenBtn();
+        setStatus('', '');
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  dropzone.addEventListener('click', (e) => { if (e.target !== previewChange) fileInput.click(); });
+  dropzone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fileInput.click(); } });
+  fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+  previewChange.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
+  ['dragover'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.remove('drag'); }));
+  dropzone.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
+
+  function refreshGenBtn(){
+    if (mode === 'image') genBtn.disabled = !imageBase64;
+    else genBtn.disabled = !urlInput.value.trim();
+  }
+
+  function setMode(m){
+    mode = m;
+    modeTabImage.classList.toggle('on', m === 'image');
+    modeTabLink.classList.toggle('on', m === 'link');
+    modeImagePanel.hidden = m !== 'image';
+    modeLinkPanel.hidden = m !== 'link';
+    setStatus('', '');
+    refreshGenBtn();
+  }
+  modeTabImage.addEventListener('click', () => setMode('image'));
+  modeTabLink.addEventListener('click', () => setMode('link'));
+  urlInput.addEventListener('input', refreshGenBtn);
+
+  function jsonInstruction(){
+    return [
+      'Svara ENDAST med giltig JSON, utan text runt omkring och utan markdown-kodblock, i exakt detta format:',
+      '{"title": "string", "description": "en till två meningar", "portions": number, "timeMinutes": number, "tags": ["string"], "ingredients": [{"name": "string", "amount": "string"}], "instructions": ["steg 1", "steg 2"]}',
+      'Skriv allt på svenska.',
+    ].join('\n');
+  }
+
+  function buildPrompt(extra){
+    return [
+      'Här är en skärmdump med ingredienser till en maträtt (t.ex. från en app, ett recept eller en anteckning).',
+      'Läs noga av vilka ingredienser (och mängder, om de syns) som finns på bilden.',
+      'Skapa sedan ett komplett, smakfullt recept baserat på dessa ingredienser. Du får lägga till ett fåtal rimliga kompletterande ingredienser (t.ex. salt, olja, kryddor) om det behövs för ett fullständigt recept, men utgå i första hand från det som faktiskt syns på bilden.',
+      extra ? ('Extra önskemål från användaren: "' + extra + '". Ta hänsyn till detta.') : '',
+      jsonInstruction(),
+    ].filter(Boolean).join('\n');
+  }
+
+  function buildUrlPrompt(url, extra){
+    return [
+      'Hämta och läs igenom innehållet på den här länken med web_fetch-verktyget: ' + url,
+      'Det är ett inlägg från Instagram eller TikTok som innehåller ett recept eller en ingredienslista till en maträtt, oftast i bildtexten/beskrivningen till inlägget.',
+      'Läs av vilka ingredienser (och mängder, om de anges) och eventuella instruktioner/tillagningssteg som beskrivs där.',
+      'Skapa sedan ett komplett, smakfullt recept baserat på detta. Du får lägga till ett fåtal rimliga kompletterande ingredienser eller steg om det behövs för ett fullständigt recept, men utgå i första hand från det som faktiskt står i inlägget.',
+      'Om länken inte gick att hämta, eller inlägget inte innehöll något recept eller några ingredienser, svara ändå med JSON enligt formatet nedan men sätt "title" till "Kunde inte läsa av länken" och lämna "ingredients" och "instructions" som tomma listor.',
+      extra ? ('Extra önskemål från användaren: "' + extra + '". Ta hänsyn till detta.') : '',
+      jsonInstruction(),
+    ].filter(Boolean).join('\n');
+  }
+
+  function parseRecipeJSON(text){
+    let clean = (text || '').trim();
+    const fence = clean.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fence) clean = fence[1].trim();
+    const start = clean.indexOf('{'), end = clean.lastIndexOf('}');
+    if (start === -1 || end === -1) throw new Error('Kunde inte tolka svaret som ett recept.');
+    const obj = JSON.parse(clean.slice(start, end + 1));
+    if (!obj.title || !Array.isArray(obj.ingredients) || !Array.isArray(obj.instructions)){
+      throw new Error('Receptet saknar nödvändig information — försök igen.');
+    }
+    return obj;
+  }
+
+  async function postToClaude(body){
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!resp.ok){
+      let msg = 'Något gick fel (HTTP ' + resp.status + ').';
+      if (resp.status === 401) msg = 'Fel API-nyckel — kontrollera den under "API-nyckel".';
+      else if (resp.status === 429) msg = 'För många förfrågningar just nu — vänta lite och försök igen.';
+      else { try { const j = await resp.json(); if (j && j.error && j.error.message) msg = j.error.message; } catch(e){} }
+      throw new Error(msg);
+    }
+    return resp.json();
+  }
+
+  function extractText(data){
+    return (data.content || []).filter(c => c.type === 'text').map(c => c.text || '').join('');
+  }
+
+  async function callClaudeFromImage(extra){
+    const data = await postToClaude({
+      model: MODEL,
+      max_tokens: 4096,
+      output_config: { effort: 'low' },
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64 } },
+          { type: 'text', text: buildPrompt(extra) },
+        ],
+      }],
+    });
+    return parseRecipeJSON(extractText(data));
+  }
+
+  async function callClaudeFromUrl(url, extra){
+    const data = await postToClaude({
+      model: MODEL,
+      max_tokens: 4096,
+      output_config: { effort: 'low' },
+      tools: [{ type: 'web_fetch_20260209', name: 'web_fetch', max_content_tokens: 30000 }],
+      messages: [{ role: 'user', content: buildUrlPrompt(url, extra) }],
+    });
+    const fetchError = (data.content || []).find(c => c.type === 'web_fetch_tool_result' && c.content && c.content.error_code);
+    if (fetchError) throw new Error('Kunde inte hämta länken (' + fetchError.content.error_code + '). Prova att ladda upp en skärmdump istället.');
+    const recipe = parseRecipeJSON(extractText(data));
+    if (recipe.title === 'Kunde inte läsa av länken'){
+      throw new Error('Kunde inte läsa av receptet från länken. Prova att ladda upp en skärmdump istället.');
+    }
+    return recipe;
+  }
+
+  function resetForm(){
+    imageBase64 = null;
+    fileInput.value = '';
+    previewWrap.style.display = 'none';
+    dropzoneDefault.style.display = '';
+    dropzone.classList.remove('has-image');
+    urlInput.value = '';
+    extraInput.value = '';
+    refreshGenBtn();
+  }
+
+  genBtn.addEventListener('click', async () => {
+    setStatus('', '');
+    if (mode === 'image' && !imageBase64){
+      setStatus('Ladda upp en skärmdump först.', 'err');
+      return;
+    }
+    if (mode === 'link' && !urlInput.value.trim()){
+      setStatus('Klistra in en länk först.', 'err');
+      return;
+    }
+    const apiKey = getKey();
+    if (!apiKey){
+      keyPanel.classList.add('open');
+      keyInput.focus();
+      setStatus('Lägg till din API-nyckel ovan för att kunna skapa recept.', 'err');
+      return;
+    }
+    genBtn.disabled = true;
+    genBtn.textContent = mode === 'link' ? 'Hämtar länken och skapar recept …' : 'Skapar recept …';
+    setStatus(mode === 'link' ? 'Hämtar inlägget och skapar receptet …' : 'Läser bilden och skapar receptet …', '');
+    try {
+      const extra = extraInput.value.trim();
+      const recipe = mode === 'link' ? await callClaudeFromUrl(urlInput.value.trim(), extra) : await callClaudeFromImage(extra);
+      if (typeof window.kv21SaveRecipe === 'function') await window.kv21SaveRecipe(recipe);
+      setStatus('"' + recipe.title + '" skapades!', 'ok');
+      resetForm();
+    } catch (err){
+      console.error('Receptgenerering:', err);
+      setStatus(err.message || 'Något gick fel — försök igen.', 'err');
+    } finally {
+      genBtn.textContent = 'Skapa recept';
+      refreshGenBtn();
+    }
+  });
+})();
+</script>
+
+<script>
+// ── Mobilmeny ──
+(function() {
+  var btn = document.getElementById('navHamburger');
+  var nav = document.getElementById('mobileNav');
+  if (!btn || !nav) return;
+  function openMenu()  { btn.classList.add('open'); nav.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeMenu() { btn.classList.remove('open'); nav.classList.remove('open'); document.body.style.overflow=''; }
+  btn.addEventListener('click', function() { btn.classList.contains('open') ? closeMenu() : openMenu(); });
+  nav.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if(e.key==='Escape') closeMenu(); });
+})();
+</script>
+
+<script>
+// ── Reveal-animation för receptkorten ──
+(function(){
+  const reveals = document.querySelectorAll('.reveal-up');
+  if (!('IntersectionObserver' in window)){
+    reveals.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+    });
+  }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  reveals.forEach(el => io.observe(el));
+})();
+</script>
+
+<script>
+// ── Mörk lyx-bakgrund: guldglöd + gulddamm ──
+(function(){
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const blobs = Array.from({length: 5}, (_, i) => ({
+    x: Math.random(), y: Math.random(), r: 260 + Math.random() * 340,
+    vx: (Math.random() - .5) * .00010, vy: (Math.random() - .5) * .00007,
+    col: i % 2 ? [201,165,90] : [168,135,46],
+    a: .09 + Math.random() * .07, phase: Math.random() * Math.PI * 2,
+  }));
+  const dust = Array.from({length: 64}, () => ({
+    x: Math.random(), y: Math.random(), r: .4 + Math.random() * 1.6,
+    sp: .00006 + Math.random() * .00018, drift: (Math.random() - .5) * .0001,
+    a: .12 + Math.random() * .32, ph: Math.random() * Math.PI * 2,
+  }));
+  let t = 0;
+  function frame() {
+    t += 0.0024;
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#0c0b0a'); bg.addColorStop(.5, '#151310'); bg.addColorStop(1, '#0b0a09');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    blobs.forEach(b => {
+      b.x += b.vx + Math.sin(b.phase + t * .4) * .00004;
+      b.y += b.vy + Math.cos(b.phase + t * .3) * .00003;
+      if (b.x < -.4) b.x = 1.4; if (b.x > 1.4) b.x = -.4;
+      if (b.y < -.4) b.y = 1.4; if (b.y > 1.4) b.y = -.4;
+      const px = b.x * W, py = b.y * H;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, b.r);
+      g.addColorStop(0, `rgba(${b.col},${b.a})`);
+      g.addColorStop(1, `rgba(${b.col},0)`);
+      ctx.beginPath(); ctx.arc(px, py, b.r, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
+    });
+    dust.forEach(d => {
+      d.y -= d.sp; d.x += d.drift + Math.sin(d.ph + d.y * 7) * .00005; d.ph += .01;
+      if (d.y < -.05) { d.y = 1.05; d.x = Math.random(); }
+      if (d.x < 0) d.x = 1; if (d.x > 1) d.x = 0;
+      const px = d.x * W, py = d.y * H, tw = (Math.sin(d.ph) + 1) / 2;
+      const g = ctx.createRadialGradient(px, py, 0, px, py, d.r * 3);
+      g.addColorStop(0, `rgba(232,203,128,${d.a * (.4 + tw * .6)})`);
+      g.addColorStop(1, 'rgba(232,203,128,0)');
+      ctx.beginPath(); ctx.arc(px, py, d.r * 3, 0, Math.PI*2); ctx.fillStyle = g; ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>

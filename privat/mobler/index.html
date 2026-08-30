@@ -357,7 +357,7 @@ body::before {
 .furn-summary, .furn-floor {
   position: relative; overflow: hidden;
   background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74)) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(125%); backdrop-filter: blur(16px) saturate(125%);
+  -webkit-backdrop-filter: blur(10px) saturate(125%); backdrop-filter: blur(10px) saturate(125%);
   border: 1px solid rgba(201,165,90,.16) !important;
   box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
   transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
@@ -368,11 +368,12 @@ body::before {
   box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
 }
 .furn-summary::before, .furn-floor::before {
-  content: ''; position: absolute; top: -20%; left: -130%; width: 55%; height: 140%;
+  content: ''; position: absolute; top: -20%; left: 0; width: 55%; height: 140%;
   background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
-  transform: skewX(-16deg); pointer-events: none; animation: cardShine 8s ease-in-out infinite; z-index: 0;
+  transform: skewX(-16deg) translateX(-280%); pointer-events: none; will-change: transform;
+  animation: cardShine 8s ease-in-out infinite; z-index: 0;
 }
-@keyframes cardShine { 0%, 70% { left: -130%; } 100% { left: 140%; } }
+@keyframes cardShine { 0%, 70% { transform: skewX(-16deg) translateX(-280%); } 100% { transform: skewX(-16deg) translateX(230%); } }
 
 .furn-summary-row { border-bottom-color: rgba(201,165,90,.1); color: rgba(233,222,202,.85); position: relative; z-index: 1; }
 .furn-summary-row.grand span:first-child { color: #ecdcbf; }

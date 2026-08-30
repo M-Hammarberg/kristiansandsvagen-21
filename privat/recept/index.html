@@ -230,11 +230,17 @@ select.recipe-extra-input {
 .recipe-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .recipe-card-title { font-family: "Libre Baskerville", serif; font-size: 1.02rem; line-height: 1.3; color: var(--charcoal); }
 .recipe-del {
-  flex-shrink: 0; background: none; border: none; cursor: pointer;
-  color: var(--stone); font-size: 1rem; line-height: 1; padding: 2px 4px;
-  opacity: .4; transition: opacity .2s, color .2s;
+  flex-shrink: 0; background: none; border: none; cursor: pointer; border-radius: 4px;
+  color: var(--stone); font-size: 1rem; line-height: 1; padding: 4px 7px;
+  opacity: .4; transition: opacity .2s, color .2s, background .2s, padding .2s;
+  font-family: "Montserrat", sans-serif;
 }
 .recipe-del:hover { opacity: 1; color: var(--red); }
+.recipe-del.confirm {
+  opacity: 1; color: #fff; background: var(--red);
+  font-size: .58rem; letter-spacing: .06em; text-transform: uppercase;
+  padding: 6px 10px; white-space: nowrap;
+}
 .recipe-meta {
   display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 10px;
   font-size: .62rem; letter-spacing: .04em; color: var(--gold2); font-weight: 500;
@@ -741,9 +747,23 @@ select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
         toggleBtn.textContent = open ? 'Dölj recept' : 'Visa recept';
       });
 
-      card.querySelector('.recipe-del').addEventListener('click', () => {
-        if (!confirm('Ta bort "' + (r.title || 'receptet') + '"?')) return;
-        recipesCol.doc(r.id).delete().catch(e => console.error('Ta bort recept:', e));
+      const delBtn = card.querySelector('.recipe-del');
+      delBtn.addEventListener('click', () => {
+        if (delBtn.dataset.confirm === '1'){
+          recipesCol.doc(r.id).delete().catch(e => console.error('Ta bort recept:', e));
+          return;
+        }
+        delBtn.dataset.confirm = '1';
+        delBtn.textContent = 'Ta bort?';
+        delBtn.classList.add('confirm');
+        delBtn.setAttribute('aria-label', 'Klicka igen för att bekräfta borttagning');
+        clearTimeout(delBtn._confirmTimer);
+        delBtn._confirmTimer = setTimeout(() => {
+          delBtn.dataset.confirm = '';
+          delBtn.textContent = '×';
+          delBtn.classList.remove('confirm');
+          delBtn.setAttribute('aria-label', 'Ta bort recept');
+        }, 3000);
       });
 
       gridEl.appendChild(card);

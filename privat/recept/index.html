@@ -173,6 +173,28 @@ body::before {
   font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
 }
 
+.mode-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.mode-tab {
+  flex: 1; background: rgba(0,0,0,.03); border: 1px solid var(--border-light);
+  color: var(--stone); padding: 9px 12px; border-radius: 4px; cursor: pointer;
+  font-family: "Montserrat", sans-serif; font-size: .6rem;
+  letter-spacing: .1em; text-transform: uppercase; transition: all .2s;
+}
+.mode-tab:hover { color: var(--charcoal); border-color: var(--gold2); }
+.mode-tab.on { background: var(--gold2); color: #fff; border-color: var(--gold2); }
+.mode-panel[hidden] { display: none; }
+.link-input-wrap { }
+.recipe-url-input {
+  width: 100%; background: rgba(0,0,0,.03);
+  border: 1px solid var(--border-light); border-radius: 4px;
+  padding: 13px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
+  color: var(--charcoal); transition: border-color .2s;
+}
+.recipe-url-input:focus { outline: none; border-color: var(--gold2); }
+.link-tip {
+  margin-top: 10px; font-size: .62rem; line-height: 1.6; color: var(--stone); font-weight: 300;
+}
+
 .dropzone {
   border: 1.5px dashed rgba(201,165,90,.35); border-radius: 6px;
   padding: 30px 20px; text-align: center; cursor: pointer;
@@ -459,6 +481,11 @@ body::before {
 .recipe-panel-head h2 { color: #ecdcbf; }
 .recipe-panel-head .sub { color: rgba(212,184,150,.5); }
 
+.mode-tab { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: rgba(212,184,150,.5); }
+.mode-tab:hover { color: #ecdcbf; }
+.recipe-url-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
+.recipe-url-input::placeholder { color: rgba(212,184,150,.35); }
+.link-tip { color: rgba(212,184,150,.45); }
 .dropzone { border-color: rgba(201,165,90,.28); color: rgba(212,184,150,.55); }
 .dropzone:hover, .dropzone.drag { border-color: var(--gold); background: rgba(201,165,90,.08); }
 .dropzone-sub { color: rgba(212,184,150,.4); }
@@ -540,7 +567,7 @@ body::before {
   <div class="page-hero-inner">
     <div class="eyebrow">Privat — endast för oss</div>
     <h1>Recept<br><em>från skärmdump till middag</em></h1>
-    <p>Ladda upp en skärmdump med ingredienser — från en app, en burk eller en anteckning — så skapas ett komplett recept utifrån det som syns på bilden. Recepten sparas och delas mellan er i realtid.</p>
+    <p>Ladda upp en skärmdump med ingredienser, eller klistra in en länk till ett Instagram- eller TikTok-inlägg — så skapas ett komplett recept utifrån det som syns på bilden eller står i inlägget. Recepten sparas och delas mellan er i realtid.</p>
   </div>
 </div>
 
@@ -563,24 +590,38 @@ body::before {
       <span class="sub">skärmdump → färdigt recept</span>
     </div>
 
-    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Ladda upp skärmdump">
-      <div id="dropzoneDefault">
-        <div class="dropzone-icon">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto;display:block;">
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <circle cx="8.5" cy="10" r="1.5"/>
-            <path d="M21 15l-5-5-9 9"/>
-          </svg>
+    <div class="mode-tabs">
+      <button type="button" class="mode-tab on" id="modeTabImage" data-mode="image">Skärmdump</button>
+      <button type="button" class="mode-tab" id="modeTabLink" data-mode="link">Länk (Instagram/TikTok)</button>
+    </div>
+
+    <div class="mode-panel" id="modeImagePanel">
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Ladda upp skärmdump">
+        <div id="dropzoneDefault">
+          <div class="dropzone-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto;display:block;">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <circle cx="8.5" cy="10" r="1.5"/>
+              <path d="M21 15l-5-5-9 9"/>
+            </svg>
+          </div>
+          <div class="dropzone-text">Klicka eller släpp en skärmdump här</div>
+          <div class="dropzone-sub">t.ex. en bild på ingredienser från en app eller ett recept</div>
         </div>
-        <div class="dropzone-text">Klicka eller släpp en skärmdump här</div>
-        <div class="dropzone-sub">t.ex. en bild på ingredienser från en app eller ett recept</div>
+        <div class="preview-wrap" id="previewWrap">
+          <img id="recipePreview" alt="Vald skärmdump">
+          <button type="button" class="preview-change" id="previewChange">Byt bild</button>
+        </div>
       </div>
-      <div class="preview-wrap" id="previewWrap">
-        <img id="recipePreview" alt="Vald skärmdump">
-        <button type="button" class="preview-change" id="previewChange">Byt bild</button>
+      <input type="file" id="recipeFile" accept="image/*" hidden>
+    </div>
+
+    <div class="mode-panel" id="modeLinkPanel" hidden>
+      <div class="link-input-wrap">
+        <input type="url" class="recipe-url-input" id="recipeUrl" placeholder="Klistra in länk till Instagram- eller TikTok-inlägg…" autocomplete="off" inputmode="url">
+        <div class="link-tip">Fungerar bäst när receptet eller ingredienserna står i bildtexten/beskrivningen — vissa inlägg går inte att läsa av. Fungerar inte om inlägget kräver inloggning.</div>
       </div>
     </div>
-    <input type="file" id="recipeFile" accept="image/*" hidden>
 
     <input type="text" class="recipe-extra-input" id="recipeExtra" placeholder="Något extra? (t.ex. vegetariskt, 4 portioner, snabblagat) — valfritt" autocomplete="off">
 
@@ -830,7 +871,14 @@ body::before {
 <script>
 (function(){
   const KEY_STORAGE = 'kv21_anthropic_key';
-  const MODEL = 'claude-sonnet-5';
+  const MODEL = 'claude-opus-5';
+
+  const modeTabImage = document.getElementById('modeTabImage');
+  const modeTabLink = document.getElementById('modeTabLink');
+  const modeImagePanel = document.getElementById('modeImagePanel');
+  const modeLinkPanel = document.getElementById('modeLinkPanel');
+  const urlInput = document.getElementById('recipeUrl');
+  let mode = 'image'; // 'image' | 'link'
 
   const dropzone = document.getElementById('dropzone');
   const dropzoneDefault = document.getElementById('dropzoneDefault');
@@ -902,7 +950,7 @@ body::before {
         dropzoneDefault.style.display = 'none';
         previewWrap.style.display = '';
         dropzone.classList.add('has-image');
-        genBtn.disabled = false;
+        refreshGenBtn();
         setStatus('', '');
       };
       img.src = e.target.result;
@@ -918,15 +966,51 @@ body::before {
   ['dragleave', 'drop'].forEach(ev => dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.classList.remove('drag'); }));
   dropzone.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
 
+  function refreshGenBtn(){
+    if (mode === 'image') genBtn.disabled = !imageBase64;
+    else genBtn.disabled = !urlInput.value.trim();
+  }
+
+  function setMode(m){
+    mode = m;
+    modeTabImage.classList.toggle('on', m === 'image');
+    modeTabLink.classList.toggle('on', m === 'link');
+    modeImagePanel.hidden = m !== 'image';
+    modeLinkPanel.hidden = m !== 'link';
+    setStatus('', '');
+    refreshGenBtn();
+  }
+  modeTabImage.addEventListener('click', () => setMode('image'));
+  modeTabLink.addEventListener('click', () => setMode('link'));
+  urlInput.addEventListener('input', refreshGenBtn);
+
+  function jsonInstruction(){
+    return [
+      'Svara ENDAST med giltig JSON, utan text runt omkring och utan markdown-kodblock, i exakt detta format:',
+      '{"title": "string", "description": "en till två meningar", "portions": number, "timeMinutes": number, "tags": ["string"], "ingredients": [{"name": "string", "amount": "string"}], "instructions": ["steg 1", "steg 2"]}',
+      'Skriv allt på svenska.',
+    ].join('\n');
+  }
+
   function buildPrompt(extra){
     return [
       'Här är en skärmdump med ingredienser till en maträtt (t.ex. från en app, ett recept eller en anteckning).',
       'Läs noga av vilka ingredienser (och mängder, om de syns) som finns på bilden.',
       'Skapa sedan ett komplett, smakfullt recept baserat på dessa ingredienser. Du får lägga till ett fåtal rimliga kompletterande ingredienser (t.ex. salt, olja, kryddor) om det behövs för ett fullständigt recept, men utgå i första hand från det som faktiskt syns på bilden.',
       extra ? ('Extra önskemål från användaren: "' + extra + '". Ta hänsyn till detta.') : '',
-      'Svara ENDAST med giltig JSON, utan text runt omkring och utan markdown-kodblock, i exakt detta format:',
-      '{"title": "string", "description": "en till två meningar", "portions": number, "timeMinutes": number, "tags": ["string"], "ingredients": [{"name": "string", "amount": "string"}], "instructions": ["steg 1", "steg 2"]}',
-      'Skriv allt på svenska.',
+      jsonInstruction(),
+    ].filter(Boolean).join('\n');
+  }
+
+  function buildUrlPrompt(url, extra){
+    return [
+      'Hämta och läs igenom innehållet på den här länken med web_fetch-verktyget: ' + url,
+      'Det är ett inlägg från Instagram eller TikTok som innehåller ett recept eller en ingredienslista till en maträtt, oftast i bildtexten/beskrivningen till inlägget.',
+      'Läs av vilka ingredienser (och mängder, om de anges) och eventuella instruktioner/tillagningssteg som beskrivs där.',
+      'Skapa sedan ett komplett, smakfullt recept baserat på detta. Du får lägga till ett fåtal rimliga kompletterande ingredienser eller steg om det behövs för ett fullständigt recept, men utgå i första hand från det som faktiskt står i inlägget.',
+      'Om länken inte gick att hämta, eller inlägget inte innehöll något recept eller några ingredienser, svara ändå med JSON enligt formatet nedan men sätt "title" till "Kunde inte läsa av länken" och lämna "ingredients" och "instructions" som tomma listor.',
+      extra ? ('Extra önskemål från användaren: "' + extra + '". Ta hänsyn till detta.') : '',
+      jsonInstruction(),
     ].filter(Boolean).join('\n');
   }
 
@@ -943,26 +1027,16 @@ body::before {
     return obj;
   }
 
-  async function callClaude(apiKey, extra){
+  async function postToClaude(body){
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-api-key': apiKey,
+        'x-api-key': getKey(),
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true',
       },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 2000,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64 } },
-            { type: 'text', text: buildPrompt(extra) },
-          ],
-        }],
-      }),
+      body: JSON.stringify(body),
     });
     if (!resp.ok){
       let msg = 'Något gick fel (HTTP ' + resp.status + ').';
@@ -971,9 +1045,44 @@ body::before {
       else { try { const j = await resp.json(); if (j && j.error && j.error.message) msg = j.error.message; } catch(e){} }
       throw new Error(msg);
     }
-    const data = await resp.json();
-    const text = (data.content || []).map(c => c.text || '').join('');
-    return parseRecipeJSON(text);
+    return resp.json();
+  }
+
+  function extractText(data){
+    return (data.content || []).filter(c => c.type === 'text').map(c => c.text || '').join('');
+  }
+
+  async function callClaudeFromImage(extra){
+    const data = await postToClaude({
+      model: MODEL,
+      max_tokens: 4096,
+      output_config: { effort: 'low' },
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64 } },
+          { type: 'text', text: buildPrompt(extra) },
+        ],
+      }],
+    });
+    return parseRecipeJSON(extractText(data));
+  }
+
+  async function callClaudeFromUrl(url, extra){
+    const data = await postToClaude({
+      model: MODEL,
+      max_tokens: 4096,
+      output_config: { effort: 'low' },
+      tools: [{ type: 'web_fetch_20260209', name: 'web_fetch', max_content_tokens: 30000 }],
+      messages: [{ role: 'user', content: buildUrlPrompt(url, extra) }],
+    });
+    const fetchError = (data.content || []).find(c => c.type === 'web_fetch_tool_result' && c.content && c.content.error_code);
+    if (fetchError) throw new Error('Kunde inte hämta länken (' + fetchError.content.error_code + '). Prova att ladda upp en skärmdump istället.');
+    const recipe = parseRecipeJSON(extractText(data));
+    if (recipe.title === 'Kunde inte läsa av länken'){
+      throw new Error('Kunde inte läsa av receptet från länken. Prova att ladda upp en skärmdump istället.');
+    }
+    return recipe;
   }
 
   function resetForm(){
@@ -982,14 +1091,19 @@ body::before {
     previewWrap.style.display = 'none';
     dropzoneDefault.style.display = '';
     dropzone.classList.remove('has-image');
-    genBtn.disabled = true;
+    urlInput.value = '';
     extraInput.value = '';
+    refreshGenBtn();
   }
 
   genBtn.addEventListener('click', async () => {
     setStatus('', '');
-    if (!imageBase64){
+    if (mode === 'image' && !imageBase64){
       setStatus('Ladda upp en skärmdump först.', 'err');
+      return;
+    }
+    if (mode === 'link' && !urlInput.value.trim()){
+      setStatus('Klistra in en länk först.', 'err');
       return;
     }
     const apiKey = getKey();
@@ -1000,10 +1114,11 @@ body::before {
       return;
     }
     genBtn.disabled = true;
-    genBtn.textContent = 'Skapar recept …';
-    setStatus('Läser bilden och skapar receptet …', '');
+    genBtn.textContent = mode === 'link' ? 'Hämtar länken och skapar recept …' : 'Skapar recept …';
+    setStatus(mode === 'link' ? 'Hämtar inlägget och skapar receptet …' : 'Läser bilden och skapar receptet …', '');
     try {
-      const recipe = await callClaude(apiKey, extraInput.value.trim());
+      const extra = extraInput.value.trim();
+      const recipe = mode === 'link' ? await callClaudeFromUrl(urlInput.value.trim(), extra) : await callClaudeFromImage(extra);
       if (typeof window.kv21SaveRecipe === 'function') await window.kv21SaveRecipe(recipe);
       setStatus('"' + recipe.title + '" skapades!', 'ok');
       resetForm();
@@ -1012,7 +1127,7 @@ body::before {
       setStatus(err.message || 'Något gick fel — försök igen.', 'err');
     } finally {
       genBtn.textContent = 'Skapa recept';
-      genBtn.disabled = !imageBase64;
+      refreshGenBtn();
     }
   });
 })();

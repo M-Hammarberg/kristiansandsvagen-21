@@ -11,9 +11,9 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Inköpslista">
+<meta name="apple-mobile-web-app-title" content="Recept">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Privat — Inköpslista</title>
+<title>Privat — Recept</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -152,98 +152,141 @@ body::before {
 .anim .reveal-up { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
 .anim .reveal-up.in { opacity: 1; transform: none; }
 
-/* ─── INKÖPSLISTA ─── */
-.shoplist {
+/* ─── NYTT RECEPT ─── */
+.recipe-panel {
   background: rgba(255,255,255,.96);
   border: 1px solid var(--border-light);
   border-radius: 6px;
   padding: 24px 26px;
+  margin-bottom: 32px;
 }
-.shoplist-head {
+.recipe-panel-head {
   display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
   margin-bottom: 18px; padding-bottom: 12px;
   border-bottom: 1px solid var(--border-light);
 }
-.shoplist-head h2 {
+.recipe-panel-head h2 {
   font-family: "Libre Baskerville", serif;
   font-size: 1.1rem; font-weight: 400; color: var(--charcoal);
 }
-.shoplist-head .sub {
+.recipe-panel-head .sub {
   font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
 }
-.shop-add-form { display: flex; gap: 8px; margin-bottom: 16px; }
-.shop-input {
-  flex: 1; background: rgba(0,0,0,.03);
+
+.manual-row { display: flex; gap: 10px; margin-top: 14px; }
+.manual-row .recipe-extra-input { margin-top: 0; flex: 1; min-width: 0; }
+.recipe-textarea { margin-top: 14px; resize: vertical; line-height: 1.6; }
+.manual-hint { font-size: .6rem; color: var(--stone); margin-top: 10px; line-height: 1.6; }
+
+.recipe-extra-input {
+  width: 100%; margin-top: 14px; background: rgba(0,0,0,.03);
   border: 1px solid var(--border-light); border-radius: 4px;
   padding: 11px 14px; font-family: "Montserrat", sans-serif; font-size: .8rem;
   color: var(--charcoal); transition: border-color .2s;
 }
-.shop-input:focus { outline: none; border-color: var(--gold2); }
-.shop-add-btn {
-  background: var(--gold2); border: none; border-radius: 4px;
-  padding: 11px 20px; color: #fff; cursor: pointer;
-  font-family: "Montserrat", sans-serif; font-size: .62rem;
-  letter-spacing: .14em; text-transform: uppercase; font-weight: 600;
-  transition: background .2s; white-space: nowrap;
+.recipe-extra-input:focus { outline: none; border-color: var(--gold2); }
+select.recipe-extra-input {
+  cursor: pointer; padding-right: 34px;
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  background-repeat: no-repeat; background-position: right 14px center; background-size: 10px 6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%231a1917' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>");
 }
-.shop-add-btn:hover { background: var(--gold); }
-.shop-section {
-  font-size: .56rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--gold2); font-weight: 600;
-  margin: 16px 0 4px; padding-top: 10px; border-top: 1px solid rgba(216,208,196,.5);
+
+.edit-note {
+  margin-top: 14px; padding: 10px 14px; border-radius: 4px;
+  background: rgba(201,165,90,.1); border: 1px solid rgba(201,165,90,.3);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: .68rem; color: var(--gold2); font-weight: 500;
 }
-.shop-section:first-child { margin-top: 0; padding-top: 0; border-top: none; }
-.shop-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 9px 4px; border-bottom: 1px solid rgba(216,208,196,.5);
+.edit-cancel-btn {
+  background: none; border: none; cursor: pointer; flex-shrink: 0;
+  font-family: "Montserrat", sans-serif; font-size: .6rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--stone); text-decoration: underline; text-underline-offset: 3px;
 }
-.shop-row:last-child { border-bottom: none; }
-.shop-checkbox {
-  flex-shrink: 0; width: 19px; height: 19px; border-radius: 5px;
-  border: 1.5px solid var(--gold2); position: relative; cursor: pointer;
-  background: transparent; transition: all .2s ease;
-}
-.shop-checkbox.on { background: var(--gold2); border-color: var(--gold2); }
-.shop-checkbox::after {
-  content: '✓'; position: absolute; inset: 0; display: flex;
-  align-items: center; justify-content: center; color: #fff;
-  font-size: .62rem; font-weight: 700; opacity: 0; transform: scale(.6);
-  transition: all .2s ease;
-}
-.shop-checkbox.on::after { opacity: 1; transform: scale(1); }
-.shop-name { flex: 1; font-size: .82rem; color: var(--charcoal); transition: color .2s, opacity .2s; }
-.shop-row.done .shop-name { text-decoration: line-through; opacity: .45; }
-.shop-del {
-  flex-shrink: 0; background: none; border: none; cursor: pointer;
-  color: var(--stone); font-size: 1rem; line-height: 1; padding: 4px 6px;
-  opacity: .4; transition: opacity .2s, color .2s;
-}
-.shop-del:hover { opacity: 1; color: var(--red); }
-.shop-empty {
-  padding: 18px 4px; text-align: center; font-size: .74rem;
-  color: var(--stone); font-weight: 300;
-}
-.shop-foot {
-  margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-light);
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-}
-.shop-done-btn {
-  width: 100%; background: var(--gold2); border: none; border-radius: 4px;
+.edit-cancel-btn:hover { color: var(--red); }
+
+.recipe-gen-btn {
+  width: 100%; margin-top: 14px; background: var(--gold2); border: none; border-radius: 4px;
   padding: 13px; color: #fff; cursor: pointer;
   font-family: "Montserrat", sans-serif; font-size: .64rem;
   letter-spacing: .16em; text-transform: uppercase; font-weight: 600;
   transition: background .2s;
 }
-.shop-done-btn:hover { background: var(--gold); }
-.shop-meta {
-  display: flex; align-items: center; justify-content: center;
-  gap: 6px 16px; flex-wrap: wrap; text-align: center;
+.recipe-gen-btn:hover:not(:disabled) { background: var(--gold); }
+.recipe-gen-btn:disabled { opacity: .55; cursor: default; }
+
+.recipe-status { margin-top: 12px; text-align: center; font-size: .68rem; min-height: 16px; letter-spacing: .02em; }
+.recipe-status.ok { color: var(--green); }
+.recipe-status.err { color: var(--red); }
+
+/* ─── SPARADE RECEPT ─── */
+.recipe-list-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin-bottom: 18px;
 }
-.shop-count { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
-.shop-last { font-size: .58rem; letter-spacing: .04em; color: var(--stone); }
+.recipe-list-head h2 {
+  font-family: "Libre Baskerville", serif;
+  font-size: 1.25rem; font-weight: 400; color: var(--champagne2);
+}
+.recipe-list-head .sub { font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(212,184,150,.5); }
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.recipe-empty {
+  grid-column: 1 / -1; text-align: center; padding: 30px 10px;
+  color: rgba(212,184,150,.5); font-size: .78rem; font-weight: 300;
+}
+.recipe-card {
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 20px 20px 18px;
+}
+.recipe-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.recipe-card-title { font-family: "Libre Baskerville", serif; font-size: 1.02rem; line-height: 1.3; color: var(--charcoal); }
+.recipe-del {
+  flex-shrink: 0; background: none; border: none; cursor: pointer; border-radius: 4px;
+  color: var(--stone); font-size: 1rem; line-height: 1; padding: 4px 7px;
+  opacity: .4; transition: opacity .2s, color .2s, background .2s, padding .2s;
+  font-family: "Montserrat", sans-serif;
+}
+.recipe-del:hover { opacity: 1; color: var(--red); }
+.recipe-del.confirm {
+  opacity: 1; color: #fff; background: var(--red);
+  font-size: .58rem; letter-spacing: .06em; text-transform: uppercase;
+  padding: 6px 10px; white-space: nowrap;
+}
+.recipe-stars { display: flex; gap: 2px; margin-top: 8px; }
+.recipe-star {
+  font-size: 1.05rem; line-height: 1; color: rgba(26,25,23,.18); padding: 2px;
+}
+.recipe-star.filled { color: var(--gold2); }
+.recipe-meta {
+  display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 10px;
+  font-size: .62rem; letter-spacing: .04em; color: var(--gold2); font-weight: 500;
+}
+.recipe-desc { font-size: .78rem; line-height: 1.6; color: rgba(26,25,23,.72); margin-bottom: 4px; font-weight: 300; }
+.recipe-details { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(216,208,196,.5); display: none; }
+.recipe-details.open { display: block; }
+.recipe-details h3 { font-family: "Libre Baskerville", serif; font-size: .82rem; font-weight: 400; color: var(--charcoal); margin-bottom: 8px; }
+.recipe-details h3.instructions-h { margin-top: 16px; }
+.recipe-details ul, .recipe-details ol { padding-left: 18px; margin-bottom: 4px; }
+.recipe-details li { font-size: .76rem; line-height: 1.65; color: rgba(26,25,23,.8); margin-bottom: 5px; }
+.recipe-toggle {
+  width: 100%; margin-top: 14px; background: none; border: 1px solid rgba(201,165,90,.35);
+  color: var(--gold2); border-radius: 4px; padding: 9px 14px;
+  font-family: "Montserrat", sans-serif; font-size: .58rem;
+  letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: all .2s;
+}
+.recipe-toggle:hover { border-color: var(--gold2); color: var(--gold); background: rgba(201,165,90,.06); }
+.recipe-edit {
+  display: block; margin: 12px 0 0 auto; background: none; border: none; cursor: pointer;
+  color: var(--stone); font-family: "Montserrat", sans-serif; font-size: .56rem;
+  letter-spacing: .1em; text-transform: uppercase; padding: 4px 2px;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.recipe-edit:hover { color: var(--gold2); }
 
 .privacy-note {
-  margin-top: 22px; max-width: 640px; margin-left: auto; margin-right: auto;
+  margin-top: 30px; max-width: 640px; margin-left: auto; margin-right: auto;
   text-align: center; font-size: .64rem; line-height: 1.7;
   color: rgba(122,118,112,.8); font-weight: 300;
 }
@@ -333,7 +376,9 @@ body::before {
   .page-hero p { font-size: .8rem; max-width: 100%; }
   .privat-subnav { padding: 14px 20px; }
   .content-wrap { padding: 44px 20px; }
-  .shoplist { padding: 20px 18px; }
+  .recipe-panel { padding: 20px 18px; }
+  .recipe-grid { grid-template-columns: 1fr; }
+  .manual-row { flex-direction: column; }
 }
 
 /* ─── HAMBURGER ─── */
@@ -376,7 +421,7 @@ body::before {
 .nav-home-icon:hover { color: var(--champagne); }
 
 /* ════════ MÖRKT LYX-TEMA (glas) ════════ */
-.shoplist {
+.recipe-panel, .recipe-card {
   position: relative; overflow: hidden;
   background: linear-gradient(155deg, rgba(36,33,29,.72), rgba(17,15,13,.74));
   -webkit-backdrop-filter: blur(10px) saturate(125%); backdrop-filter: blur(10px) saturate(125%);
@@ -384,12 +429,12 @@ body::before {
   box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
   transition: box-shadow .4s ease, transform .4s ease, border-color .4s ease;
 }
-.shoplist:hover {
+.recipe-panel:hover, .recipe-card:hover {
   transform: translateY(-3px);
   border-color: rgba(201,165,90,.34);
   box-shadow: 0 34px 90px rgba(0,0,0,.55), 0 0 32px rgba(201,165,90,.08), inset 0 1px 0 rgba(255,255,255,.07);
 }
-.shoplist::before {
+.recipe-panel::before, .recipe-card::before {
   content: ''; position: absolute; top: -20%; left: 0; width: 55%; height: 140%;
   background: linear-gradient(100deg, transparent, rgba(232,203,128,.08), transparent);
   transform: skewX(-16deg) translateX(-280%); pointer-events: none; will-change: transform;
@@ -397,18 +442,26 @@ body::before {
 }
 @keyframes cardShine { 0%, 70% { transform: skewX(-16deg) translateX(-280%); } 100% { transform: skewX(-16deg) translateX(230%); } }
 
-.shoplist-head { border-bottom-color: rgba(201,165,90,.16) !important; }
-.shoplist-head h2 { color: #ecdcbf; }
-.shoplist-head .sub { color: rgba(212,184,150,.5); }
+.recipe-panel-head { border-bottom-color: rgba(201,165,90,.16) !important; }
+.recipe-panel-head h2 { color: #ecdcbf; }
+.recipe-panel-head .sub { color: rgba(212,184,150,.5); }
 
-.shop-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
-.shop-input::placeholder { color: rgba(212,184,150,.35); }
-.shop-section { color: #d9b96a; border-top-color: rgba(201,165,90,.14); }
-.shop-row { border-bottom-color: rgba(201,165,90,.1); }
-.shop-name { color: rgba(233,222,202,.9); }
-.shop-empty { color: rgba(212,184,150,.5); }
-.shop-foot { border-top-color: rgba(201,165,90,.14); }
-.shop-count, .shop-last { color: rgba(212,184,150,.45); }
+.manual-hint { color: rgba(212,184,150,.45); }
+.recipe-extra-input { background: rgba(255,255,255,.05); border-color: rgba(201,165,90,.2); color: #ecdcbf; }
+.recipe-extra-input::placeholder { color: rgba(212,184,150,.35); }
+select.recipe-extra-input { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23ecdcbf' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/></svg>"); }
+select.recipe-extra-input option { background: #1a1917; color: #ecdcbf; }
+
+.recipe-card-title { color: #ecdcbf; }
+.recipe-star { color: rgba(233,222,202,.22); }
+.recipe-star.filled { color: #e6c578; }
+.recipe-desc { color: rgba(233,222,202,.72); }
+.recipe-details { border-top-color: rgba(201,165,90,.14); }
+.recipe-details h3 { color: #ecdcbf; }
+.recipe-details li { color: rgba(233,222,202,.82); }
+.recipe-empty { color: rgba(212,184,150,.5); }
+.recipe-edit { color: rgba(212,184,150,.5); }
+.recipe-edit:hover { color: #e6c578; }
 .privacy-note { color: rgba(212,184,150,.55); }
 </style>
 </head>
@@ -429,7 +482,7 @@ body::before {
     </div>
     <div class="lock-eyebrow">Privat sida</div>
     <div class="lock-title">Ange kod</div>
-    <div class="lock-sub">Den här sidan är låst. Ange koden för att se inköpslistan.</div>
+    <div class="lock-sub">Den här sidan är låst. Ange koden för att se recepten.</div>
     <form class="lock-form" id="lockForm">
       <input class="lock-input" id="lockInput" type="password" inputmode="numeric" placeholder="Kod" autocomplete="off">
       <button class="lock-btn" type="submit">Lås upp</button>
@@ -472,8 +525,8 @@ body::before {
 <div class="page-hero">
   <div class="page-hero-inner">
     <div class="eyebrow">Privat — endast för oss</div>
-    <h1>Inköpslista<br><em>delad mellan er</em></h1>
-    <p>Allt som brukar behöva handlas varje vecka. Lägg till varor, bocka av när de är köpta — listan syncas mellan era mobiler i realtid.</p>
+    <h1>Recept<br><em>samlade på ett ställe</em></h1>
+    <p>Skriv in ett recept nedan — titel, ingredienser och gör-så-här. Det sparas och delas mellan er i realtid.</p>
   </div>
 </div>
 
@@ -481,32 +534,84 @@ body::before {
 <div class="privat-subnav">
   <div class="privat-tabs">
     <a href="/privat" class="ptab">Budget</a>
-    <a href="/privat/inkopslista" class="ptab on">Inköpslista</a>
+    <a href="/privat/inkopslista" class="ptab">Inköpslista</a>
     <a href="/privat/mobler" class="ptab">Möbler</a>
-    <a href="/privat/recept" class="ptab">Recept</a>
+    <a href="/privat/recept" class="ptab on">Recept</a>
   </div>
 </div>
 
-<!-- ═══ INKÖPSLISTA ═══ -->
+<!-- ═══ RECEPT ═══ -->
 <div class="content-wrap">
-  <div class="shoplist reveal-up" id="shoplistSection">
-    <div class="shoplist-head">
-      <h2>Inköpslista</h2>
-      <span class="sub" id="shopSyncStatus">synkas mellan er</span>
+
+  <div class="recipe-panel reveal-up" id="recipePanel">
+    <div class="recipe-panel-head">
+      <h2>Nytt recept</h2>
+      <span class="sub">lägg till ditt recept</span>
     </div>
-    <form class="shop-add-form" id="shopAddForm">
-      <input class="shop-input" id="shopInput" type="text" placeholder="Lägg till vara…" autocomplete="off">
-      <button class="shop-add-btn" type="submit">Lägg till</button>
-    </form>
-    <div id="shopRows"></div>
-    <div class="shop-empty" id="shopEmpty" style="display:none;">Listan är tom — lägg till något ovan.</div>
-    <div class="shop-foot">
-      <button class="shop-done-btn" id="shopDoneBtn" type="button">Handlat färdigt</button>
-      <div class="shop-meta">
-        <span class="shop-count" id="shopCount"></span>
-        <span class="shop-last" id="shopLast"></span>
-      </div>
+
+    <input type="text" class="recipe-extra-input" id="manualTitle" placeholder="Titel*" autocomplete="off" style="margin-top:0;">
+    <input type="text" class="recipe-extra-input" id="manualDesc" placeholder="Kort beskrivning (valfritt)" autocomplete="off">
+    <div class="manual-row">
+      <select class="recipe-extra-input" id="manualPortions">
+        <option value="" selected>Portioner</option>
+        <option value="1">1 portion</option>
+        <option value="2">2 portioner</option>
+        <option value="3">3 portioner</option>
+        <option value="4">4 portioner</option>
+        <option value="5">5 portioner</option>
+        <option value="6">6 portioner</option>
+        <option value="8">8 portioner</option>
+        <option value="10">10 portioner</option>
+        <option value="12">12 portioner</option>
+      </select>
+      <select class="recipe-extra-input" id="manualTime">
+        <option value="" selected>Tid</option>
+        <option value="5">5 min</option>
+        <option value="10">10 min</option>
+        <option value="15">15 min</option>
+        <option value="20">20 min</option>
+        <option value="25">25 min</option>
+        <option value="30">30 min</option>
+        <option value="40">40 min</option>
+        <option value="45">45 min</option>
+        <option value="60">1 timme</option>
+        <option value="75">1 tim 15 min</option>
+        <option value="90">1 tim 30 min</option>
+        <option value="120">2 timmar</option>
+        <option value="150">2 tim 30 min</option>
+        <option value="180">3 timmar</option>
+        <option value="240">4 timmar +</option>
+      </select>
+      <select class="recipe-extra-input" id="manualRating">
+        <option value="0" selected>Betyg</option>
+        <option value="1">★☆☆☆☆</option>
+        <option value="2">★★☆☆☆</option>
+        <option value="3">★★★☆☆</option>
+        <option value="4">★★★★☆</option>
+        <option value="5">★★★★★</option>
+      </select>
     </div>
+    <input type="text" class="recipe-extra-input" id="manualTags" placeholder="Taggar, kommaseparerat (valfritt)" autocomplete="off">
+    <textarea class="recipe-extra-input recipe-textarea" id="manualIngredients" rows="5" placeholder="Ingredienser* — en rad per ingrediens, t.ex.
+2 dl mjöl
+3 ägg
+1 msk socker"></textarea>
+    <textarea class="recipe-extra-input recipe-textarea" id="manualInstructions" rows="5" placeholder="Gör så här — ett steg per rad (valfritt)"></textarea>
+
+    <div class="edit-note" id="editNote" hidden>
+      <span id="editNoteText"></span>
+      <button type="button" class="edit-cancel-btn" id="editCancelBtn">Avbryt</button>
+    </div>
+    <button type="button" class="recipe-gen-btn" id="recipeGenBtn" disabled>Spara recept</button>
+    <div class="recipe-status" id="recipeStatus"></div>
+  </div>
+
+  <div class="recipe-list-head reveal-up">
+    <h2>Sparade recept</h2>
+    <span class="sub" id="recipeSyncStatus">synkas mellan er</span>
+  </div>
+  <div class="recipe-grid reveal-up" id="recipeGrid">
+    <div class="recipe-empty" id="recipeEmpty">Inga recept ännu — lägg till ditt första ovan.</div>
   </div>
 
   <div class="privacy-note">
@@ -528,12 +633,6 @@ body::before {
     PW_HASH med sha256 av den nya koden.
    Delar samma session som /privat — upplåst där
    räknas som upplåst här också.
-
-   Öppnad som installerad hemskärms-app (standalone)
-   sparas upplåsningen i localStorage istället för
-   sessionStorage, så man slipper ange koden varje
-   gång man trycker på ikonen — vanlig webbläsare
-   beter sig som förut (session, delad med /privat).
    ───────────────────────────────────────────── */
 (function(){
   const PW_HASH = 'b8dc2c143be8994682b08461f46487e05874e59dd9ab65cf973e3a3c67a763aa'; // = "2121"
@@ -586,9 +685,8 @@ body::before {
 </script>
 
 <!-- ═════════════════════════════════════════════════════════════
-     INKÖPSLISTA — delad & synkad via Firebase Firestore
-     ─────────────────────────────────────────────────────────────
-     Samma Firebase-projekt/samling som tidigare (shoppingList).
+     SPARADE RECEPT — delas & synkas via Firebase Firestore
+     Samma Firebase-projekt som inköpslistan (kollektion "recipes").
      ═════════════════════════════════════════════════════════════ -->
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -603,221 +701,289 @@ body::before {
     appId: "1:726739177351:web:57da52bea559b2db5b4d22",
   };
 
-  /* Standardartiklar — stående varor som alltid finns kvar i listan.
-     De går bara att bocka av/på, inte ta bort. Lägg till/ta bort
-     varor i listan här (kräver att sidan publiceras på nytt). */
-  const STANDARD_ITEMS = [];
-  const slug = name => 'standard_' + name.toLowerCase()
-    .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
-    .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-
-  /* Butiksordning — varorna sorteras efter var i butiken de brukar
-     ligga (baserat på City Gross i Trollhättan), så listan följer
-     vägen genom butiken istället för när varan lades till. Man går
-     in på högersidan (Kroppsvård/Kläder) och runt hela väggen —
-     dryck, fryst och tidningar (→ Övrigt) kommer sist, precis innan
-     kassan. Nya varor man skriver in gissas in i rätt avsnitt via
-     nyckelorden nedan. Lägg till fler nyckelord om något hamnar fel,
-     eller säg till om ordningen på ett avsnitt är fel. */
-  const STORE_SECTIONS = [
-    { id: 'skafferi',   label: 'Flingor, Pasta & Konserver' },
-    { id: 'kaffe',      label: 'Kaffe & Te' },
-    { id: 'bakning',    label: 'Bakning' },
-    { id: 'varlden',    label: 'Smaksättning & Världens mat' },
-    { id: 'kott',       label: 'Kött, Fisk & Chark' },
-    { id: 'frukt',      label: 'Frukt & Grönt' },
-    { id: 'kroppsvard', label: 'Kroppsvård' },
-    { id: 'brod',       label: 'Bageri & Bröd' },
-    { id: 'mejeri',     label: 'Mejeri & Ägg' },
-    { id: 'halsokost',  label: 'Glutenfritt & Hälsokost' },
-    { id: 'dryck',      label: 'Dryck' },
-    { id: 'snacks',     label: 'Snacks & Godis' },
-    { id: 'stad',       label: 'Städ & Tvätt' },
-    { id: 'fryst',      label: 'Fryst' },
-    { id: 'ovrigt',     label: 'Övrigt' },
-  ];
-  const CATEGORY_KEYWORDS = {
-    halsokost:  ['glutenfri', 'hälsokost', 'protein', 'kosttillskott'],
-    mejeri:     ['mjölk', 'ägg', 'grädde', 'fil', 'yoghurt', 'yogurt', 'smör', 'philadelphia', 'keso', 'crème', 'gräddfil'],
-    brod:       ['bröd', 'fralla', 'frallor', 'baguette', 'skorpa', 'skorpor', 'tortilla', 'wrap', 'kex', 'knäckebröd'],
-    frukt:      ['banan', 'äpple', 'apelsin', 'tomat', 'gurka', 'sallad', 'potatis', 'lök', 'morot', 'paprika', 'citron', 'avokado', 'vitlök', 'frukt', 'grönsak', 'svamp', 'melon', 'druvor', 'broccoli', 'blomkål'],
-    kott:       ['kyckling', 'köttfärs', 'fläsk', 'bacon', 'korv', 'skinka', 'ost', 'kött', 'biff', 'karré', 'prinskorv', 'salami', 'fisk', 'lax', 'räkor', 'torsk'],
-    varlden:    ['krydd', 'ketchup', 'senap', 'majonnäs', 'soja', 'taco', 'curry', 'chilisås', 'salsa'],
-    kaffe:      ['kaffe', 'te'],
-    bakning:    ['mjöl', 'socker', 'bakpulver', 'vanilj', 'jäst'],
-    skafferi:   ['pasta', 'ris', 'flingor', 'müsli', 'konserv', 'böna', 'bönor', 'linser', 'nudlar', 'spaghetti'],
-    dryck:      ['läsk', 'cola', 'pepsi', 'fanta', 'sprite', 'juice', 'vatten', 'öl', 'vin', 'cider', 'saft', 'must'],
-    snacks:     ['chips', 'godis', 'choklad', 'nötter', 'popcorn', 'kaka', 'kakor', 'glass'],
-    fryst:      ['fryst', 'frys'],
-    stad:       ['diskmedel', 'tvättmedel', 'toalettpapper', 'hushållspapper', 'tvättlapp', 'sopor', 'soppåse'],
-    kroppsvard: ['schampo', 'tandkräm', 'tvål', 'deo', 'rakhyvel', 'balsam', 'bindor'],
-  };
-  function guessCategory(name){
-    // Delar upp på ord (inte \b-regex — den hanterar inte å/ä/ö-ord korrekt i JS)
-    // och matchar om något ord i namnet börjar med ett nyckelord. Om flera
-    // nyckelord (i olika avsnitt) matchar samma ord vinner det längsta —
-    // annars skulle t.ex. "mjöl" (bakning) alltid vinna över "mjölk" (mejeri)
-    // bara för att bakning råkar stå tidigare i listan.
-    const nameWords = name.toLowerCase().split(/[^a-zåäö]+/).filter(Boolean);
-    let best = null, bestLen = 0;
-    for (const sec of STORE_SECTIONS){
-      const keywords = CATEGORY_KEYWORDS[sec.id];
-      if (!keywords) continue;
-      for (const k of keywords){
-        if (k.length > bestLen && nameWords.some(nw => nw.startsWith(k))){
-          best = sec.id; bestLen = k.length;
-        }
-      }
-    }
-    return best || 'ovrigt';
-  }
-  function sectionIndex(cat){
-    const i = STORE_SECTIONS.findIndex(s => s.id === cat);
-    return i === -1 ? STORE_SECTIONS.length : i;
-  }
-  function sectionLabel(cat){
-    const sec = STORE_SECTIONS.find(s => s.id === cat);
-    return sec ? sec.label : 'Övrigt';
-  }
-
-  const rowsEl = document.getElementById('shopRows');
-  const emptyEl = document.getElementById('shopEmpty');
-  const countEl = document.getElementById('shopCount');
-  const lastEl = document.getElementById('shopLast');
-  const statusEl = document.getElementById('shopSyncStatus');
-  const form = document.getElementById('shopAddForm');
-  const input = document.getElementById('shopInput');
-  const doneBtn = document.getElementById('shopDoneBtn');
-  if (!rowsEl || !form) return;
-
-  function formatLast(d){
-    const datePart = d.toLocaleDateString('sv-SE', { day: 'numeric', month: 'long' });
-    const timePart = d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
-    return 'Handlades senast ' + datePart + ' kl. ' + timePart;
-  }
+  const gridEl = document.getElementById('recipeGrid');
+  const emptyEl = document.getElementById('recipeEmpty');
+  const statusEl = document.getElementById('recipeSyncStatus');
+  if (!gridEl) return;
 
   function showUnavailable(msg){
     statusEl.textContent = 'ej ansluten';
-    rowsEl.innerHTML = '';
-    emptyEl.style.display = '';
-    emptyEl.textContent = msg;
-    form.querySelector('.shop-input').disabled = true;
-    form.querySelector('.shop-add-btn').disabled = true;
+    gridEl.innerHTML = '';
+    const p = document.createElement('div');
+    p.className = 'recipe-empty';
+    p.textContent = msg;
+    gridEl.appendChild(p);
   }
 
-  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'FYLL_I_MIG'){
-    showUnavailable('Inköpslistan är inte kopplad till Firebase ännu.');
+  if (!firebaseConfig.apiKey){
+    showUnavailable('Recepten är inte kopplade till Firebase ännu.');
     return;
   }
   if (typeof firebase === 'undefined'){
-    showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
+    showUnavailable('Kunde inte ladda recepten just nu — testa att ladda om sidan.');
     return;
   }
 
-  let db, shopCol, metaRef;
+  let db, recipesCol;
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
-    shopCol = db.collection('shoppingList');
-    metaRef = db.collection('shoppingMeta').doc('status');
+    recipesCol = db.collection('recipes');
   } catch (e) {
-    console.error('Shoppinglista init:', e);
-    showUnavailable('Kunde inte ladda inköpslistan just nu — testa att ladda om sidan.');
+    console.error('Recept init:', e);
+    showUnavailable('Kunde inte ladda recepten just nu — testa att ladda om sidan.');
     return;
   }
 
-  metaRef.onSnapshot(doc => {
-    const data = doc.data();
-    lastEl.textContent = (data && data.lastShoppedAt) ? formatLast(data.lastShoppedAt.toDate()) : '';
-  }, e => console.error('Shoppinglista meta:', e));
+  function renderStars(container, rating){
+    container.innerHTML = '';
+    container.setAttribute('aria-label', rating ? (rating + ' av 5 stjärnor') : 'Obetygsatt');
+    for (let i = 1; i <= 5; i++){
+      const span = document.createElement('span');
+      span.className = 'recipe-star' + (i <= rating ? ' filled' : '');
+      span.textContent = i <= rating ? '★' : '☆';
+      container.appendChild(span);
+    }
+  }
 
-  // Håll standardartiklarna i synk med STANDARD_ITEMS ovan: lägg till nya,
-  // ta bort de som inte längre finns i listan (rör inte avbockade-status för de som finns kvar).
-  shopCol.where('standard', '==', true).get().then(snap => {
-    const existing = new Set();
-    snap.forEach(doc => {
-      const name = doc.data().name;
-      existing.add(name);
-      if (!STANDARD_ITEMS.includes(name)) doc.ref.delete().catch(e => console.error('Ta bort standardartikel:', name, e));
-    });
-    STANDARD_ITEMS.forEach(name => {
-      if (!existing.has(name)){
-        shopCol.doc(slug(name)).set({ name, checked: false, standard: true, category: guessCategory(name), createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-      }
-    });
-  }).catch(e => console.error('Standardartiklar:', e));
+  function renderRecipes(items){
+    gridEl.innerHTML = '';
+    if (!items.length){
+      gridEl.appendChild(emptyEl);
+      return;
+    }
+    items.forEach(r => {
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      const metaParts = [];
+      if (r.timeMinutes) metaParts.push('⏱ ' + r.timeMinutes + ' min');
+      if (r.portions) metaParts.push('🍽 ' + r.portions + ' port');
+      (r.tags || []).forEach(t => metaParts.push('#' + t));
 
-  function renderRows(items){
-    rowsEl.innerHTML = '';
-    emptyEl.style.display = items.length ? 'none' : '';
-    const doneCount = items.filter(it => it.checked).length;
-    countEl.textContent = items.length ? (items.length - doneCount) + ' kvar av ' + items.length : '';
-    let lastCat = null;
-    items.forEach(it => {
-      if (!it.checked && it.category !== lastCat){
-        lastCat = it.category;
-        const head = document.createElement('div');
-        head.className = 'shop-section';
-        head.textContent = sectionLabel(it.category);
-        rowsEl.appendChild(head);
-      }
-      const row = document.createElement('div');
-      row.className = 'shop-row' + (it.checked ? ' done' : '');
-      row.innerHTML =
-        '<button type="button" class="shop-checkbox' + (it.checked ? ' on' : '') + '" aria-label="Bocka av"></button>' +
-        '<span class="shop-name"></span>' +
-        (it.standard ? '' : '<button type="button" class="shop-del" aria-label="Ta bort">×</button>');
-      row.querySelector('.shop-name').textContent = it.name;
-      row.querySelector('.shop-checkbox').addEventListener('click', () => {
-        shopCol.doc(it.id).update({ checked: !it.checked });
+      card.innerHTML =
+        '<div class="recipe-card-head">' +
+          '<div class="recipe-card-title"></div>' +
+          '<button type="button" class="recipe-del" aria-label="Ta bort recept">×</button>' +
+        '</div>' +
+        '<div class="recipe-stars"></div>' +
+        (metaParts.length ? '<div class="recipe-meta"></div>' : '') +
+        '<p class="recipe-desc"></p>' +
+        '<div class="recipe-details">' +
+          '<h3>Ingredienser</h3><ul class="recipe-ing"></ul>' +
+          '<h3 class="instructions-h">Gör så här</h3><ol class="recipe-steps"></ol>' +
+          '<button type="button" class="recipe-edit">Redigera</button>' +
+        '</div>' +
+        '<button type="button" class="recipe-toggle">Visa recept</button>';
+
+      card.querySelector('.recipe-card-title').textContent = r.title || 'Namnlöst recept';
+      renderStars(card.querySelector('.recipe-stars'), r.rating || 0);
+      if (metaParts.length) card.querySelector('.recipe-meta').textContent = metaParts.join('   ');
+      card.querySelector('.recipe-desc').textContent = r.description || '';
+
+      const ingEl = card.querySelector('.recipe-ing');
+      (r.ingredients || []).forEach(ing => {
+        const li = document.createElement('li');
+        const name = typeof ing === 'string' ? ing : ing.name;
+        const amount = typeof ing === 'string' ? '' : ing.amount;
+        li.textContent = amount ? (amount + ' ' + name) : name;
+        ingEl.appendChild(li);
       });
-      const delBtn = row.querySelector('.shop-del');
-      if (delBtn) delBtn.addEventListener('click', () => {
-        if (!confirm('Ta bort "' + it.name + '"?')) return;
-        shopCol.doc(it.id).delete();
+      const stepsEl = card.querySelector('.recipe-steps');
+      (r.instructions || []).forEach(step => {
+        const li = document.createElement('li');
+        li.textContent = step;
+        stepsEl.appendChild(li);
       });
-      rowsEl.appendChild(row);
+
+      const details = card.querySelector('.recipe-details');
+      const toggleBtn = card.querySelector('.recipe-toggle');
+      toggleBtn.addEventListener('click', () => {
+        const open = details.classList.toggle('open');
+        toggleBtn.textContent = open ? 'Dölj recept' : 'Visa recept';
+      });
+
+      card.querySelector('.recipe-edit').addEventListener('click', () => {
+        if (typeof window.kv21StartEditRecipe === 'function') window.kv21StartEditRecipe(r);
+      });
+
+      const delBtn = card.querySelector('.recipe-del');
+      delBtn.addEventListener('click', () => {
+        if (delBtn.dataset.confirm === '1'){
+          recipesCol.doc(r.id).delete().catch(e => console.error('Ta bort recept:', e));
+          return;
+        }
+        delBtn.dataset.confirm = '1';
+        delBtn.textContent = 'Ta bort?';
+        delBtn.classList.add('confirm');
+        delBtn.setAttribute('aria-label', 'Klicka igen för att bekräfta borttagning');
+        clearTimeout(delBtn._confirmTimer);
+        delBtn._confirmTimer = setTimeout(() => {
+          delBtn.dataset.confirm = '';
+          delBtn.textContent = '×';
+          delBtn.classList.remove('confirm');
+          delBtn.setAttribute('aria-label', 'Ta bort recept');
+        }, 3000);
+      });
+
+      gridEl.appendChild(card);
     });
   }
 
-  shopCol.orderBy('createdAt', 'asc').onSnapshot(
+  recipesCol.orderBy('createdAt', 'desc').onSnapshot(
     snap => {
       statusEl.textContent = 'synkas mellan er';
-      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      // Kategorin räknas om för varje vara vid varje laddning (inte bara sparad
-      // en gång) — så när nyckelorden ändras rättar gamla varor sig själva,
-      // oavsett om de tidigare hamnat helt fel eller bara i "Övrigt".
-      items.forEach(it => {
-        const guess = guessCategory(it.name);
-        if (guess !== it.category){
-          it.category = guess;
-          shopCol.doc(it.id).update({ category: guess }).catch(e => console.error('Kategori-backfill:', it.name, e));
-        }
-      });
-      items.sort((a, b) => {
-        if (a.checked !== b.checked) return a.checked ? 1 : -1;
-        return sectionIndex(a.category) - sectionIndex(b.category);
-      });
-      renderRows(items);
+      renderRecipes(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     },
-    err => { statusEl.textContent = 'synkfel'; console.error('Shoppinglista:', err); }
+    err => { statusEl.textContent = 'synkfel'; console.error('Recept:', err); }
   );
 
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const name = input.value.trim();
-    if (!name) return;
-    shopCol.add({ name, checked: false, category: guessCategory(name), createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-    input.value = '';
+  function recipeFields(recipe){
+    return {
+      title: recipe.title || '',
+      description: recipe.description || '',
+      portions: recipe.portions || null,
+      timeMinutes: recipe.timeMinutes || null,
+      rating: recipe.rating || 0,
+      tags: Array.isArray(recipe.tags) ? recipe.tags : [],
+      ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
+      instructions: Array.isArray(recipe.instructions) ? recipe.instructions : [],
+    };
+  }
+
+  // Anropas nedan när ett nytt recept ska sparas.
+  window.kv21SaveRecipe = function(recipe){
+    return recipesCol.add(Object.assign(recipeFields(recipe), {
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    }));
+  };
+
+  // Anropas nedan när ett befintligt recept redigeras och sparas.
+  window.kv21UpdateRecipe = function(id, recipe){
+    return recipesCol.doc(id).update(recipeFields(recipe));
+  };
+})();
+</script>
+
+<!-- ═════════════════════════════════════════════════════════════
+     NYTT RECEPT — formulär
+     ═════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  const recipePanel = document.getElementById('recipePanel');
+  const manualTitle = document.getElementById('manualTitle');
+  const manualDesc = document.getElementById('manualDesc');
+  const manualPortions = document.getElementById('manualPortions');
+  const manualTime = document.getElementById('manualTime');
+  const manualRating = document.getElementById('manualRating');
+  const manualTags = document.getElementById('manualTags');
+  const manualIngredients = document.getElementById('manualIngredients');
+  const manualInstructions = document.getElementById('manualInstructions');
+  const genBtn = document.getElementById('recipeGenBtn');
+  const genStatus = document.getElementById('recipeStatus');
+  const editNote = document.getElementById('editNote');
+  const editNoteText = document.getElementById('editNoteText');
+  const editCancelBtn = document.getElementById('editCancelBtn');
+  if (!genBtn) return;
+
+  let editingId = null;
+
+  function setStatus(msg, kind){
+    genStatus.textContent = msg || '';
+    genStatus.className = 'recipe-status' + (kind ? ' ' + kind : '');
+  }
+
+  function idleLabel(){
+    return editingId ? 'Uppdatera recept' : 'Spara recept';
+  }
+
+  function refreshGenBtn(){
+    genBtn.disabled = !manualTitle.value.trim() || !manualIngredients.value.trim();
+  }
+  manualTitle.addEventListener('input', refreshGenBtn);
+  manualIngredients.addEventListener('input', refreshGenBtn);
+
+  function buildManualRecipe(){
+    const lines = str => (str || '').split('\n').map(s => s.trim()).filter(Boolean);
+    const num = v => { const n = parseInt(v, 10); return Number.isFinite(n) && n > 0 ? n : null; };
+    return {
+      title: manualTitle.value.trim(),
+      description: manualDesc.value.trim(),
+      portions: num(manualPortions.value),
+      timeMinutes: num(manualTime.value),
+      rating: parseInt(manualRating.value, 10) || 0,
+      tags: manualTags.value.split(',').map(s => s.trim()).filter(Boolean),
+      ingredients: lines(manualIngredients.value),
+      instructions: lines(manualInstructions.value),
+    };
+  }
+
+  function resetForm(){
+    editingId = null;
+    manualTitle.value = '';
+    manualDesc.value = '';
+    manualPortions.value = '';
+    manualTime.value = '';
+    manualRating.value = '0';
+    manualTags.value = '';
+    manualIngredients.value = '';
+    manualInstructions.value = '';
+    editNote.hidden = true;
+    genBtn.textContent = idleLabel();
+    refreshGenBtn();
+  }
+
+  editCancelBtn.addEventListener('click', () => {
+    resetForm();
+    setStatus('', '');
   });
 
-  doneBtn.addEventListener('click', async () => {
-    if (!confirm('Handlat färdigt? Alla avbockade varor återställs för nästa gång.')) return;
-    const snap = await shopCol.where('checked', '==', true).get();
-    const batch = db.batch();
-    snap.forEach(doc => batch.update(doc.ref, { checked: false }));
-    batch.set(metaRef, { lastShoppedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
-    await batch.commit();
+  // Anropas från "Redigera" på ett receptkort — fyller i formuläret med
+  // receptets nuvarande data (inklusive betyg) så det bara går att ändra
+  // betyget genom att faktiskt redigera receptet, inte med ett snabbklick.
+  window.kv21StartEditRecipe = function(r){
+    editingId = r.id;
+    manualTitle.value = r.title || '';
+    manualDesc.value = r.description || '';
+    manualPortions.value = r.portions || '';
+    manualTime.value = r.timeMinutes || '';
+    manualRating.value = String(r.rating || 0);
+    manualTags.value = (r.tags || []).join(', ');
+    manualIngredients.value = (r.ingredients || []).map(ing =>
+      typeof ing === 'string' ? ing : ((ing.amount ? ing.amount + ' ' : '') + ing.name)
+    ).join('\n');
+    manualInstructions.value = (r.instructions || []).join('\n');
+    editNoteText.textContent = 'Redigerar "' + (r.title || 'receptet') + '"';
+    editNote.hidden = false;
+    genBtn.textContent = idleLabel();
+    setStatus('', '');
+    refreshGenBtn();
+    if (recipePanel) recipePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  genBtn.addEventListener('click', async () => {
+    setStatus('', '');
+    if (!manualTitle.value.trim() || !manualIngredients.value.trim()){
+      setStatus('Skriv minst en titel och en ingrediens.', 'err');
+      return;
+    }
+    genBtn.disabled = true;
+    genBtn.textContent = editingId ? 'Uppdaterar recept …' : 'Sparar recept …';
+    try {
+      const recipe = buildManualRecipe();
+      if (editingId){
+        if (typeof window.kv21UpdateRecipe === 'function') await window.kv21UpdateRecipe(editingId, recipe);
+        setStatus('"' + recipe.title + '" uppdaterades!', 'ok');
+      } else {
+        if (typeof window.kv21SaveRecipe === 'function') await window.kv21SaveRecipe(recipe);
+        setStatus('"' + recipe.title + '" sparades!', 'ok');
+      }
+      resetForm();
+    } catch (err){
+      console.error('Receptsparning:', err);
+      setStatus(err.message || 'Något gick fel — försök igen.', 'err');
+      genBtn.textContent = idleLabel();
+      refreshGenBtn();
+    }
   });
 })();
 </script>
@@ -837,7 +1003,7 @@ body::before {
 </script>
 
 <script>
-// ── Reveal-animation för inköpslistkortet ──
+// ── Reveal-animation för receptkorten ──
 (function(){
   const reveals = document.querySelectorAll('.reveal-up');
   if (!('IntersectionObserver' in window)){
@@ -850,7 +1016,7 @@ body::before {
       en.target.classList.add('in');
       io.unobserve(en.target);
     });
-  }, { threshold: .16, rootMargin: '0px 0px -6% 0px' });
+  }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
   reveals.forEach(el => io.observe(el));
 })();
 </script>

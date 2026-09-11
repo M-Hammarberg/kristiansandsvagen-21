@@ -1,0 +1,13 @@
+{
+  "name": "Recept — Kristiansandsvägen 21",
+  "short_name": "Recept",
+  "start_url": "/privat/recept/",
+  "scope": "/privat/recept/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "lang": "sv",
+  "icons": [
+    { "src": "../../images/misc/favicon.jpg", "sizes": "735x735", "type": "image/jpeg", "purpose": "any" }
+  ]
+}

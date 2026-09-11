@@ -102,11 +102,6 @@ h1 em {
   transform-box: fill-box; transform-origin: 50% 50%;
   animation: ballSpin 3.6s linear infinite;
 }
-.ball .glint {
-  transform-box: view-box; transform-origin: 100px 100px;
-  animation: ballSpin 3.6s linear infinite;
-  mix-blend-mode: screen; opacity: .8;
-}
 .ball .shadow {
   transform-box: fill-box; transform-origin: 50% 50%;
   animation: shadowPulse 3.6s ease-in-out infinite;
@@ -122,6 +117,19 @@ h1 em {
 @keyframes shadowPulse {
   0%, 100% { opacity: .35; transform: scaleX(1); }
   50%      { opacity: .22; transform: scaleX(.86); }
+}
+
+.pins-mini { display: flex; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+.mp {
+  width: 13px; height: 34px;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.35));
+  transform-box: fill-box; transform-origin: 50% 100%;
+  animation: pinSway 4.2s ease-in-out infinite;
+}
+.mp-2 { width: 10px; height: 26px; opacity: .78; animation-delay: .35s; }
+@keyframes pinSway {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(4deg); }
 }
 
 .card {
@@ -185,6 +193,8 @@ h1 em {
   .lead { font-size: 1rem; max-width: 460px; }
   .ornament { margin-top: 48px; max-width: 380px; }
   .ball { width: 62px; height: 62px; }
+  .mp { width: 16px; height: 41px; }
+  .mp-2 { width: 12px; height: 31px; }
   .card {
     margin-top: 0; padding: 6px 34px;
     position: relative;
@@ -257,17 +267,9 @@ h1 em {
               <stop offset="45%" stop-color="#9c2a3e"/>
               <stop offset="100%" stop-color="#360d18"/>
             </radialGradient>
-            <radialGradient id="ballGlint" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#ffe9bd" stop-opacity=".95"/>
-              <stop offset="100%" stop-color="#ffe9bd" stop-opacity="0"/>
-            </radialGradient>
-            <clipPath id="ballClip"><circle cx="100" cy="100" r="92"/></clipPath>
           </defs>
           <g class="ball-body">
             <circle cx="100" cy="100" r="92" fill="url(#ballShade)"></circle>
-            <g clip-path="url(#ballClip)">
-              <circle class="glint" cx="58" cy="52" r="26" fill="url(#ballGlint)"></circle>
-            </g>
             <g class="ball-holes">
               <circle cx="88" cy="70" r="9" fill="#1a1917"></circle>
               <circle cx="118" cy="72" r="9" fill="#1a1917"></circle>
@@ -275,6 +277,16 @@ h1 em {
             </g>
           </g>
         </svg>
+        <div class="pins-mini">
+          <svg class="mp" viewBox="0 0 240 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M120,18C104,2 78,-4 60,14C40,34 34,62 42,92C48,116 62,132 70,150C76,164 78,176 78,192L162,192C162,176 164,164 170,150C178,132 192,116 198,92C206,62 200,34 180,14C162,-4 136,2 120,18Z" fill="#c9a55a"/>
+            <path d="M78,230C50,268 34,320 34,378C34,452 62,512 90,560C100,578 110,592 120,602C130,592 140,578 150,560C178,512 206,452 206,378C206,320 190,268 162,230Z" fill="#c9a55a"/>
+          </svg>
+          <svg class="mp mp-2" viewBox="0 0 240 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M120,18C104,2 78,-4 60,14C40,34 34,62 42,92C48,116 62,132 70,150C76,164 78,176 78,192L162,192C162,176 164,164 170,150C178,132 192,116 198,92C206,62 200,34 180,14C162,-4 136,2 120,18Z" fill="#c9a55a"/>
+            <path d="M78,230C50,268 34,320 34,378C34,452 62,512 90,560C100,578 110,592 120,602C130,592 140,578 150,560C178,512 206,452 206,378C206,320 190,268 162,230Z" fill="#c9a55a"/>
+          </svg>
+        </div>
         <div class="l"></div>
       </div>
     </div>

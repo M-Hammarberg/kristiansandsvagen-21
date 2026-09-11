@@ -161,6 +161,17 @@ h1 em {
 .s-lbl .s-no { font-family: "Montserrat", sans-serif; font-size: .6rem; letter-spacing: .16em; color: var(--gold); margin-right: 10px; }
 .s-txt { margin-top: 4px; font-size: .82rem; color: rgba(212,184,150,.55); line-height: 1.5; }
 
+.menu {
+  margin-top: 56px;
+  opacity: 0; animation: fadeUp .9s ease .72s forwards;
+}
+.menu-cols { margin-top: 26px; display: flex; flex-direction: column; gap: 18px; }
+.mi { display: flex; align-items: baseline; gap: 8px; padding: 9px 0; }
+.mi-name { font-family: "Libre Baskerville", serif; font-size: .98rem; color: #ecdcbf; white-space: nowrap; }
+.mi-dots { flex: 1; border-bottom: 1px dotted rgba(212,184,150,.28); transform: translateY(-4px); }
+.mi-price { font-family: "Libre Baskerville", serif; font-style: italic; font-size: .92rem; color: var(--gold); white-space: nowrap; }
+.menu-note { margin-top: 18px; font-size: .78rem; color: rgba(212,184,150,.45); line-height: 1.6; }
+
 .foot {
   margin-top: auto; padding-top: 44px;
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
@@ -196,6 +207,9 @@ h1 em {
   .step:not(:last-child)::after {
     content: ''; position: absolute; top: 12px; right: 12px; width: 18px; height: 1px; background: var(--border);
   }
+  .menu { margin-top: 56px; }
+  .menu-cols { flex-direction: row; gap: 48px; }
+  .menu-cols .mc { flex: 1; }
   .foot { margin-top: 64px; }
 }
 
@@ -348,6 +362,29 @@ h1 em {
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="menu">
+    <div class="agenda-title">
+      <span class="l"></span>
+      <span>Från menyn</span>
+      <span class="l"></span>
+    </div>
+    <div class="menu-cols">
+      <div class="mc">
+        <div class="mi"><span class="mi-name">Classic Bud</span><span class="mi-dots"></span><span class="mi-price">199:–</span></div>
+        <div class="mi"><span class="mi-name">Steak Frites</span><span class="mi-dots"></span><span class="mi-price">325:–</span></div>
+        <div class="mi"><span class="mi-name">Chicken Caesar Sandwich</span><span class="mi-dots"></span><span class="mi-price">245:–</span></div>
+        <div class="mi"><span class="mi-name">Stor Halloumi Kebab</span><span class="mi-dots"></span><span class="mi-price">255:–</span></div>
+      </div>
+      <div class="mc">
+        <div class="mi"><span class="mi-name">Bowling Fries</span><span class="mi-dots"></span><span class="mi-price">95:–</span></div>
+        <div class="mi"><span class="mi-name">Crème Brûlée</span><span class="mi-dots"></span><span class="mi-price">95:–</span></div>
+        <div class="mi"><span class="mi-name">Milkshake</span><span class="mi-dots"></span><span class="mi-price">89:–</span></div>
+        <div class="mi"><span class="mi-name">Nachochips</span><span class="mi-dots"></span><span class="mi-price">65:–</span></div>
+      </div>
+    </div>
+    <div class="menu-note">Smakprov ur Buddy's meny — hela utbudet (kött, fisk &amp; veg) finns på plats, så alla hittar något gott.</div>
   </div>
 
   <div class="foot">

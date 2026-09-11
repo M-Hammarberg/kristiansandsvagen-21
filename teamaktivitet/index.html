@@ -90,29 +90,25 @@ h1 em {
   opacity: 0; animation: fadeUp .9s ease .5s forwards;
 }
 .ornament .l { flex: 1; height: 1px; background: var(--border); }
-.pin {
-  flex-shrink: 0; width: 34px; height: 88px; overflow: visible;
+.ball {
+  flex-shrink: 0; width: 52px; height: 52px; overflow: visible;
   filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
 }
-.pin .pin-body {
-  transform-box: fill-box; transform-origin: 50% 96%;
-  animation: pinWobble 4.5s ease-in-out infinite;
-}
-.pin .shadow {
+.ball .ball-holes {
   transform-box: fill-box; transform-origin: 50% 50%;
-  animation: shadowPulse 4.5s ease-in-out infinite;
+  animation: ballSpin 3.6s linear infinite;
 }
-@keyframes pinWobble {
-  0%, 100% { transform: rotate(0deg); }
-  20%      { transform: rotate(-7deg); }
-  45%      { transform: rotate(5deg); }
-  70%      { transform: rotate(-3deg); }
-  88%      { transform: rotate(1.5deg); }
+.ball .shadow {
+  transform-box: fill-box; transform-origin: 50% 50%;
+  animation: shadowPulse 3.6s ease-in-out infinite;
+}
+@keyframes ballSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 @keyframes shadowPulse {
   0%, 100% { opacity: .35; transform: scaleX(1); }
-  20%      { opacity: .22; transform: scaleX(.82); }
-  45%      { opacity: .3; transform: scaleX(1.06); }
+  50%      { opacity: .24; transform: scaleX(.88); }
 }
 
 .card {
@@ -159,7 +155,7 @@ h1 em {
   h1 { margin-top: 0; font-size: clamp(3.2rem, 4.6vw, 4.4rem); }
   .lead { font-size: 1rem; max-width: 460px; }
   .ornament { margin-top: 48px; max-width: 380px; }
-  .pin { width: 44px; height: 114px; }
+  .ball { width: 62px; height: 62px; }
   .card {
     margin-top: 0; padding: 6px 34px;
     position: relative;
@@ -218,11 +214,20 @@ h1 em {
       <p class="lead">Vad sägs om att runda av en arbetsdag tillsammans — några klot, lite skratt och gott käk med gänget?</p>
       <div class="ornament">
         <div class="l"></div>
-        <svg class="pin" viewBox="0 0 240 620" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <ellipse class="shadow" cx="120" cy="612" rx="72" ry="14" fill="#c9a55a" opacity=".3"></ellipse>
-          <g class="pin-body">
-            <path d="M120,18C104,2 78,-4 60,14C40,34 34,62 42,92C48,116 62,132 70,150C76,164 78,176 78,192L162,192C162,176 164,164 170,150C178,132 192,116 198,92C206,62 200,34 180,14C162,-4 136,2 120,18Z" fill="#c9a55a"></path>
-            <path d="M78,230C50,268 34,320 34,378C34,452 62,512 90,560C100,578 110,592 120,602C130,592 140,578 150,560C178,512 206,452 206,378C206,320 190,268 162,230Z" fill="#c9a55a"></path>
+        <svg class="ball" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <ellipse class="shadow" cx="100" cy="188" rx="70" ry="12" fill="#c9a55a" opacity=".3"></ellipse>
+          <defs>
+            <radialGradient id="ballShade" cx="35%" cy="32%" r="75%">
+              <stop offset="0%" stop-color="#f0dba3"/>
+              <stop offset="55%" stop-color="#c9a55a"/>
+              <stop offset="100%" stop-color="#8a6f2e"/>
+            </radialGradient>
+          </defs>
+          <circle cx="100" cy="100" r="92" fill="url(#ballShade)"></circle>
+          <g class="ball-holes">
+            <circle cx="88" cy="70" r="9" fill="#1a1917"></circle>
+            <circle cx="118" cy="72" r="9" fill="#1a1917"></circle>
+            <circle cx="100" cy="98" r="9" fill="#1a1917"></circle>
           </g>
         </svg>
         <div class="l"></div>
@@ -257,6 +262,7 @@ h1 em {
           <div class="lbl">Kostnad</div>
           <div class="val">Jobbet bjuder på mat &amp; bowling</div>
           <div class="sub">Öl och drinkar under kvällen står ni själva för</div>
+          <div class="sub">Vinnaren av bowlingen får så klart ett pris! 🏆</div>
         </div>
       </div>
     </div>

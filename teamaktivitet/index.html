@@ -119,23 +119,6 @@ h1 em {
   50%      { opacity: .22; transform: scaleX(.86); }
 }
 
-.pin-rack { display: flex; flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0; }
-.pr-row { display: flex; gap: 3px; justify-content: center; }
-.mp {
-  color: var(--gold);
-  filter: drop-shadow(0 3px 5px rgba(0,0,0,.3));
-  transform-box: fill-box; transform-origin: 50% 100%;
-  animation: pinSway 4.2s ease-in-out infinite;
-}
-.pr-4 .mp { width: 13px; height: 13px; opacity: .5;  animation-delay: .05s; }
-.pr-3 .mp { width: 16px; height: 16px; opacity: .66; animation-delay: .18s; }
-.pr-2 .mp { width: 19px; height: 19px; opacity: .84; animation-delay: .3s;  }
-.pr-1 .mp { width: 23px; height: 23px; opacity: 1;   animation-delay: .42s; }
-@keyframes pinSway {
-  0%, 100% { transform: rotate(0deg); }
-  50%      { transform: rotate(4deg); }
-}
-
 .card {
   margin-top: 36px;
   position: relative; overflow: hidden;
@@ -197,12 +180,6 @@ h1 em {
   .lead { font-size: 1rem; max-width: 460px; }
   .ornament { margin-top: 48px; max-width: 380px; }
   .ball { width: 62px; height: 62px; }
-  .pin-rack { gap: 4px; }
-  .pr-row { gap: 4px; }
-  .pr-4 .mp { width: 16px; height: 16px; }
-  .pr-3 .mp { width: 20px; height: 20px; }
-  .pr-2 .mp { width: 24px; height: 24px; }
-  .pr-1 .mp { width: 29px; height: 29px; }
   .card {
     margin-top: 0; padding: 6px 34px;
     position: relative;
@@ -251,12 +228,6 @@ h1 em {
 </head>
 <body>
 
-<svg style="position:absolute;width:0;height:0" aria-hidden="true">
-  <defs>
-    <path id="pinPath" d="M12 2.5c-1.4 0-2.6 1.1-2.6 2.6 0 .8.3 1.4.8 2 .5.6 1 1.3 1.1 2.1.1.5.1 1 .1 1.5H9.8c-1.1 2.1-1.8 4.6-1.8 7.3 0 2.3.9 4.1 1.8 5.3.6.8 1.3 1.4 1.8 1.7l.4.3.4-.3c.5-.3 1.2-.9 1.8-1.7.9-1.2 1.8-3 1.8-5.3 0-2.7-.7-5.2-1.8-7.3h-1.6c0-.5 0-1 .1-1.5.1-.8.6-1.5 1.1-2.1.5-.6.8-1.2.8-2C14.6 3.6 13.4 2.5 12 2.5Z"/>
-  </defs>
-</svg>
-
 <canvas id="bgCanvas" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
 
 <div class="wrap">
@@ -291,26 +262,6 @@ h1 em {
             </g>
           </g>
         </svg>
-        <div class="pin-rack">
-          <div class="pr-row pr-4">
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-          </div>
-          <div class="pr-row pr-3">
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-          </div>
-          <div class="pr-row pr-2">
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-          </div>
-          <div class="pr-row pr-1">
-            <svg class="mp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#pinPath"/></svg>
-          </div>
-        </div>
         <div class="l"></div>
       </div>
     </div>

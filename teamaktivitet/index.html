@@ -43,6 +43,7 @@ body::before {
   padding: calc(64px + env(safe-area-inset-top, 0px)) 28px 64px;
   display: flex; flex-direction: column; min-height: 100vh;
 }
+.layout { display: contents; }
 
 .eyebrow {
   display: flex; align-items: center; gap: 14px;
@@ -125,6 +126,29 @@ h1 em {
 .foot .note { font-size: .74rem; color: rgba(212,184,150,.5); font-weight: 300; line-height: 1.6; }
 .foot .sig { font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold); font-size: 1.05rem; white-space: nowrap; }
 
+@media(min-width:860px){
+  .wrap { max-width: 1060px; justify-content: center; padding-top: 64px; padding-bottom: 64px; }
+  .layout {
+    display: grid; grid-template-columns: 1.15fr 0.85fr; column-gap: 72px; align-items: center;
+    margin-top: 56px;
+  }
+  .intro { display: flex; flex-direction: column; }
+  h1 { margin-top: 0; font-size: clamp(3.2rem, 4.6vw, 4.4rem); }
+  .lead { font-size: 1rem; max-width: 460px; }
+  .ornament { display: none; }
+  .card {
+    margin-top: 0; padding: 6px 34px;
+    position: relative;
+  }
+  .card::after {
+    content: ''; position: absolute; top: 6%; bottom: 6%; left: -36px; width: 1px;
+    background: var(--border);
+  }
+  .row { padding: 28px 0; }
+  .row .val { font-size: 1.2rem; }
+  .foot { margin-top: 64px; }
+}
+
 @media(max-width:480px){
   .wrap { padding: calc(48px + env(safe-area-inset-top, 0px)) 20px 48px; }
   h1 { margin-top: 36px; }
@@ -146,40 +170,42 @@ h1 em {
     <span class="co">Combitech</span>
   </div>
 
-  <h1>Bowling &amp; käk<br><em>hos Buddy&#39;s</em></h1>
-
-  <p class="lead">Vad sägs om att runda av en arbetsdag tillsammans — några klot, lite skratt och gott käk med gänget?</p>
-
-  <div class="ornament"><div class="l"></div><div class="d"></div><div class="l"></div></div>
-
-  <div class="card">
-    <div class="row">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v4"/><path d="M16 3v4"/>
-      </svg>
-      <div>
-        <div class="lbl">När</div>
-        <div class="val">Oktober 2026 — exakt datum kommer snart</div>
-      </div>
+  <div class="layout">
+    <div class="intro">
+      <h1>Bowling &amp; käk<br><em>hos Buddy&#39;s</em></h1>
+      <p class="lead">Vad sägs om att runda av en arbetsdag tillsammans — några klot, lite skratt och gott käk med gänget?</p>
+      <div class="ornament"><div class="l"></div><div class="d"></div><div class="l"></div></div>
     </div>
-    <div class="row">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 21.5s7-6.3 7-12A7 7 0 0 0 5 9.5c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.3" r="2.6"/>
-      </svg>
-      <div>
-        <div class="lbl">Var</div>
-        <div class="val">Buddy&#39;s Food, Bowling &amp; Bar</div>
-        <div class="sub">Torggatan 11, Trollhättan</div>
+
+    <div class="card">
+      <div class="row">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v4"/><path d="M16 3v4"/>
+        </svg>
+        <div>
+          <div class="lbl">När</div>
+          <div class="val">Oktober 2026 — exakt datum kommer snart</div>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20.5 11.2 12.8 3.5a1.5 1.5 0 0 0-1.06-.44H4.5a1 1 0 0 0-1 1v7.24c0 .4.16.78.44 1.06l7.7 7.7a1.5 1.5 0 0 0 2.12 0l6.74-6.74a1.5 1.5 0 0 0 0-2.12z"/><circle cx="8" cy="8" r="1.4"/>
-      </svg>
-      <div>
-        <div class="lbl">Kostnad</div>
-        <div class="val">Jobbet bjuder på mat &amp; bowling</div>
-        <div class="sub">Stannar ni kvar för någon öl eller drink sen står ni för det själva</div>
+      <div class="row">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21.5s7-6.3 7-12A7 7 0 0 0 5 9.5c0 5.7 7 12 7 12z"/><circle cx="12" cy="9.3" r="2.6"/>
+        </svg>
+        <div>
+          <div class="lbl">Var</div>
+          <div class="val">Buddy&#39;s Food, Bowling &amp; Bar</div>
+          <div class="sub">Torggatan 11, Trollhättan</div>
+        </div>
+      </div>
+      <div class="row">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.5 11.2 12.8 3.5a1.5 1.5 0 0 0-1.06-.44H4.5a1 1 0 0 0-1 1v7.24c0 .4.16.78.44 1.06l7.7 7.7a1.5 1.5 0 0 0 2.12 0l6.74-6.74a1.5 1.5 0 0 0 0-2.12z"/><circle cx="8" cy="8" r="1.4"/>
+        </svg>
+        <div>
+          <div class="lbl">Kostnad</div>
+          <div class="val">Jobbet bjuder på mat &amp; bowling</div>
+          <div class="sub">Stannar ni kvar för någon öl eller drink sen står ni för det själva</div>
+        </div>
       </div>
     </div>
   </div>

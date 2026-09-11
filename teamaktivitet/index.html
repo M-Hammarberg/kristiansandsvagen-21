@@ -165,12 +165,17 @@ h1 em {
   margin-top: 56px;
   opacity: 0; animation: fadeUp .9s ease .72s forwards;
 }
-.menu-cols { margin-top: 26px; display: flex; flex-direction: column; gap: 18px; }
-.mi { display: flex; align-items: baseline; gap: 8px; padding: 9px 0; }
-.mi-name { font-family: "Libre Baskerville", serif; font-size: .98rem; color: #ecdcbf; white-space: nowrap; }
-.mi-dots { flex: 1; border-bottom: 1px dotted rgba(212,184,150,.28); transform: translateY(-4px); }
+.menu-grid { margin-top: 30px; display: flex; flex-direction: column; gap: 30px; }
+.mc-h {
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold);
+  padding-bottom: 8px; margin-bottom: 4px; border-bottom: 1px solid rgba(201,165,90,.2);
+}
+.mi { display: flex; align-items: baseline; gap: 8px; padding: 8px 0; }
+.mi-name { font-family: "Libre Baskerville", serif; font-size: .96rem; color: #ecdcbf; white-space: nowrap; }
+.mi-name .veg { font-family: "Montserrat", sans-serif; font-size: .68rem; font-style: normal; color: rgba(212,184,150,.4); }
+.mi-dots { flex: 1; border-bottom: 1px dotted rgba(212,184,150,.28); transform: translateY(-4px); min-width: 16px; }
 .mi-price { font-family: "Libre Baskerville", serif; font-style: italic; font-size: .92rem; color: var(--gold); white-space: nowrap; }
-.menu-note { margin-top: 18px; font-size: .78rem; color: rgba(212,184,150,.45); line-height: 1.6; }
+.menu-note { margin-top: 22px; font-size: .78rem; color: rgba(212,184,150,.45); line-height: 1.6; }
 
 .foot {
   margin-top: auto; padding-top: 44px;
@@ -208,8 +213,7 @@ h1 em {
     content: ''; position: absolute; top: 12px; right: 12px; width: 18px; height: 1px; background: var(--border);
   }
   .menu { margin-top: 56px; }
-  .menu-cols { flex-direction: row; gap: 48px; }
-  .menu-cols .mc { flex: 1; }
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 30px; }
   .foot { margin-top: 64px; }
 }
 
@@ -370,21 +374,46 @@ h1 em {
       <span>Från menyn</span>
       <span class="l"></span>
     </div>
-    <div class="menu-cols">
+    <div class="menu-grid">
       <div class="mc">
-        <div class="mi"><span class="mi-name">Classic Bud</span><span class="mi-dots"></span><span class="mi-price">199:–</span></div>
-        <div class="mi"><span class="mi-name">Steak Frites</span><span class="mi-dots"></span><span class="mi-price">325:–</span></div>
-        <div class="mi"><span class="mi-name">Chicken Caesar Sandwich</span><span class="mi-dots"></span><span class="mi-price">245:–</span></div>
-        <div class="mi"><span class="mi-name">Stor Halloumi Kebab</span><span class="mi-dots"></span><span class="mi-price">255:–</span></div>
+        <div class="mc-h">Förrätter</div>
+        <div class="mi"><span class="mi-name">Råbiff</span><span class="mi-dots"></span><span class="mi-price">179:–</span></div>
+        <div class="mi"><span class="mi-name">Asiatisk Räkröra</span><span class="mi-dots"></span><span class="mi-price">155:–</span></div>
+        <div class="mi"><span class="mi-name">Buffelmozzarella <span class="veg">veg</span></span><span class="mi-dots"></span><span class="mi-price">155:–</span></div>
       </div>
       <div class="mc">
+        <div class="mc-h">Huvudrätter</div>
+        <div class="mi"><span class="mi-name">Steak Frites</span><span class="mi-dots"></span><span class="mi-price">325:–</span></div>
+        <div class="mi"><span class="mi-name">Buddy's Grillplanka</span><span class="mi-dots"></span><span class="mi-price">459:–</span></div>
+        <div class="mi"><span class="mi-name">Grillad Flankstek</span><span class="mi-dots"></span><span class="mi-price">299:–</span></div>
+        <div class="mi"><span class="mi-name">Fish 'n' Chips</span><span class="mi-dots"></span><span class="mi-price">225:–</span></div>
+        <div class="mi"><span class="mi-name">Chicken Caesar Sandwich</span><span class="mi-dots"></span><span class="mi-price">245:–</span></div>
+      </div>
+      <div class="mc">
+        <div class="mc-h">Burgers</div>
+        <div class="mi"><span class="mi-name">Classic Bud</span><span class="mi-dots"></span><span class="mi-price">199:–</span></div>
+        <div class="mi"><span class="mi-name">Big Bud</span><span class="mi-dots"></span><span class="mi-price">255:–</span></div>
+        <div class="mi"><span class="mi-name">Chicken Burger</span><span class="mi-dots"></span><span class="mi-price">215:–</span></div>
+        <div class="mi"><span class="mi-name">Strike Burger</span><span class="mi-dots"></span><span class="mi-price">215:–</span></div>
+      </div>
+      <div class="mc">
+        <div class="mc-h">Plockrätter</div>
         <div class="mi"><span class="mi-name">Bowling Fries</span><span class="mi-dots"></span><span class="mi-price">95:–</span></div>
-        <div class="mi"><span class="mi-name">Crème Brûlée</span><span class="mi-dots"></span><span class="mi-price">95:–</span></div>
-        <div class="mi"><span class="mi-name">Milkshake</span><span class="mi-dots"></span><span class="mi-price">89:–</span></div>
         <div class="mi"><span class="mi-name">Nachochips</span><span class="mi-dots"></span><span class="mi-price">65:–</span></div>
+        <div class="mi"><span class="mi-name">Vedrökt Sidfläsk</span><span class="mi-dots"></span><span class="mi-price">75:–</span></div>
+      </div>
+      <div class="mc">
+        <div class="mc-h">Efterrätter</div>
+        <div class="mi"><span class="mi-name">Crème Brûlée</span><span class="mi-dots"></span><span class="mi-price">95:–</span></div>
+        <div class="mi"><span class="mi-name">Brownie Caramel</span><span class="mi-dots"></span><span class="mi-price">95:–</span></div>
+        <div class="mi"><span class="mi-name">Kula Glass</span><span class="mi-dots"></span><span class="mi-price">65:–</span></div>
+      </div>
+      <div class="mc">
+        <div class="mc-h">Milkshakes</div>
+        <div class="mi"><span class="mi-name">Vanilj / Nutella / Oreo</span><span class="mi-dots"></span><span class="mi-price">89:–</span></div>
       </div>
     </div>
-    <div class="menu-note">Smakprov ur Buddy's meny — hela utbudet (kött, fisk &amp; veg) finns på plats, så alla hittar något gott.</div>
+    <div class="menu-note">Ett urval ur Buddy's meny — hela utbudet (kött, fisk &amp; veg) finns på plats, så alla hittar något gott.</div>
   </div>
 
   <div class="foot">

@@ -97,7 +97,13 @@ h1 em {
 }
 @keyframes collabShine { 0%, 60% { left: -60%; } 100% { left: 160%; } }
 .collab-line { flex: 1; max-width: 40px; height: 1px; background: var(--border); }
-.collab-logo { flex-shrink: 0; width: auto; display: block; opacity: .92; }
+.collab-logo {
+  flex-shrink: 0; width: auto; display: block;
+  filter:
+    drop-shadow(0 0 1px rgba(212,184,150,.9))
+    drop-shadow(0 0 10px rgba(201,165,90,.35))
+    drop-shadow(0 4px 10px rgba(0,0,0,.55));
+}
 .collab-logo.buddys { height: 24px; }
 .collab-logo.combitech { height: 14px; }
 .collab-x {

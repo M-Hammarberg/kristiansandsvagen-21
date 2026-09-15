@@ -710,7 +710,7 @@ h1 em {
   const title = document.querySelector('.loader-title');
   if (!title) return;
   let i = 0;
-  const STEP = 70, BASE = 600; // ms — starts after address fades in
+  const STEP = 70, BASE = 1600; // ms — starts once the Combitech logo has fully wiped in
   const wrap = (text, parent) => {
     [...text].forEach(ch => {
       const s = document.createElement('span');

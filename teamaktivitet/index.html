@@ -97,6 +97,16 @@ h1 em {
 .collab-logo { width: auto; display: block; }
 .collab-logo.buddys { height: 24px; }
 .collab-logo.combitech { height: 14px; }
+.collab-logo-color {
+  position: absolute; inset: 0; pointer-events: none;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  background: linear-gradient(90deg, var(--gold2) 0%, var(--gold) 40%, #e8cb80 60%, var(--gold2) 100%);
+  background-size: 200% auto;
+  animation: shimmer 6s linear infinite;
+}
+.collab-logo-color.buddys { -webkit-mask-image: url(../images/teamaktivitet/buddys-wordmark.png); mask-image: url(../images/teamaktivitet/buddys-wordmark.png); }
+.collab-logo-color.combitech { -webkit-mask-image: url(../images/teamaktivitet/combitech-wordmark.png); mask-image: url(../images/teamaktivitet/combitech-wordmark.png); }
 .collab-logo-shine {
   position: absolute; inset: 0; pointer-events: none;
   -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
@@ -422,6 +432,7 @@ h1 em {
 .loader-logo-wrap{position:relative;display:inline-block;vertical-align:-.04em;margin-right:.3em;clip-path:inset(0 100% 0 0);animation:loaderLogoReveal .9s cubic-bezier(.22,1,.36,1) .65s forwards}
 .loader-combitech{height:.58em;width:auto;display:block}
 @keyframes loaderLogoReveal{to{clip-path:inset(0 0 0 0)}}
+.loader-combitech-color{position:absolute;inset:0;pointer-events:none;-webkit-mask-image:url(../images/teamaktivitet/combitech-wordmark.png);mask-image:url(../images/teamaktivitet/combitech-wordmark.png);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;background:linear-gradient(90deg,var(--gold2) 0%,var(--gold) 40%,#e8cb80 60%,var(--gold2) 100%);background-size:200% auto;animation:shimmer 6s linear infinite}
 .loader-combitech-shine,.loader-combitech-glint{position:absolute;inset:0;pointer-events:none;-webkit-mask-image:url(../images/teamaktivitet/combitech-wordmark.png);mask-image:url(../images/teamaktivitet/combitech-wordmark.png);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;mix-blend-mode:overlay}
 .loader-combitech-shine{background:linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(255,255,255,.4) 30%,rgba(255,255,255,.05) 48%,rgba(0,0,0,0) 58%,rgba(0,0,0,.28) 100%)}
 .loader-combitech-glint{background:linear-gradient(96deg,transparent 15%,rgba(0,0,0,.25) 32%,rgba(255,255,255,.9) 44%,#fff 50%,rgba(255,255,255,.9) 56%,rgba(0,0,0,.25) 68%,transparent 85%);background-repeat:no-repeat;background-size:260% 100%;background-position:160% 0;animation:logoShineSweep 4.5s ease-in-out infinite;animation-delay:1.6s}
@@ -456,7 +467,7 @@ h1 em {
   <div class="loader-h-rule"></div>
   <div class="loader-diamond"></div>
   <div class="loader-address">Förslag på teamaktivitet</div>
-  <div class="loader-title"><span class="loader-logo-wrap"><img class="loader-combitech" src="../images/teamaktivitet/combitech-wordmark.png" alt="Combitech"><span class="loader-combitech-shine" aria-hidden="true"></span><span class="loader-combitech-glint" aria-hidden="true"></span></span> <span class="loader-num">Teamaktivitet</span></div>
+  <div class="loader-title"><span class="loader-logo-wrap"><img class="loader-combitech" src="../images/teamaktivitet/combitech-wordmark.png" alt="Combitech"><span class="loader-combitech-color" aria-hidden="true"></span><span class="loader-combitech-shine" aria-hidden="true"></span><span class="loader-combitech-glint" aria-hidden="true"></span></span> <span class="loader-num">Teamaktivitet</span></div>
   <div class="loader-sub">Bowling &amp; käk &nbsp;·&nbsp; Buddy&#39;s, Trollhättan</div>
   <div class="loader-progress-wrap">
     <div class="loader-progress-bar" id="loaderBar"></div>
@@ -483,12 +494,14 @@ h1 em {
         <span class="collab-line"></span>
         <span class="collab-logo-wrap">
           <img class="collab-logo buddys" src="../images/teamaktivitet/buddys-wordmark.png" alt="Buddy's" loading="lazy">
+          <span class="collab-logo-color buddys" aria-hidden="true"></span>
           <span class="collab-logo-shine buddys" aria-hidden="true"></span>
           <span class="collab-logo-glint buddys" aria-hidden="true"></span>
         </span>
         <span class="collab-x">×</span>
         <span class="collab-logo-wrap">
           <img class="collab-logo combitech" src="../images/teamaktivitet/combitech-wordmark.png" alt="Combitech" loading="lazy">
+          <span class="collab-logo-color combitech" aria-hidden="true"></span>
           <span class="collab-logo-shine combitech" aria-hidden="true"></span>
           <span class="collab-logo-glint combitech" aria-hidden="true"></span>
         </span>

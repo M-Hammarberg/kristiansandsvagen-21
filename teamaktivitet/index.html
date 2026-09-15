@@ -177,6 +177,31 @@ h1 em {
 .mi-price { font-family: "Libre Baskerville", serif; font-style: italic; font-size: .92rem; color: var(--gold); white-space: nowrap; }
 .menu-note { margin-top: 22px; font-size: .78rem; color: rgba(212,184,150,.45); line-height: 1.6; }
 
+.venue {
+  margin-top: 56px;
+  opacity: 0; animation: fadeUp .9s ease .64s forwards;
+}
+.venue-frame {
+  position: relative; border-radius: 6px; overflow: hidden;
+  border: 1px solid rgba(201,165,90,.2);
+  box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
+  height: 220px;
+}
+.venue-frame iframe {
+  width: 100%; height: 100%; border: 0; display: block;
+  filter: grayscale(55%) sepia(28%) saturate(140%) brightness(.72) contrast(1.08);
+}
+.venue-frame::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(155deg, rgba(13,13,13,.16), rgba(13,13,13,.34));
+  border-radius: 6px;
+}
+.venue-cap {
+  margin-top: 14px; display: flex; align-items: baseline; gap: 8px;
+  font-size: .78rem; color: rgba(212,184,150,.5);
+}
+.venue-cap strong { font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold); font-weight: 400; }
+
 .foot {
   margin-top: auto; padding-top: 44px;
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
@@ -214,6 +239,8 @@ h1 em {
   }
   .menu { margin-top: 56px; }
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 30px; }
+  .venue { margin-top: 64px; }
+  .venue-frame { height: 320px; }
   .foot { margin-top: 64px; }
 }
 
@@ -421,6 +448,16 @@ h1 em {
           <div class="val">Vinnaren av bowlingen får så klart ett fint pris!</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="venue">
+    <div class="venue-frame">
+      <iframe src="https://maps.google.com/maps?q=Buddy%27s+Food%2C+Bowling+%26+Bar%2C+Torggatan+11%2C+Trollh%C3%A4ttan&output=embed&z=16" loading="lazy" title="Buddy's Food, Bowling &amp; Bar"></iframe>
+    </div>
+    <div class="venue-cap">
+      <strong>Buddy's Food, Bowling &amp; Bar</strong>
+      <span>— mitt i centrala Trollhättan</span>
     </div>
   </div>
 

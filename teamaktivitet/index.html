@@ -153,6 +153,53 @@ h1 em {
 .s-lbl .s-no { font-family: "Montserrat", sans-serif; font-size: .6rem; letter-spacing: .16em; color: var(--gold); margin-right: 10px; }
 .s-txt { margin-top: 4px; font-size: .82rem; color: rgba(212,184,150,.55); line-height: 1.5; }
 
+.poll {
+  margin-top: 56px;
+  opacity: 0; animation: fadeUp .9s ease .70s forwards;
+}
+.poll-note { margin-top: 12px; font-size: .82rem; color: rgba(212,184,150,.55); line-height: 1.6; }
+.poll-days { margin-top: 24px; display: flex; flex-direction: column; gap: 18px; }
+.poll-day {
+  border: 1px solid rgba(201,165,90,.16); border-radius: 6px; padding: 18px 20px;
+  background: linear-gradient(155deg, rgba(36,33,29,.5), rgba(17,15,13,.5));
+}
+.poll-day-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.poll-day-name { font-family: "Libre Baskerville", serif; font-size: 1.05rem; color: #ecdcbf; }
+.poll-day-date { font-size: .68rem; letter-spacing: .1em; color: rgba(212,184,150,.4); text-transform: uppercase; }
+.poll-names { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+.poll-empty { font-size: .78rem; color: rgba(212,184,150,.32); font-style: italic; }
+.vote-name {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(201,165,90,.08); border: 1px solid rgba(201,165,90,.18);
+  border-radius: 20px; padding: 5px 8px 5px 14px; font-size: .82rem; color: #ecdcbf;
+  transition: background .4s, border-color .4s, box-shadow .4s;
+}
+.vote-name button {
+  background: none; border: none; color: rgba(212,184,150,.4); font-size: 1rem; line-height: 1;
+  cursor: pointer; padding: 2px 4px;
+}
+.vote-name button:hover { color: #e05747; }
+.vote-name.new { animation: voteFlash 1.8s ease; }
+@keyframes voteFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(224,87,71,.9); border-color: rgba(224,87,71,.9); background: rgba(224,87,71,.3); }
+  55%  { box-shadow: 0 0 16px 4px rgba(224,87,71,.3); }
+  100% { box-shadow: 0 0 0 0 rgba(224,87,71,0); border-color: rgba(201,165,90,.18); background: rgba(201,165,90,.08); }
+}
+.poll-form { margin-top: 14px; display: flex; gap: 8px; }
+.poll-input {
+  flex: 1; min-width: 0; background: rgba(0,0,0,.25); border: 1px solid rgba(201,165,90,.2);
+  border-radius: 5px; padding: 9px 12px; font-size: .85rem; color: #ecdcbf; font-family: "Montserrat", sans-serif;
+}
+.poll-input::placeholder { color: rgba(212,184,150,.3); }
+.poll-input:focus { outline: none; border-color: var(--gold); }
+.poll-btn {
+  flex-shrink: 0; background: var(--gold); color: #1a1917; border: none; border-radius: 5px;
+  padding: 9px 16px; font-size: .78rem; font-weight: 600; letter-spacing: .02em; cursor: pointer;
+  transition: background .2s;
+}
+.poll-btn:hover { background: var(--champagne2); }
+.poll-btn:disabled { opacity: .5; cursor: default; }
+
 .menu {
   margin-top: 56px;
   opacity: 0; animation: fadeUp .9s ease .72s forwards;
@@ -238,6 +285,10 @@ h1 em {
   .step:not(:last-child)::after {
     content: ''; position: absolute; top: 12px; right: 12px; width: 18px; height: 1px; background: var(--border);
   }
+  .poll { margin-top: 64px; }
+  .poll-days { flex-direction: row; gap: 20px; }
+  .poll-day { flex: 1; display: flex; flex-direction: column; }
+  .poll-names { flex: 1; align-content: flex-start; }
   .menu { margin-top: 56px; }
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 30px; }
   .collab { margin-top: 40px; }
@@ -437,6 +488,56 @@ h1 em {
           <div class="lbl">Pris</div>
           <div class="val">Vinnaren av bowlingen får så klart ett fint pris!</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="poll">
+    <div class="agenda-title">
+      <span class="l"></span>
+      <span>Vilken dag passar dig?</span>
+      <span class="l"></span>
+    </div>
+    <p class="poll-note">Vecka 42 — kryssa i den eller de dagar som funkar för dig, så bokar vi den dag flest kan.</p>
+    <div class="poll-days">
+      <div class="poll-day">
+        <div class="poll-day-head">
+          <span class="poll-day-name">Onsdag</span>
+          <span class="poll-day-date">14 okt</span>
+        </div>
+        <div class="poll-names" id="pollNames-ons">
+          <span class="poll-empty">Ingen har kryssat än</span>
+        </div>
+        <form class="poll-form" data-day="ons">
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
+          <button class="poll-btn" type="submit">Jag kan!</button>
+        </form>
+      </div>
+      <div class="poll-day">
+        <div class="poll-day-head">
+          <span class="poll-day-name">Torsdag</span>
+          <span class="poll-day-date">15 okt</span>
+        </div>
+        <div class="poll-names" id="pollNames-tors">
+          <span class="poll-empty">Ingen har kryssat än</span>
+        </div>
+        <form class="poll-form" data-day="tors">
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
+          <button class="poll-btn" type="submit">Jag kan!</button>
+        </form>
+      </div>
+      <div class="poll-day">
+        <div class="poll-day-head">
+          <span class="poll-day-name">Fredag</span>
+          <span class="poll-day-date">16 okt</span>
+        </div>
+        <div class="poll-names" id="pollNames-fre">
+          <span class="poll-empty">Ingen har kryssat än</span>
+        </div>
+        <form class="poll-form" data-day="fre">
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
+          <button class="poll-btn" type="submit">Jag kan!</button>
+        </form>
       </div>
     </div>
   </div>
@@ -851,6 +952,147 @@ document.addEventListener('mousemove', e => {
     setTimeout(() => s.remove(), 1000);
   }
 });
+</script>
+
+<!-- ═════════════════════════════════════════════════════════════
+     DAGOMRÖSTNING — delad & synkad via Firebase Firestore
+     Samma Firebase-projekt som inköpslistan, egen samling
+     "teamaktivitetVotes". Kräver att Firestore-reglerna även
+     tillåter den samlingen (se separat instruktion).
+     ═════════════════════════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const firebaseConfig = {
+    apiKey: "AIzaSyC2fUO9rtUbhPxn32b32j-d1UUuqxsjgY8",
+    authDomain: "kristiansandsvagen-21.firebaseapp.com",
+    projectId: "kristiansandsvagen-21",
+    storageBucket: "kristiansandsvagen-21.firebasestorage.app",
+    messagingSenderId: "726739177351",
+    appId: "1:726739177351:web:57da52bea559b2db5b4d22",
+  };
+
+  const DAYS = ['ons', 'tors', 'fre'];
+  const MINE_KEY = 'kv21_team_votes_mine';
+
+  const slug = name => name.toLowerCase().trim()
+    .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
+    .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+
+  function getMine(){
+    try { return new Set(JSON.parse(localStorage.getItem(MINE_KEY) || '[]')); }
+    catch(e){ return new Set(); }
+  }
+  function addMine(id){
+    const s = getMine(); s.add(id);
+    try { localStorage.setItem(MINE_KEY, JSON.stringify([...s])); } catch(e){}
+  }
+
+  const containers = {};
+  DAYS.forEach(d => { containers[d] = document.getElementById('pollNames-' + d); });
+  const forms = document.querySelectorAll('.poll-form');
+  if (!containers.ons || !forms.length) return;
+
+  function showUnavailable(msg){
+    DAYS.forEach(d => {
+      containers[d].innerHTML = '<span class="poll-empty">' + msg + '</span>';
+    });
+    forms.forEach(f => {
+      f.querySelector('.poll-input').disabled = true;
+      f.querySelector('.poll-btn').disabled = true;
+    });
+  }
+
+  if (typeof firebase === 'undefined'){
+    showUnavailable('Kunde inte ladda just nu — testa att ladda om sidan.');
+    return;
+  }
+
+  let db, votesCol;
+  try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    votesCol = db.collection('teamaktivitetVotes');
+  } catch (e) {
+    console.error('Dagomröstning init:', e);
+    showUnavailable('Kunde inte ladda just nu — testa att ladda om sidan.');
+    return;
+  }
+
+  const votes = new Map(); // id -> { name, day }
+
+  function render(animateIds){
+    const mine = getMine();
+    DAYS.forEach(day => {
+      const container = containers[day];
+      const entries = [...votes.entries()].filter(([, v]) => v.day === day);
+      container.innerHTML = '';
+      if (!entries.length){
+        container.innerHTML = '<span class="poll-empty">Ingen har kryssat än</span>';
+        return;
+      }
+      entries.forEach(([id, v]) => {
+        const pill = document.createElement('span');
+        pill.className = 'vote-name' + (animateIds.has(id) ? ' new' : '');
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = v.name;
+        pill.appendChild(nameSpan);
+        if (mine.has(id)){
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.setAttribute('aria-label', 'Ta bort');
+          btn.textContent = '×';
+          btn.addEventListener('click', () => {
+            votesCol.doc(id).delete().catch(e => console.error('Ta bort röst:', e));
+          });
+          pill.appendChild(btn);
+        }
+        container.appendChild(pill);
+      });
+    });
+  }
+
+  let isFirst = true;
+  votesCol.onSnapshot(snap => {
+    const animateIds = new Set();
+    snap.docChanges().forEach(ch => {
+      const id = ch.doc.id;
+      if (ch.type === 'removed'){
+        votes.delete(id);
+      } else {
+        votes.set(id, ch.doc.data());
+        if (!isFirst && ch.type === 'added') animateIds.add(id);
+      }
+    });
+    isFirst = false;
+    render(animateIds);
+  }, e => {
+    console.error('Dagomröstning sync:', e);
+    showUnavailable('Synkfel — kunde inte läsa röster just nu.');
+  });
+
+  forms.forEach(form => {
+    const day = form.dataset.day;
+    const input = form.querySelector('.poll-input');
+    const btn = form.querySelector('.poll-btn');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = input.value.trim();
+      if (!name) { input.focus(); return; }
+      const id = day + '_' + slug(name);
+      btn.disabled = true;
+      votesCol.doc(id).set({
+        name, day, createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      }).then(() => {
+        addMine(id);
+        input.value = '';
+      }).catch(e => {
+        console.error('Rösta:', e);
+      }).finally(() => { btn.disabled = false; });
+    });
+  });
+})();
 </script>
 </body>
 </html>

@@ -116,28 +116,28 @@ h1 em {
   -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
   background: linear-gradient(96deg,
-    transparent 30%,
-    rgba(0,0,0,.3) 42%,
-    rgba(255,255,255,.95) 48.5%,
+    transparent 15%,
+    rgba(0,0,0,.25) 32%,
+    rgba(255,255,255,.9) 44%,
     #fff 50%,
-    rgba(255,255,255,.95) 51.5%,
-    rgba(0,0,0,.3) 58%,
-    transparent 70%);
+    rgba(255,255,255,.9) 56%,
+    rgba(0,0,0,.25) 68%,
+    transparent 85%);
   background-repeat: no-repeat;
   background-size: 260% 100%;
-  background-position: -160% 0;
+  background-position: 160% 0;
   mix-blend-mode: overlay;
-  animation: logoShineSweep 4s ease-in-out infinite;
+  animation: logoShineSweep 4.5s ease-in-out infinite;
 }
 .collab-logo-glint.buddys { -webkit-mask-image: url(../images/teamaktivitet/buddys-wordmark.png); mask-image: url(../images/teamaktivitet/buddys-wordmark.png); }
 .collab-logo-glint.combitech { -webkit-mask-image: url(../images/teamaktivitet/combitech-wordmark.png); mask-image: url(../images/teamaktivitet/combitech-wordmark.png); animation-delay: .6s; }
 @keyframes logoShineSweep {
-  0%, 25%   { background-position: -160% 0; }
-  75%, 100% { background-position: 160% 0; }
+  0%, 25%   { background-position: 160% 0; }
+  75%, 100% { background-position: -160% 0; }
 }
 .collab-x {
   font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold);
-  font-size: 1.1rem; flex-shrink: 0;
+  font-size: 1.55rem; flex-shrink: 0;
 }
 
 .card {
@@ -419,7 +419,7 @@ h1 em {
 @keyframes loaderLogoReveal{to{clip-path:inset(0 0 0 0)}}
 .loader-combitech-shine,.loader-combitech-glint{position:absolute;inset:0;pointer-events:none;-webkit-mask-image:url(../images/teamaktivitet/combitech-wordmark.png);mask-image:url(../images/teamaktivitet/combitech-wordmark.png);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;mix-blend-mode:overlay}
 .loader-combitech-shine{background:linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(255,255,255,.4) 30%,rgba(255,255,255,.05) 48%,rgba(0,0,0,0) 58%,rgba(0,0,0,.28) 100%)}
-.loader-combitech-glint{background:linear-gradient(96deg,transparent 30%,rgba(0,0,0,.3) 42%,rgba(255,255,255,.95) 48.5%,#fff 50%,rgba(255,255,255,.95) 51.5%,rgba(0,0,0,.3) 58%,transparent 70%);background-repeat:no-repeat;background-size:260% 100%;background-position:-160% 0;animation:logoShineSweep 4s ease-in-out infinite;animation-delay:1.6s}
+.loader-combitech-glint{background:linear-gradient(96deg,transparent 15%,rgba(0,0,0,.25) 32%,rgba(255,255,255,.9) 44%,#fff 50%,rgba(255,255,255,.9) 56%,rgba(0,0,0,.25) 68%,transparent 85%);background-repeat:no-repeat;background-size:260% 100%;background-position:160% 0;animation:logoShineSweep 4.5s ease-in-out infinite;animation-delay:1.6s}
 .loader-num{font-family:"Libre Baskerville",serif;font-style:normal;font-weight:400;color:var(--champagne,#f0e0c0);letter-spacing:.04em;text-shadow:0 0 18px rgba(240,224,192,.85),0 0 40px rgba(212,175,110,.55)}
 .loader-num .lt{animation:letterRise .7s cubic-bezier(.22,1,.36,1) forwards,numGlow 2.4s ease-in-out infinite}
 @keyframes numGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.55)}}

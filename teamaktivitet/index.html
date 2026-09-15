@@ -138,6 +138,11 @@ h1 em {
 .collab-x {
   font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold);
   font-size: 1.55rem; flex-shrink: 0;
+  animation: collabXPulse 2.6s ease-in-out infinite;
+}
+@keyframes collabXPulse {
+  0%, 100% { color: var(--gold); text-shadow: 0 0 6px rgba(201,165,90,.25); }
+  50% { color: #f0d99a; text-shadow: 0 0 16px rgba(232,203,128,.85), 0 0 30px rgba(201,165,90,.5); }
 }
 
 .card {

@@ -85,40 +85,6 @@ h1 em {
   opacity: 0; animation: fadeUp .9s ease .4s forwards;
 }
 
-.ornament {
-  margin-top: 32px; display: flex; align-items: center; gap: 22px;
-  opacity: 0; animation: fadeUp .9s ease .5s forwards;
-}
-.ornament .l { flex: 1; height: 1px; background: var(--border); }
-.ball {
-  flex-shrink: 0; width: 52px; height: 52px; overflow: visible;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
-}
-.ball .ball-body {
-  transform-box: fill-box; transform-origin: 50% 50%;
-  animation: ballBob 3.6s ease-in-out infinite;
-}
-.ball .ball-holes {
-  transform-box: fill-box; transform-origin: 50% 50%;
-  animation: ballSpin 3.6s linear infinite;
-}
-.ball .shadow {
-  transform-box: fill-box; transform-origin: 50% 50%;
-  animation: shadowPulse 3.6s ease-in-out infinite;
-}
-@keyframes ballBob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-7px); }
-}
-@keyframes ballSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-@keyframes shadowPulse {
-  0%, 100% { opacity: .35; transform: scaleX(1); }
-  50%      { opacity: .22; transform: scaleX(.86); }
-}
-
 .card {
   margin-top: 36px;
   position: relative; overflow: hidden;
@@ -186,13 +152,8 @@ h1 em {
   font-size: .78rem; color: rgba(212,184,150,.5);
 }
 .venue-logo {
-  width: 20px; height: 20px; flex-shrink: 0;
-  -webkit-mask-image: url(../images/teamaktivitet/logo.png);
-  mask-image: url(../images/teamaktivitet/logo.png);
-  -webkit-mask-size: contain; mask-size: contain;
-  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-  -webkit-mask-position: center; mask-position: center;
-  background: var(--gold);
+  width: 20px; height: 20px; flex-shrink: 0; object-fit: contain;
+  filter: sepia(1) saturate(6) hue-rotate(-12deg) brightness(.9);
 }
 .venue-cap strong { font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold); font-weight: 400; }
 .venue-gallery {
@@ -235,8 +196,6 @@ h1 em {
   .intro { display: flex; flex-direction: column; }
   h1 { margin-top: 0; font-size: clamp(3.2rem, 4.6vw, 4.4rem); }
   .lead { font-size: 1rem; max-width: 460px; }
-  .ornament { margin-top: 48px; max-width: 380px; }
-  .ball { width: 62px; height: 62px; }
   .card {
     margin-top: 0; padding: 6px 34px;
     position: relative;
@@ -397,28 +356,6 @@ h1 em {
     <div class="intro">
       <h1>Bowling &amp; käk<br><em>på Buddy&#39;s</em></h1>
       <p class="lead">Vad sägs om att runda av en arbetsdag tillsammans — några klot, lite skratt och gott käk med gänget?</p>
-      <div class="ornament">
-        <div class="l"></div>
-        <svg class="ball" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <ellipse class="shadow" cx="100" cy="188" rx="70" ry="12" fill="#c9a55a" opacity=".3"></ellipse>
-          <defs>
-            <radialGradient id="ballShade" cx="35%" cy="32%" r="75%">
-              <stop offset="0%" stop-color="#e8a878"/>
-              <stop offset="45%" stop-color="#9c2a3e"/>
-              <stop offset="100%" stop-color="#360d18"/>
-            </radialGradient>
-          </defs>
-          <g class="ball-body">
-            <circle cx="100" cy="100" r="92" fill="url(#ballShade)"></circle>
-            <g class="ball-holes">
-              <circle cx="88" cy="70" r="9" fill="#1a1917"></circle>
-              <circle cx="118" cy="72" r="9" fill="#1a1917"></circle>
-              <circle cx="100" cy="98" r="9" fill="#1a1917"></circle>
-            </g>
-          </g>
-        </svg>
-        <div class="l"></div>
-      </div>
     </div>
 
     <div class="card">
@@ -470,7 +407,7 @@ h1 em {
 
   <div class="venue">
     <div class="venue-cap">
-      <span class="venue-logo"></span>
+      <img class="venue-logo" src="../images/teamaktivitet/logo.png" alt="" loading="lazy">
       <strong>Buddy's Food, Bowling &amp; Bar</strong>
       <span>— mitt i centrala Trollhättan</span>
     </div>

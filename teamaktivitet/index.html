@@ -92,7 +92,7 @@ h1 em {
 }
 .collab::before {
   content: ''; position: absolute; top: -30%; left: -60%; width: 30%; height: 160%;
-  background: linear-gradient(100deg, transparent, rgba(232,203,128,.4), transparent);
+  background: linear-gradient(100deg, transparent, rgba(224,87,71,.45), transparent);
   transform: skewX(-16deg); pointer-events: none; animation: collabShine 6s ease-in-out infinite;
 }
 @keyframes collabShine { 0%, 60% { left: -60%; } 100% { left: 160%; } }
@@ -100,8 +100,8 @@ h1 em {
 .collab-logo {
   flex-shrink: 0; width: auto; display: block;
   filter:
-    drop-shadow(0 0 1px rgba(212,184,150,.9))
-    drop-shadow(0 0 10px rgba(201,165,90,.35))
+    drop-shadow(0 0 1px rgba(224,87,71,.6))
+    drop-shadow(0 0 10px rgba(224,87,71,.3))
     drop-shadow(0 4px 10px rgba(0,0,0,.55));
 }
 .collab-logo.buddys { height: 24px; }
@@ -179,11 +179,14 @@ h1 em {
   cursor: pointer; padding: 2px 4px;
 }
 .vote-name button:hover { color: #e05747; }
-.vote-name.new { animation: voteFlash 1.8s ease; }
+.vote-name.unread {
+  border-color: rgba(224,87,71,.55); background: rgba(224,87,71,.16);
+  box-shadow: 0 0 10px 1px rgba(224,87,71,.2);
+}
+.vote-name.burst { animation: voteFlash 1.2s ease; }
 @keyframes voteFlash {
-  0%   { box-shadow: 0 0 0 0 rgba(224,87,71,.9); border-color: rgba(224,87,71,.9); background: rgba(224,87,71,.3); }
-  55%  { box-shadow: 0 0 16px 4px rgba(224,87,71,.3); }
-  100% { box-shadow: 0 0 0 0 rgba(224,87,71,0); border-color: rgba(201,165,90,.18); background: rgba(201,165,90,.08); }
+  0%   { box-shadow: 0 0 0 0 rgba(224,87,71,.9); border-color: rgba(224,87,71,.9); background: rgba(224,87,71,.4); }
+  100% { box-shadow: 0 0 10px 1px rgba(224,87,71,.2); border-color: rgba(224,87,71,.55); background: rgba(224,87,71,.16); }
 }
 .poll-form { margin-top: 14px; display: flex; gap: 8px; }
 .poll-input {
@@ -503,7 +506,7 @@ h1 em {
       <div class="poll-day">
         <div class="poll-day-head">
           <span class="poll-day-name">Onsdag</span>
-          <span class="poll-day-date">14 okt</span>
+          <span class="poll-day-date">14 okt · kl 16</span>
         </div>
         <div class="poll-names" id="pollNames-ons">
           <span class="poll-empty">Ingen har kryssat än</span>
@@ -516,7 +519,7 @@ h1 em {
       <div class="poll-day">
         <div class="poll-day-head">
           <span class="poll-day-name">Torsdag</span>
-          <span class="poll-day-date">15 okt</span>
+          <span class="poll-day-date">15 okt · kl 16</span>
         </div>
         <div class="poll-names" id="pollNames-tors">
           <span class="poll-empty">Ingen har kryssat än</span>
@@ -529,7 +532,7 @@ h1 em {
       <div class="poll-day">
         <div class="poll-day-head">
           <span class="poll-day-name">Fredag</span>
-          <span class="poll-day-date">16 okt</span>
+          <span class="poll-day-date">16 okt · kl 16</span>
         </div>
         <div class="poll-names" id="pollNames-fre">
           <span class="poll-empty">Ingen har kryssat än</span>
@@ -1021,8 +1024,10 @@ document.addEventListener('mousemove', e => {
   }
 
   const votes = new Map(); // id -> { name, day }
+  const unreadIds = new Set(); // förblir röda tills sidan laddas om
+  let burstIds = new Set();    // spelar upp glimt-animationen bara en gång
 
-  function render(animateIds){
+  function render(){
     const mine = getMine();
     DAYS.forEach(day => {
       const container = containers[day];
@@ -1034,7 +1039,10 @@ document.addEventListener('mousemove', e => {
       }
       entries.forEach(([id, v]) => {
         const pill = document.createElement('span');
-        pill.className = 'vote-name' + (animateIds.has(id) ? ' new' : '');
+        let cls = 'vote-name';
+        if (unreadIds.has(id)) cls += ' unread';
+        if (burstIds.has(id)) cls += ' burst';
+        pill.className = cls;
         const nameSpan = document.createElement('span');
         nameSpan.textContent = v.name;
         pill.appendChild(nameSpan);
@@ -1051,22 +1059,26 @@ document.addEventListener('mousemove', e => {
         container.appendChild(pill);
       });
     });
+    burstIds = new Set(); // engångseffekt — spelas inte upp igen vid nästa render
   }
 
   let isFirst = true;
   votesCol.onSnapshot(snap => {
-    const animateIds = new Set();
     snap.docChanges().forEach(ch => {
       const id = ch.doc.id;
       if (ch.type === 'removed'){
         votes.delete(id);
+        unreadIds.delete(id);
       } else {
         votes.set(id, ch.doc.data());
-        if (!isFirst && ch.type === 'added') animateIds.add(id);
+        if (!isFirst && ch.type === 'added'){
+          unreadIds.add(id);
+          burstIds.add(id);
+        }
       }
     });
     isFirst = false;
-    render(animateIds);
+    render();
   }, e => {
     console.error('Dagomröstning sync:', e);
     showUnavailable('Synkfel — kunde inte läsa röster just nu.');

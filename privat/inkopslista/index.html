@@ -521,36 +521,20 @@ body::before {
 
 <script>
 /* ─────────────────────────────────────────────
-   KODLÅS
-   Lösenord/kod: 2121
-   (jämförs mot SHA-256-hashen nedan så koden inte
-    står i klartext). Byt kod genom att ersätta
-    PW_HASH med sha256 av den nya koden.
-   Delar samma session som /privat — upplåst där
-   räknas som upplåst här också.
-
-   Öppnad som installerad hemskärms-app (standalone)
-   sparas upplåsningen i localStorage istället för
-   sessionStorage, så man slipper ange koden varje
-   gång man trycker på ikonen — vanlig webbläsare
-   beter sig som förut (session, delad med /privat).
+   LÅS
+   Koden verifieras server-side av en Cloudflare Worker
+   (/privat-api/unlock) — den finns aldrig i webbläsaren eller i
+   repot. Se /cloudflare-worker/privat-gate.js. Delar samma session
+   som /privat och /privat/mobler (en gemensam cookie).
    ───────────────────────────────────────────── */
 (function(){
-  const PW_HASH = 'b8dc2c143be8994682b08461f46487e05874e59dd9ab65cf973e3a3c67a763aa'; // = "2121"
-  const SESSION_KEY = 'kv21_privat_unlocked';
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  const store = isStandalone ? localStorage : sessionStorage;
   const lock = document.getElementById('lock');
   const form = document.getElementById('lockForm');
   const inp = document.getElementById('lockInput');
   const err = document.getElementById('lockError');
+  const btn = form ? form.querySelector('.lock-btn') : null;
 
-  async function sha256(str){
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-  }
   function unlock(){
-    store.setItem(SESSION_KEY, '1');
     if (inp) inp.blur();
     lock.classList.add('hidden');
     document.dispatchEvent(new Event('kv21:unlocked'));
@@ -560,26 +544,37 @@ body::before {
     setTimeout(toTop, 80);
     setTimeout(toTop, 250);
   }
-  if (sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY)) lock.classList.add('hidden');
+  if (document.querySelector('meta[name="kv21-authed"]')) unlock();
 
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     err.textContent = '';
     const val = inp.value;
     if (!val){ err.textContent = 'Skriv koden.'; return; }
-    if (await sha256(val) === PW_HASH){
-      unlock();
-    } else {
+    if (btn) btn.disabled = true;
+    try {
+      const res = await fetch('/privat-api/unlock', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code: val }),
+      });
+      if (res.ok) {
+        location.reload();
+        return;
+      }
       err.textContent = 'Fel kod.';
       inp.value = '';
       inp.focus();
+    } catch (e2) {
+      err.textContent = 'Kunde inte nå servern. Försök igen.';
+    } finally {
+      if (btn) btn.disabled = false;
     }
   });
 
   const lockNowBtn = document.getElementById('lockNowBtn');
-  if (lockNowBtn) lockNowBtn.addEventListener('click', function(){
-    sessionStorage.removeItem(SESSION_KEY);
-    localStorage.removeItem(SESSION_KEY);
+  if (lockNowBtn) lockNowBtn.addEventListener('click', async function(){
+    try { await fetch('/privat-api/lock', { method: 'POST' }); } catch (e3) {}
     location.reload();
   });
 })();

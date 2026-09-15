@@ -181,26 +181,42 @@ h1 em {
   margin-top: 56px;
   opacity: 0; animation: fadeUp .9s ease .64s forwards;
 }
-.venue-frame {
-  position: relative; border-radius: 6px; overflow: hidden;
-  border: 1px solid rgba(201,165,90,.2);
-  box-shadow: 0 26px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.05);
-  height: 220px;
-}
-.venue-frame iframe {
-  width: 100%; height: 100%; border: 0; display: block;
-  filter: grayscale(55%) sepia(28%) saturate(140%) brightness(.72) contrast(1.08);
-}
-.venue-frame::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(155deg, rgba(13,13,13,.16), rgba(13,13,13,.34));
-  border-radius: 6px;
-}
 .venue-cap {
-  margin-top: 14px; display: flex; align-items: baseline; gap: 8px;
+  display: flex; align-items: center; gap: 10px;
   font-size: .78rem; color: rgba(212,184,150,.5);
 }
+.venue-logo {
+  width: 20px; height: 20px; flex-shrink: 0;
+  -webkit-mask-image: url(../images/teamaktivitet/logo.png);
+  mask-image: url(../images/teamaktivitet/logo.png);
+  -webkit-mask-size: contain; mask-size: contain;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+  background: var(--gold);
+}
 .venue-cap strong { font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold); font-weight: 400; }
+.venue-gallery {
+  margin-top: 18px; display: flex; flex-direction: column; gap: 12px;
+}
+.venue-photo {
+  position: relative; border-radius: 6px; overflow: hidden; height: 180px;
+  border: 1px solid rgba(201,165,90,.2);
+  box-shadow: 0 22px 54px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.venue-photo img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: saturate(1.08) contrast(1.04);
+  transition: transform .6s cubic-bezier(.22,1,.36,1);
+}
+.venue-photo:hover img { transform: scale(1.045); }
+.venue-photo::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(0deg, rgba(13,13,13,.72) 0%, rgba(13,13,13,.05) 45%, rgba(13,13,13,.14) 100%);
+}
+.venue-photo-tag {
+  position: absolute; left: 16px; bottom: 12px; z-index: 1;
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--champagne2);
+}
 
 .foot {
   margin-top: auto; padding-top: 44px;
@@ -240,7 +256,8 @@ h1 em {
   .menu { margin-top: 56px; }
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 30px; }
   .venue { margin-top: 64px; }
-  .venue-frame { height: 320px; }
+  .venue-gallery { flex-direction: row; gap: 24px; margin-top: 22px; }
+  .venue-photo { flex: 1; height: 260px; }
   .foot { margin-top: 64px; }
 }
 
@@ -452,12 +469,20 @@ h1 em {
   </div>
 
   <div class="venue">
-    <div class="venue-frame">
-      <iframe src="https://maps.google.com/maps?q=Buddy%27s+Food%2C+Bowling+%26+Bar%2C+Torggatan+11%2C+Trollh%C3%A4ttan&output=embed&z=16" loading="lazy" title="Buddy's Food, Bowling &amp; Bar"></iframe>
-    </div>
     <div class="venue-cap">
+      <span class="venue-logo"></span>
       <strong>Buddy's Food, Bowling &amp; Bar</strong>
       <span>— mitt i centrala Trollhättan</span>
+    </div>
+    <div class="venue-gallery">
+      <div class="venue-photo">
+        <img src="../images/teamaktivitet/bowling.webp" alt="Bowlingbanorna på Buddy's" loading="lazy">
+        <span class="venue-photo-tag">Bowling</span>
+      </div>
+      <div class="venue-photo">
+        <img src="../images/teamaktivitet/bar.webp" alt="Bar och matsal på Buddy's" loading="lazy">
+        <span class="venue-photo-tag">Bar &amp; kök</span>
+      </div>
     </div>
   </div>
 

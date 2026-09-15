@@ -88,24 +88,28 @@ h1 em {
 .collab {
   margin-top: 32px; display: flex; align-items: center; gap: 18px;
   opacity: 0; animation: fadeUp .9s ease .5s forwards;
-  position: relative; overflow: hidden;
 }
-.collab::before {
-  content: ''; position: absolute; top: -30%; left: -60%; width: 30%; height: 160%;
-  background: linear-gradient(100deg, transparent, rgba(224,87,71,.45), transparent);
-  transform: skewX(-16deg); pointer-events: none; animation: collabShine 6s ease-in-out infinite;
-}
-@keyframes collabShine { 0%, 60% { left: -60%; } 100% { left: 160%; } }
 .collab-line { flex: 1; max-width: 40px; height: 1px; background: var(--border); }
 .collab-logo {
   flex-shrink: 0; width: auto; display: block;
-  filter:
-    drop-shadow(0 0 1px rgba(224,87,71,.6))
-    drop-shadow(0 0 10px rgba(224,87,71,.3))
-    drop-shadow(0 4px 10px rgba(0,0,0,.55));
+  animation: logoGlow 4.5s ease-in-out infinite;
+}
+@keyframes logoGlow {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 1px rgba(224,87,71,.45))
+      drop-shadow(0 0 7px rgba(224,87,71,.18))
+      drop-shadow(0 4px 10px rgba(0,0,0,.55));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 2px rgba(224,87,71,.85))
+      drop-shadow(0 0 15px rgba(224,87,71,.4))
+      drop-shadow(0 4px 10px rgba(0,0,0,.55));
+  }
 }
 .collab-logo.buddys { height: 24px; }
-.collab-logo.combitech { height: 14px; }
+.collab-logo.combitech { height: 14px; animation-delay: .6s; }
 .collab-x {
   font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold);
   font-size: 1.1rem; flex-shrink: 0;

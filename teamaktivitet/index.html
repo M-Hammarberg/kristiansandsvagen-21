@@ -85,6 +85,19 @@ h1 em {
   opacity: 0; animation: fadeUp .9s ease .4s forwards;
 }
 
+.collab {
+  margin-top: 32px; display: flex; align-items: center; gap: 18px;
+  opacity: 0; animation: fadeUp .9s ease .5s forwards;
+}
+.collab-line { flex: 1; max-width: 40px; height: 1px; background: var(--border); }
+.collab-logo { flex-shrink: 0; width: auto; display: block; opacity: .92; }
+.collab-logo.buddys { height: 24px; }
+.collab-logo.combitech { height: 14px; }
+.collab-x {
+  font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold);
+  font-size: 1.1rem; flex-shrink: 0;
+}
+
 .card {
   margin-top: 36px;
   position: relative; overflow: hidden;
@@ -147,20 +160,12 @@ h1 em {
   margin-top: 56px;
   opacity: 0; animation: fadeUp .9s ease .64s forwards;
 }
-.collab {
-  display: flex; align-items: center; justify-content: center; gap: 18px;
-}
-.collab-line { flex: 1; max-width: 64px; height: 1px; background: var(--border); }
-.collab-logo { flex-shrink: 0; width: auto; display: block; opacity: .92; }
-.collab-logo.buddys { height: 26px; }
-.collab-logo.combitech { height: 15px; }
-.collab-x {
-  font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold);
-  font-size: 1.15rem; flex-shrink: 0;
-}
 .venue-cap {
-  margin-top: 16px; text-align: center;
+  display: flex; align-items: center; gap: 10px;
   font-size: .78rem; color: rgba(212,184,150,.5);
+}
+.venue-icon {
+  width: 20px; height: 20px; flex-shrink: 0; object-fit: contain;
 }
 .venue-cap strong { font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold); font-weight: 400; }
 .venue-gallery {
@@ -221,9 +226,10 @@ h1 em {
   }
   .menu { margin-top: 56px; }
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 30px; }
+  .collab { margin-top: 40px; }
+  .collab-logo.buddys { height: 28px; }
+  .collab-logo.combitech { height: 16px; }
   .venue { margin-top: 64px; }
-  .collab-logo.buddys { height: 32px; }
-  .collab-logo.combitech { height: 19px; }
   .venue-gallery { flex-direction: row; gap: 24px; margin-top: 22px; }
   .venue-photo { flex: 1; height: 260px; }
   .foot { margin-top: 64px; }
@@ -365,6 +371,13 @@ h1 em {
     <div class="intro">
       <h1>Bowling &amp; käk<br><em>på Buddy&#39;s</em></h1>
       <p class="lead">Vad sägs om att runda av en arbetsdag tillsammans — några klot, lite skratt och gott käk med gänget?</p>
+      <div class="collab">
+        <span class="collab-line"></span>
+        <img class="collab-logo buddys" src="../images/teamaktivitet/buddys-wordmark.png" alt="Buddy's" loading="lazy">
+        <span class="collab-x">×</span>
+        <img class="collab-logo combitech" src="../images/teamaktivitet/combitech-wordmark.png" alt="Combitech" loading="lazy">
+        <span class="collab-line"></span>
+      </div>
     </div>
 
     <div class="card">
@@ -415,14 +428,8 @@ h1 em {
   </div>
 
   <div class="venue">
-    <div class="collab">
-      <span class="collab-line"></span>
-      <img class="collab-logo buddys" src="../images/teamaktivitet/buddys-wordmark.png" alt="Buddy's" loading="lazy">
-      <span class="collab-x">×</span>
-      <img class="collab-logo combitech" src="../images/teamaktivitet/combitech-wordmark.png" alt="Combitech" loading="lazy">
-      <span class="collab-line"></span>
-    </div>
     <div class="venue-cap">
+      <img class="venue-icon" src="../images/teamaktivitet/buddys-icon.png" alt="" loading="lazy">
       <strong>Buddy's Food, Bowling &amp; Bar</strong>
       <span>— mitt i centrala Trollhättan</span>
     </div>

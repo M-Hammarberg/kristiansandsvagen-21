@@ -147,13 +147,26 @@ h1 em {
   margin-top: 56px;
   opacity: 0; animation: fadeUp .9s ease .64s forwards;
 }
-.venue-cap {
-  display: flex; align-items: center; gap: 10px;
-  font-size: .78rem; color: rgba(212,184,150,.5);
+.collab {
+  display: flex; align-items: center; justify-content: center; gap: 18px;
 }
-.venue-logo {
-  width: 20px; height: 20px; flex-shrink: 0; object-fit: contain;
+.collab-line { flex: 1; max-width: 64px; height: 1px; background: var(--border); }
+.collab-logo.buddys {
+  height: 32px; width: auto; flex-shrink: 0;
   filter: sepia(1) saturate(6) hue-rotate(-12deg) brightness(.9);
+}
+.collab-x {
+  font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold);
+  font-size: 1.15rem; flex-shrink: 0;
+}
+.collab-chip {
+  background: #fff; border-radius: 5px; padding: 7px 13px; line-height: 0; flex-shrink: 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,.3);
+}
+.collab-logo.combitech { height: 15px; width: auto; display: block; }
+.venue-cap {
+  margin-top: 16px; text-align: center;
+  font-size: .78rem; color: rgba(212,184,150,.5);
 }
 .venue-cap strong { font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold); font-weight: 400; }
 .venue-gallery {
@@ -215,6 +228,8 @@ h1 em {
   .menu { margin-top: 56px; }
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 30px; }
   .venue { margin-top: 64px; }
+  .collab-logo.buddys { height: 38px; }
+  .collab-logo.combitech { height: 17px; }
   .venue-gallery { flex-direction: row; gap: 24px; margin-top: 22px; }
   .venue-photo { flex: 1; height: 260px; }
   .foot { margin-top: 64px; }
@@ -406,8 +421,14 @@ h1 em {
   </div>
 
   <div class="venue">
+    <div class="collab">
+      <span class="collab-line"></span>
+      <img class="collab-logo buddys" src="../images/teamaktivitet/logo.png" alt="Buddy's" loading="lazy">
+      <span class="collab-x">×</span>
+      <span class="collab-chip"><img class="collab-logo combitech" src="../images/teamaktivitet/Combitech_logo.png" alt="Combitech" loading="lazy"></span>
+      <span class="collab-line"></span>
+    </div>
     <div class="venue-cap">
-      <img class="venue-logo" src="../images/teamaktivitet/logo.png" alt="" loading="lazy">
       <strong>Buddy's Food, Bowling &amp; Bar</strong>
       <span>— mitt i centrala Trollhättan</span>
     </div>

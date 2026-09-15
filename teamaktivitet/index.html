@@ -429,9 +429,10 @@ h1 em {
 .loader-pct{font-size:.58rem;letter-spacing:.16em;color:rgba(255,255,255,.2);margin-top:12px;min-width:40px;text-align:center;opacity:0;animation:fadeIn .4s ease 1s forwards;position:relative;z-index:2}
 #loader.dismissing{animation:loaderFade .7s ease forwards}
 @keyframes loaderFade{from{opacity:1}to{opacity:0}}
-.loader-brand{display:flex;justify-content:center;margin-bottom:18px;opacity:0;animation:fadeIn .8s ease .3s forwards;position:relative;z-index:2}
-.loader-brand-wrap{position:relative;display:inline-block}
+.loader-brand{display:flex;justify-content:center;margin-bottom:18px;position:relative;z-index:2}
+.loader-brand-wrap{position:relative;display:inline-block;clip-path:inset(0 100% 0 0);animation:loaderLogoReveal .9s cubic-bezier(.22,1,.36,1) .3s forwards}
 .loader-brand-logo{height:11px;width:auto;display:block}
+@keyframes loaderLogoReveal{to{clip-path:inset(0 0 0 0)}}
 .loader-brand-color{position:absolute;inset:0;pointer-events:none;-webkit-mask-image:url(../images/teamaktivitet/combitech-wordmark.png);mask-image:url(../images/teamaktivitet/combitech-wordmark.png);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;background:linear-gradient(90deg,var(--gold2) 0%,var(--gold) 40%,#e8cb80 60%,var(--gold2) 100%);background-size:200% auto;animation:shimmer 6s linear infinite}
 .loader-num{font-family:"Libre Baskerville",serif;font-style:normal;font-weight:400;color:var(--champagne,#f0e0c0);letter-spacing:.04em;text-shadow:0 0 18px rgba(240,224,192,.85),0 0 40px rgba(212,175,110,.55)}
 .loader-num .lt{animation:letterRise .7s cubic-bezier(.22,1,.36,1) forwards,numGlow 2.4s ease-in-out infinite}

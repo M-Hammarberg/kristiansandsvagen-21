@@ -88,7 +88,14 @@ h1 em {
 .collab {
   margin-top: 32px; display: flex; align-items: center; gap: 18px;
   opacity: 0; animation: fadeUp .9s ease .5s forwards;
+  position: relative; overflow: hidden;
 }
+.collab::before {
+  content: ''; position: absolute; top: -30%; left: -60%; width: 30%; height: 160%;
+  background: linear-gradient(100deg, transparent, rgba(232,203,128,.4), transparent);
+  transform: skewX(-16deg); pointer-events: none; animation: collabShine 6s ease-in-out infinite;
+}
+@keyframes collabShine { 0%, 60% { left: -60%; } 100% { left: 160%; } }
 .collab-line { flex: 1; max-width: 40px; height: 1px; background: var(--border); }
 .collab-logo { flex-shrink: 0; width: auto; display: block; opacity: .92; }
 .collab-logo.buddys { height: 24px; }
@@ -166,6 +173,7 @@ h1 em {
 }
 .venue-icon {
   width: 20px; height: 20px; flex-shrink: 0; object-fit: contain;
+  filter: sepia(1) saturate(6) hue-rotate(-12deg) brightness(.9);
 }
 .venue-cap strong { font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold); font-weight: 400; }
 .venue-gallery {
@@ -429,7 +437,7 @@ h1 em {
 
   <div class="venue">
     <div class="venue-cap">
-      <img class="venue-icon" src="../images/teamaktivitet/buddys-icon.png" alt="" loading="lazy">
+      <img class="venue-icon" src="../images/teamaktivitet/logo.png" alt="" loading="lazy">
       <strong>Buddy's Food, Bowling &amp; Bar</strong>
       <span>— mitt i centrala Trollhättan</span>
     </div>

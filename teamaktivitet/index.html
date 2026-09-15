@@ -90,19 +90,29 @@ h1 em {
   opacity: 0; animation: fadeUp .9s ease .5s forwards;
 }
 .collab-line { flex: 1; max-width: 40px; height: 1px; background: var(--border); }
-.collab-logo {
-  flex-shrink: 0; width: auto; display: block;
-  animation: logoNeonOrbit 3s linear infinite;
+.collab-logo-wrap {
+  position: relative; flex-shrink: 0; display: inline-block;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.5));
 }
-@keyframes logoNeonOrbit {
-  0%   { filter: drop-shadow(5px 0 9px rgba(255,255,255,.75)) drop-shadow(0 0 16px rgba(255,255,255,.35)) drop-shadow(0 4px 10px rgba(0,0,0,.5)); }
-  25%  { filter: drop-shadow(0 5px 9px rgba(255,255,255,.75)) drop-shadow(0 0 16px rgba(255,255,255,.35)) drop-shadow(0 4px 10px rgba(0,0,0,.5)); }
-  50%  { filter: drop-shadow(-5px 0 9px rgba(255,255,255,.75)) drop-shadow(0 0 16px rgba(255,255,255,.35)) drop-shadow(0 4px 10px rgba(0,0,0,.5)); }
-  75%  { filter: drop-shadow(0 -5px 9px rgba(255,255,255,.75)) drop-shadow(0 0 16px rgba(255,255,255,.35)) drop-shadow(0 4px 10px rgba(0,0,0,.5)); }
-  100% { filter: drop-shadow(5px 0 9px rgba(255,255,255,.75)) drop-shadow(0 0 16px rgba(255,255,255,.35)) drop-shadow(0 4px 10px rgba(0,0,0,.5)); }
-}
+.collab-logo { width: auto; display: block; }
 .collab-logo.buddys { height: 24px; }
-.collab-logo.combitech { height: 14px; animation-delay: .6s; }
+.collab-logo.combitech { height: 14px; }
+.collab-logo-shine {
+  position: absolute; inset: 0; pointer-events: none;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  background: linear-gradient(100deg, transparent 35%, rgba(255,255,255,.95) 49%, rgba(255,241,214,.9) 53%, transparent 67%);
+  background-size: 260% 100%;
+  background-position: -130% 0;
+  mix-blend-mode: overlay;
+  animation: logoShineSweep 3.4s ease-in-out infinite;
+}
+.collab-logo-shine.buddys { -webkit-mask-image: url(../images/teamaktivitet/buddys-wordmark.png); mask-image: url(../images/teamaktivitet/buddys-wordmark.png); }
+.collab-logo-shine.combitech { -webkit-mask-image: url(../images/teamaktivitet/combitech-wordmark.png); mask-image: url(../images/teamaktivitet/combitech-wordmark.png); animation-delay: .5s; }
+@keyframes logoShineSweep {
+  0%, 25%   { background-position: -130% 0; }
+  75%, 100% { background-position: 130% 0; }
+}
 .collab-x {
   font-family: "Libre Baskerville", serif; font-style: italic; color: var(--gold);
   font-size: 1.1rem; flex-shrink: 0;
@@ -382,7 +392,8 @@ h1 em {
 .loader-pct{font-size:.58rem;letter-spacing:.16em;color:rgba(255,255,255,.2);margin-top:12px;min-width:40px;text-align:center;opacity:0;animation:fadeIn .4s ease 1s forwards;position:relative;z-index:2}
 #loader.dismissing{animation:loaderFade .7s ease forwards}
 @keyframes loaderFade{from{opacity:1}to{opacity:0}}
-.loader-combitech{height:.58em;width:auto;display:inline-block;vertical-align:-.04em;margin-right:.3em;opacity:0;animation:fadeIn .7s ease .9s forwards}
+.loader-combitech{height:.58em;width:auto;display:inline-block;vertical-align:-.04em;margin-right:.3em;clip-path:inset(0 100% 0 0);animation:loaderLogoReveal .9s cubic-bezier(.22,1,.36,1) .65s forwards}
+@keyframes loaderLogoReveal{to{clip-path:inset(0 0 0 0)}}
 .loader-num{font-family:"Libre Baskerville",serif;font-style:normal;font-weight:400;color:var(--champagne,#f0e0c0);letter-spacing:.04em;text-shadow:0 0 18px rgba(240,224,192,.85),0 0 40px rgba(212,175,110,.55)}
 .loader-num .lt{animation:letterRise .7s cubic-bezier(.22,1,.36,1) forwards,numGlow 2.4s ease-in-out infinite}
 @keyframes numGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.55)}}
@@ -439,9 +450,15 @@ h1 em {
       <p class="lead">Vad sägs om att runda av en arbetsdag tillsammans — några klot, lite skratt och gott käk med gänget?</p>
       <div class="collab">
         <span class="collab-line"></span>
-        <img class="collab-logo buddys" src="../images/teamaktivitet/buddys-wordmark.png" alt="Buddy's" loading="lazy">
+        <span class="collab-logo-wrap">
+          <img class="collab-logo buddys" src="../images/teamaktivitet/buddys-wordmark.png" alt="Buddy's" loading="lazy">
+          <span class="collab-logo-shine buddys" aria-hidden="true"></span>
+        </span>
         <span class="collab-x">×</span>
-        <img class="collab-logo combitech" src="../images/teamaktivitet/combitech-wordmark.png" alt="Combitech" loading="lazy">
+        <span class="collab-logo-wrap">
+          <img class="collab-logo combitech" src="../images/teamaktivitet/combitech-wordmark.png" alt="Combitech" loading="lazy">
+          <span class="collab-logo-shine combitech" aria-hidden="true"></span>
+        </span>
         <span class="collab-line"></span>
       </div>
     </div>

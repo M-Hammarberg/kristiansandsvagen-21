@@ -423,7 +423,7 @@ h1 em {
 @keyframes letterRise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 .loader-sub{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:10px;opacity:0;animation:fadeIn .8s ease 1.5s forwards;position:relative;z-index:2}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.loader-progress-wrap{width:160px;height:1px;background:rgba(255,255,255,.1);margin-top:28px;overflow:hidden;position:relative;z-index:2}
+.loader-progress-wrap{width:160px;height:2px;border-radius:2px;background:rgba(255,255,255,.15);margin-top:28px;overflow:hidden;position:relative;z-index:2}
 .loader-progress-bar{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(to right,var(--gold2),var(--champagne),var(--gold2));background-size:200% auto;animation:progressFill 2.5s cubic-bezier(.4,0,.2,1) 0s forwards,shimmer 1.5s linear 1s infinite}
 @keyframes progressFill{0%{width:0%}60%{width:75%}100%{width:100%}}
 .loader-pct{font-size:.58rem;letter-spacing:.16em;color:rgba(255,255,255,.2);margin-top:12px;min-width:40px;text-align:center;opacity:0;animation:fadeIn .4s ease 1s forwards;position:relative;z-index:2}

@@ -216,14 +216,9 @@ h1 em {
 .vote-name {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(201,165,90,.08); border: 1px solid rgba(201,165,90,.18);
-  border-radius: 20px; padding: 5px 8px 5px 14px; font-size: .82rem; color: #ecdcbf;
+  border-radius: 20px; padding: 5px 14px; font-size: .82rem; color: #ecdcbf;
   transition: background .4s, border-color .4s, box-shadow .4s;
 }
-.vote-name button {
-  background: none; border: none; color: rgba(212,184,150,.4); font-size: 1rem; line-height: 1;
-  cursor: pointer; padding: 2px 4px;
-}
-.vote-name button:hover { color: #e05747; }
 .vote-name.unread {
   border-color: rgba(224,87,71,.55); background: rgba(224,87,71,.16);
   box-shadow: 0 0 10px 1px rgba(224,87,71,.2);
@@ -1038,20 +1033,10 @@ document.addEventListener('mousemove', e => {
   };
 
   const DAYS = ['ons', 'tors', 'fre'];
-  const MINE_KEY = 'kv21_team_votes_mine';
 
   const slug = name => name.toLowerCase().trim()
     .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
     .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-
-  function getMine(){
-    try { return new Set(JSON.parse(localStorage.getItem(MINE_KEY) || '[]')); }
-    catch(e){ return new Set(); }
-  }
-  function addMine(id){
-    const s = getMine(); s.add(id);
-    try { localStorage.setItem(MINE_KEY, JSON.stringify([...s])); } catch(e){}
-  }
 
   const containers = {};
   DAYS.forEach(d => { containers[d] = document.getElementById('pollNames-' + d); });
@@ -1089,7 +1074,6 @@ document.addEventListener('mousemove', e => {
   let burstIds = new Set();    // spelar upp glimt-animationen bara en gång
 
   function render(){
-    const mine = getMine();
     DAYS.forEach(day => {
       const container = containers[day];
       const entries = [...votes.entries()].filter(([, v]) => v.day === day);
@@ -1107,16 +1091,6 @@ document.addEventListener('mousemove', e => {
         const nameSpan = document.createElement('span');
         nameSpan.textContent = v.name;
         pill.appendChild(nameSpan);
-        if (mine.has(id)){
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.setAttribute('aria-label', 'Ta bort');
-          btn.textContent = '×';
-          btn.addEventListener('click', () => {
-            votesCol.doc(id).delete().catch(e => console.error('Ta bort röst:', e));
-          });
-          pill.appendChild(btn);
-        }
         container.appendChild(pill);
       });
     });
@@ -1158,7 +1132,6 @@ document.addEventListener('mousemove', e => {
       votesCol.doc(id).set({
         name, day, createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       }).then(() => {
-        addMine(id);
         input.value = '';
       }).catch(e => {
         console.error('Rösta:', e);

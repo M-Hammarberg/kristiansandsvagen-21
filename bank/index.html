@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Swedbank</title>
 <style>
   :root{
@@ -15,7 +15,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:#000;height:100%}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;justify-content:center;color:var(--text);-webkit-font-smoothing:antialiased;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;justify-content:center;color:var(--text);-webkit-font-smoothing:antialiased;touch-action:manipulation}
 
   .phone{width:100%;max-width:400px;height:100%;background:var(--bg);position:relative;overflow:hidden}
   .view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg)}
@@ -145,6 +145,45 @@
   .hg.right{text-align:right}
   .hold-chev{position:absolute;right:14px;top:62%;color:#8a8a8e;display:flex}
   .pos{color:#5a9fd4}
+  .hold-grid .neg{color:#e0714e}
+
+  /* stock detail page */
+  .buysell{position:absolute;left:14px;right:14px;bottom:76px;display:flex;gap:12px;z-index:6}
+  .buysell button{flex:1;border:none;font-size:20px;font-weight:800;padding:16px;border-radius:28px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+  .buysell .buy{background:#a7d98a;color:#12331a}
+  .buysell .sell{background:#ef8f7a;color:#3a120c}
+  .stock .tabs{display:flex;justify-content:space-between;padding:6px 18px 12px}
+  .stock .tab{color:#c9c9cc;font-size:16px;font-weight:600;padding:7px 14px;border-radius:16px}
+  .stock .tab.on{background:#e7c14a;color:#1a1a1a}
+  .s-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 4px}
+  .s-name{display:flex;align-items:center;gap:9px;font-size:20px}
+  .s-name .flag{width:22px;height:15px}
+  .s-price{font-size:20px;font-weight:800}
+  .s-sub{display:grid;grid-template-columns:1fr 1fr 1.3fr;padding:2px 18px 12px;font-size:17px;font-weight:700}
+  .s-sub .s-l{color:#8a8a8e;font-size:14px;font-weight:500;margin-bottom:3px}
+  .s-sub .s-rt{text-align:right}
+  .s-sub .g{color:#7bbf6a}
+  .s-sub .r{color:#e0714e}
+  .jmf{padding:10px 18px 2px}
+  .jmf-btn{background:transparent;color:#fff;border:1px solid #3a3a3c;border-radius:20px;padding:8px 18px;font-size:16px}
+  .chart{position:relative;height:210px;margin:10px 0 2px}
+  .chart-line{position:absolute;left:8px;right:10px;top:10px;bottom:30px;width:calc(100% - 18px);height:calc(100% - 40px)}
+  .yleft,.yright{position:absolute;top:10px;bottom:30px;font-size:12px;color:#8a8a8e}
+  .yleft{left:10px}.yright{right:10px}
+  .yl,.yr{position:absolute;transform:translateY(-50%);white-space:nowrap}
+  .yleft .yl{left:0}.yright .yr{right:0}
+  .xlabels{position:absolute;left:44px;right:52px;bottom:4px;display:flex;justify-content:space-between;font-size:12px;color:#8a8a8e}
+  .rpills{display:flex;gap:9px;overflow-x:auto;padding:12px 16px 4px;-webkit-overflow-scrolling:touch}
+  .rpills .rp{flex:0 0 auto;color:#e6e6e8;font-size:16px;font-weight:600;padding:8px 16px;border:1px solid #3a3a3c;border-radius:20px}
+  .rpills .rp.on{background:#3e8ba0;border-color:#3e8ba0;color:#fff}
+  .rets{display:flex;gap:14px;overflow-x:auto;padding:8px 16px 2px;font-size:16px;font-weight:700}
+  .rets span{flex:0 0 auto;white-space:nowrap}
+  .rets .g{color:#7bbf6a}.rets .r{color:#e0714e}.rets .d{color:#8a8a8e}
+  .sects{display:flex;gap:10px;flex-wrap:wrap;padding:14px 16px 2px}
+  .sect{color:#e6e6e8;font-size:16px;padding:8px 16px;border:1px solid #3a3a3c;border-radius:20px}
+  .komm-row{display:flex;align-items:baseline;justify-content:space-between;padding-right:18px}
+  .komm{color:var(--orange);font-size:26px;font-weight:800;padding:22px 18px 4px}
+  .visa{color:#5a9fd4;font-size:16px;font-weight:600}
 </style>
 </head>
 <body>
@@ -193,12 +232,13 @@
 <!-- ============ DETAIL VIEW ============ -->
 <div class="view hidden" id="view-detail">
   <div class="detail-topbar">
-    <button class="backbtn" onclick="goHome()"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="backbtn" onclick="goBack()"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="topbar-title" id="detail-topbar-title"></div>
     <div class="topbar-right" id="detail-topbar-right"></div>
   </div>
   <div class="scroll list-pad" id="detail-scroll"></div>
   <div class="paybtn-wrap" id="paybtn-wrap" style="height:0"><button class="paybtn">Ny betalning/överföring</button></div>
+  <div class="buysell" id="buysell" style="display:none"><button class="buy">Köp</button><button class="sell">Sälj</button></div>
   <div id="nav-detail"></div>
 </div>
 
@@ -264,10 +304,18 @@ const accounts = {
     utv:"+1 857 269,51", utvpct:"+384,27",
     aktierTotal:"2 340 590,51",
     holdings:[
-      {flag:"us", tick:"SNDK", name:"SanDisk B",           idag:"+11,84", senast:"1 777,80", sedan:"+536,38", varde:"912 840,20"},
-      {flag:"us", tick:"MRNA", name:"Moderna",             idag:"+4,21",  senast:"198,88",   sedan:"+399,06", varde:"623 410,15"},
-      {flag:"us", tick:"DELL", name:"Dell Technologies",   idag:"+2,03",  senast:"171,45",   sedan:"+305,85", varde:"498 220,66"},
-      {flag:"us", tick:"MU",   name:"Micron Technology",   idag:"+3,10",  senast:"245,60",   sedan:"+224,84", varde:"306 119,50"}
+      {flag:"us", tick:"SNDK", name:"SanDisk B", disp:"Sandisk", sedan:"+536,38", varde:"912 840,20",
+        cur:"USD", close:1777.80, dayAbs:24.18, dayPct:1.38, open:1791.94, low:1742.59, high:1815.00,
+        sectors:["Teknologi","IT-Service","Datalagring"], ret:["+1,38","+648,93","−0,78","−23,86","+1 785,46","—"]},
+      {flag:"us", tick:"MRNA", name:"Moderna", disp:"Moderna", sedan:"+399,06", varde:"623 410,15",
+        cur:"USD", close:194.82, dayAbs:12.71, dayPct:6.98, open:180.60, low:180.39, high:195.71,
+        sectors:["Bioteknik","Läkemedel","Vaccin"], ret:["+6,98","+520,00","+9,80","+64,00","+691,63","+180,00"]},
+      {flag:"us", tick:"DELL", name:"Dell Technologies", disp:"Dell Technologies", sedan:"+305,85", varde:"498 220,66",
+        cur:"USD", close:565.86, dayAbs:29.84, dayPct:5.57, open:546.50, low:541.24, high:567.05,
+        sectors:["Teknologi","Hårdvara","Servrar"], ret:["+5,57","+352,00","−5,13","+40,00","+340,26","+600,00"]},
+      {flag:"us", tick:"MU",   name:"Micron Technology", disp:"Micron Technology", sedan:"+224,84", varde:"306 119,50",
+        cur:"USD", close:1082.28, dayAbs:1.75, dayPct:0.16, open:1095.83, low:1073.00, high:1108.72,
+        sectors:["Teknologi","Halvledare","Minne"], ret:["+0,16","+560,00","+7,37","+95,00","+588,41","+900,00"]}
     ],
     alloc:{aktier:100, rantor:0, alt:0}, reserved:[], months:[]}
 };
@@ -298,12 +346,30 @@ const flagSVG = {
 const up = `\u00A0<span class="up">↗</span>`;
 const chevSm = `<svg width="11" height="19" viewBox="0 0 12 20" fill="none" stroke="#8a8a8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l7 8-7 8"/></svg>`;
 
+function fmt(n, dec=2){
+  const neg=n<0; n=Math.abs(n);
+  let [i,f]=n.toFixed(dec).split('.');
+  i=i.replace(/\B(?=(\d{3})+(?!\d))/g,'\u00A0');
+  return (neg?'−':'')+i+(f?','+f:'');
+}
+function pctStr(n){ return (n>=0?'+':'−')+fmt(Math.abs(n),2); }
+function seededRand(seed){ let s=seed%2147483647; if(s<=0)s+=2147483646; return ()=>(s=s*16807%2147483647)/2147483647; }
+
+const stockByTick={};
+(accounts.csn.holdings||[]).forEach(h=>stockByTick[h.tick]=h);
+
+const starSVG=`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3.2l2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 9.7l6.1-.9z"/></svg>`;
+const investTopBar=`
+        <span class="bell"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="bell-badge">14</span></span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>`;
+
 function holdRow(h){
-  return `<div class="hold">
+  const idagCls=h.dayPct>=0?'pos':'neg';
+  return `<div class="hold" onclick="openStock('${h.tick}')">
     <div class="hold-name">${flagSVG[h.flag]||''}<span class="tick">${h.tick}</span> ${h.name}</div>
     <div class="hold-grid">
-      <div class="hg"><div class="hg-l">Idag %</div><div class="hg-v pos">${h.idag}${up}</div></div>
-      <div class="hg"><div class="hg-l">Senast</div><div class="hg-v">${h.senast}</div></div>
+      <div class="hg"><div class="hg-l">Idag %</div><div class="hg-v ${idagCls}">${pctStr(h.dayPct)}${up}</div></div>
+      <div class="hg"><div class="hg-l">Senast</div><div class="hg-v">${fmt(h.close)}</div></div>
       <div class="hg"><div class="hg-l">Sedan köp %</div><div class="hg-v pos">${h.sedan}${up}</div></div>
       <div class="hg right"><div class="hg-l">Värde</div><div class="hg-v">${h.varde}</div></div>
     </div>
@@ -366,6 +432,92 @@ function investHTML(a){
     </div>`;
 }
 
+function renderInvest(id){
+  const a=accounts[id];
+  window._investId=id; window._stockOpen=false;
+  document.getElementById('detail-topbar-title').textContent='Investering';
+  document.getElementById('paybtn-wrap').style.display='none';
+  document.getElementById('buysell').style.display='none';
+  const tr=document.getElementById('detail-topbar-right'); tr.className='topbar-right on'; tr.innerHTML=investTopBar;
+  const sc=document.getElementById('detail-scroll'); sc.innerHTML=investHTML(a); sc.scrollTop=0;
+  show('view-detail');
+}
+
+function buildChart(h){
+  const lo=h.low, hi=h.high, prev=h.close-h.dayAbs, span=(hi-lo)||1, n=80;
+  const rnd=seededRand(h.tick.split('').reduce((a,c)=>a+c.charCodeAt(0),17));
+  let pts=[], noise=0;
+  for(let i=0;i<n;i++){
+    const t=i/(n-1);
+    const trend=h.open+(h.close-h.open)*t;
+    noise=noise*0.75+(rnd()-0.5)*span*0.13;
+    let val=trend+noise;
+    if(val<lo)val=lo+(lo-val)*0.3;
+    if(val>hi)val=hi-(val-hi)*0.3;
+    val=Math.max(lo,Math.min(hi,val));
+    pts.push(val);
+  }
+  pts[0]=h.open; pts[n-1]=h.close;
+  const d='M'+pts.map((p,i)=>((i/(n-1))*100).toFixed(2)+' '+((1-(p-lo)/span)*100).toFixed(2)).join(' L');
+  let L='',R='';
+  for(let r=0;r<=6;r++){
+    const val=lo+span*(r/6), top=(1-(r/6))*100, pct=((val-prev)/prev)*100;
+    L+=`<span class="yl" style="top:${top.toFixed(1)}%">${fmt(val,2)}</span>`;
+    R+=`<span class="yr" style="top:${top.toFixed(1)}%">${pctStr(pct)} %</span>`;
+  }
+  return `<div class="chart">
+    <svg class="chart-line" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="#f26a26" stroke-width="0.7" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+    <div class="yleft">${L}</div><div class="yright">${R}</div>
+    <div class="xlabels"><span>15:30</span><span>17:10</span><span>18:50</span><span>20:30</span></div>
+  </div>`;
+}
+
+function stockHTML(h){
+  const dayCls=h.dayPct>=0?'g':'r';
+  const ranges=['1 d','I år','1 v','3 m','1 år','5 år'];
+  const pills=ranges.map((r,i)=>`<div class="rp ${i===0?'on':''}">${r}</div>`).join('');
+  const rets=(h.ret||[]).map(x=>{const t=x.trim(); const cls=t==='—'?'d':(t.charAt(0)==='−'?'r':'g'); return `<span class="${cls}">${t==='—'?'—':t+' %'}</span>`;}).join('');
+  const sect=(h.sectors||[]).map(s=>`<div class="sect">${s}</div>`).join('');
+  return `<div class="stock">
+    <div class="tabs"><div class="tab on">Översikt</div><div class="tab">Nyheter</div><div class="tab">Kalender</div><div class="tab">Info</div></div>
+    <div class="detail-sep"></div>
+    <div class="s-head"><div class="s-name">${flagSVG[h.flag]||''}<b>${h.disp||h.name}</b></div><div class="s-price">${fmt(h.close)} ${h.cur}</div></div>
+    <div class="s-sub">
+      <div><div class="s-l">Igår</div><div class="${dayCls}">${pctStr(h.dayPct)} %</div></div>
+      <div><div class="s-l">+/-</div><div class="${dayCls}">${fmt(h.dayAbs)}</div></div>
+      <div class="s-rt"><div class="s-l">Kursintervall</div><div>${fmt(h.low)} - ${fmt(h.high)}</div></div>
+    </div>
+    <div class="detail-sep"></div>
+    <div class="jmf"><button class="jmf-btn">Jämför</button></div>
+    ${buildChart(h)}
+    <div class="rpills">${pills}</div>
+    <div class="rets">${rets}</div>
+    <div class="sects">${sect}</div>
+    <div class="komm-row"><h3 class="komm">Kommande händelser</h3><span class="visa">Visa fler</span></div>
+    <div style="height:24px"></div>
+  </div>`;
+}
+
+function openStock(tick){
+  const h=stockByTick[tick]; if(!h) return;
+  document.getElementById('loading-title').textContent=h.disp||h.name;
+  show('view-loading');
+  setTimeout(()=>{
+    window._stockOpen=true;
+    document.getElementById('detail-topbar-title').textContent=h.disp||h.name;
+    document.getElementById('paybtn-wrap').style.display='none';
+    document.getElementById('buysell').style.display='';
+    const tr=document.getElementById('detail-topbar-right'); tr.className='topbar-right on'; tr.innerHTML=starSVG;
+    const sc=document.getElementById('detail-scroll'); sc.innerHTML=stockHTML(h); sc.scrollTop=0;
+    show('view-detail');
+  },500);
+}
+
+function goBack(){
+  if(window._stockOpen){ renderInvest(window._investId||'csn'); }
+  else { show('view-start'); }
+}
+
 function openAccount(id){
   const a = accounts[id];
   document.getElementById('loading-title').textContent = a.name;
@@ -374,22 +526,14 @@ function openAccount(id){
   const topTitle = document.getElementById('detail-topbar-title');
   const payWrap = document.getElementById('paybtn-wrap');
   const topRight = document.getElementById('detail-topbar-right');
+  const buysell = document.getElementById('buysell');
 
   setTimeout(()=>{
-    if(a.invest){
-      topTitle.textContent = 'Investering';
-      payWrap.style.display = 'none';
-      topRight.className = 'topbar-right on';
-      topRight.innerHTML = `
-        <span class="bell"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="bell-badge">14</span></span>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>`;
-      document.getElementById('detail-scroll').innerHTML = investHTML(a);
-      document.getElementById('detail-scroll').scrollTop = 0;
-      show('view-detail');
-      return;
-    }
+    if(a.invest){ renderInvest(id); return; }
+    window._stockOpen=false;
     topTitle.textContent = '';
     payWrap.style.display = '';
+    buysell.style.display = 'none';
     topRight.className = 'topbar-right';
     topRight.innerHTML = '';
 
@@ -431,6 +575,18 @@ function openAccount(id){
   if(sc && g){
     sc.addEventListener('scroll', ()=>{ g.style.opacity = Math.min(sc.scrollTop/45, 1); }, {passive:true});
   }
+})();
+
+// block double-tap / double-click / pinch zoom
+(function(){
+  document.addEventListener('dblclick', e=>e.preventDefault(), {passive:false});
+  document.addEventListener('gesturestart', e=>e.preventDefault(), {passive:false});
+  let last=0;
+  document.addEventListener('touchend', e=>{
+    const now=Date.now();
+    if(now-last<=350){ e.preventDefault(); }
+    last=now;
+  }, {passive:false});
 })();
 </script>
 </body>

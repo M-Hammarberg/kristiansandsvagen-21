@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0e0e0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Swedbank</title>
 <style>
   :root{
@@ -11,13 +15,12 @@
     --orange:#ef5f24; --orange-card1:#f26a26; --orange-card2:#e9531a; --oak:#c9430f;
     --text:#f4f4f5; --text-dim:#8a8a8e; --nav-inactive:#c9c9cc;
     box-sizing:border-box;
-    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:#000;height:100%}
+  html,body{background:#0e0e0f;height:100%}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;justify-content:center;color:var(--text);-webkit-font-smoothing:antialiased;touch-action:manipulation}
 
-  .phone{width:100%;max-width:400px;height:100%;background:var(--bg);position:relative;overflow:hidden}
+  .phone{width:100%;max-width:min(100vw,500px);height:100%;background:var(--bg);position:relative;overflow:hidden}
   .view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg)}
   .view.hidden{display:none}
   .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
@@ -62,6 +65,21 @@
   .mc .yellow{background:#f4901e;margin-left:-14px;mix-blend-mode:screen}
 
   .peek{color:var(--orange);font-size:23px;font-weight:800;padding:16px 18px 0;opacity:.85;display:flex;align-items:center;gap:5px}
+  .start-tx{margin:8px 14px 0;background:var(--card);border-radius:15px;overflow:hidden}
+  .stx{display:flex;align-items:center;gap:12px;padding:14px 16px}
+  .stx + .stx{border-top:1px solid var(--divider)}
+  .stx-ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .stx-ic.home{background:#e7b73a}
+  .stx-ic.folder{background:#6f6f73}
+  .stx-mid{flex:1;min-width:0}
+  .stx-n{font-size:16px;font-weight:700;line-height:1.2;margin-bottom:3px;overflow-wrap:anywhere}
+  .stx-sub{font-size:14px;color:var(--text-dim)}
+  .stx-date{font-size:14px;color:var(--text-dim);margin-top:1px}
+  .stx-right{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+  .stx-amt{font-size:16px;font-weight:700;white-space:nowrap}
+  .anpassa-wrap{display:flex;justify-content:center;padding:22px 0 6px}
+  .anpassa{display:flex;align-items:center;gap:10px;background:#1d4c57;color:#7fbccb;border:none;font-size:19px;font-weight:700;padding:14px 24px;border-radius:26px}
+  .tyck{text-align:center;color:#5a9fd4;font-size:19px;font-weight:700;padding:14px 0 26px}
 
   .nav{display:flex;align-items:center;justify-content:space-between;margin:0 12px 12px;padding:6px 16px;background:#161617;border:1px solid #262628;border-radius:28px}
   .nav-top{margin-top:14px}
@@ -215,6 +233,9 @@
         <div class="bankcard"></div>
       </div>
       <div class="peek">Transaktioner <svg width="13" height="20" viewBox="0 0 12 20" fill="none" stroke="var(--orange)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l7 8-7 8"/></svg></div>
+      <div class="start-tx" id="start-tx"></div>
+      <div class="anpassa-wrap"><button class="anpassa"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg> Anpassa startsidan</button></div>
+      <div class="tyck">Tyck till om nya utseendet</div>
     </div>
   </div>
   <div class="topglass" id="startGlass"></div>
@@ -567,6 +588,26 @@ function openAccount(id){
     show('view-detail');
   }, 500);
 }
+
+// bottom transactions on the start page
+(function(){
+  const iconSVG={
+    home:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h12v-9"/></svg>`,
+    folder:`<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#eaeaea" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h3.5l2 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>`
+  };
+  const startTx=[
+    {icon:"folder", n:"Swish Västtrafik T", sub:"Swish", d:"2026-09-27", a:"−76,00"},
+    {icon:"home", n:"Överföring lån 0000002451843888", sub:"Bolån?", d:"2026-09-27", a:"−4 505,00"},
+    {icon:"home", n:"Överföring lån 0000002451843896", sub:"Bolån?", d:"2026-09-27", a:"−4 505,00"},
+    {icon:"home", n:"Överföring lån 0000002451843904", sub:"Bolån?", d:"2026-09-27", a:"−4 505,00"}
+  ];
+  const el=document.getElementById('start-tx');
+  if(el) el.innerHTML=startTx.map(t=>`<div class="stx">
+    <div class="stx-ic ${t.icon}">${iconSVG[t.icon]||''}</div>
+    <div class="stx-mid"><div class="stx-n">${t.n}</div><div class="stx-sub">${t.sub}</div><div class="stx-date">${t.d}</div></div>
+    <div class="stx-right"><div class="stx-amt">${t.a}</div>${chev}</div>
+  </div>`).join('');
+})();
 
 // fade the frosted top in as the start page scrolls
 (function(){

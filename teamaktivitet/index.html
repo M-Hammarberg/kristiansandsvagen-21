@@ -329,8 +329,8 @@ h1 em {
     content: ''; position: absolute; top: 12px; right: 12px; width: 18px; height: 1px; background: var(--border);
   }
   .poll { margin-top: 64px; }
-  .poll-days { flex-direction: row; gap: 20px; }
-  .poll-day { flex: 1; display: flex; flex-direction: column; }
+  .poll-days { flex-direction: row; flex-wrap: wrap; gap: 20px; }
+  .poll-day { flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; }
   .poll-names { flex: 1; align-content: flex-start; }
   .menu { margin-top: 56px; }
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 30px; }
@@ -557,12 +557,38 @@ h1 em {
       <span>Vilken dag passar dig?</span>
       <span class="l"></span>
     </div>
-    <p class="poll-note">Vecka 42 — kryssa i den eller de dagar som funkar för dig, så bokar vi den dag flest kan.</p>
+    <p class="poll-note">Vecka 41 — kryssa i den eller de dagar som funkar för dig, så bokar vi den dag flest kan.</p>
     <div class="poll-days">
       <div class="poll-day">
         <div class="poll-day-head">
+          <span class="poll-day-name">Måndag</span>
+          <span class="poll-day-date">5 okt · kl 16:30</span>
+        </div>
+        <div class="poll-names" id="pollNames-man">
+          <span class="poll-empty">Ingen har kryssat än</span>
+        </div>
+        <form class="poll-form" data-day="man">
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
+          <button class="poll-btn" type="submit">Jag kan!</button>
+        </form>
+      </div>
+      <div class="poll-day">
+        <div class="poll-day-head">
+          <span class="poll-day-name">Tisdag</span>
+          <span class="poll-day-date">6 okt · kl 16:30</span>
+        </div>
+        <div class="poll-names" id="pollNames-tis">
+          <span class="poll-empty">Ingen har kryssat än</span>
+        </div>
+        <form class="poll-form" data-day="tis">
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
+          <button class="poll-btn" type="submit">Jag kan!</button>
+        </form>
+      </div>
+      <div class="poll-day">
+        <div class="poll-day-head">
           <span class="poll-day-name">Onsdag</span>
-          <span class="poll-day-date">14 okt · kl 16:30</span>
+          <span class="poll-day-date">7 okt · kl 16:30</span>
         </div>
         <div class="poll-names" id="pollNames-ons">
           <span class="poll-empty">Ingen har kryssat än</span>
@@ -575,7 +601,7 @@ h1 em {
       <div class="poll-day">
         <div class="poll-day-head">
           <span class="poll-day-name">Torsdag</span>
-          <span class="poll-day-date">15 okt · kl 16:30</span>
+          <span class="poll-day-date">8 okt · kl 16:30</span>
         </div>
         <div class="poll-names" id="pollNames-tors">
           <span class="poll-empty">Ingen har kryssat än</span>
@@ -588,7 +614,7 @@ h1 em {
       <div class="poll-day">
         <div class="poll-day-head">
           <span class="poll-day-name">Fredag</span>
-          <span class="poll-day-date">16 okt · kl 16:30</span>
+          <span class="poll-day-date">9 okt · kl 16:30</span>
         </div>
         <div class="poll-names" id="pollNames-fre">
           <span class="poll-empty">Ingen har kryssat än</span>
@@ -1032,7 +1058,7 @@ document.addEventListener('mousemove', e => {
     appId: "1:726739177351:web:57da52bea559b2db5b4d22",
   };
 
-  const DAYS = ['ons', 'tors', 'fre'];
+  const DAYS = ['man', 'tis', 'ons', 'tors', 'fre'];
 
   const slug = name => name.toLowerCase().trim()
     .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')

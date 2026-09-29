@@ -202,6 +202,13 @@
   .komm-row{display:flex;align-items:baseline;justify-content:space-between;padding-right:18px}
   .komm{color:var(--orange);font-size:26px;font-weight:800;padding:22px 18px 4px}
   .visa{color:#5a9fd4;font-size:16px;font-weight:600}
+  .innehav{margin:16px 16px 4px;background:var(--card);border-radius:12px;padding:16px 18px}
+  .innehav-h{font-size:21px;font-weight:800;margin-bottom:14px}
+  .innehav-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px}
+  .ih-l{color:#8a8a8e;font-size:14px;margin-bottom:4px}
+  .ih-v{font-size:19px;font-weight:700}
+  .ih-sub{font-size:15px;font-weight:700;margin-top:2px}
+  .innehav .g{color:#7bbf6a}.innehav .r{color:#e0714e}
 
   /* din ekonomi / spara och placera */
   .eko-top{position:relative;display:flex;align-items:center}
@@ -403,11 +410,14 @@ const accounts = {
 
 // build account list
 const accList = document.getElementById('acc-list');
-accList.innerHTML = Object.entries(accounts).map(([id,a])=>`
+function renderAccList(){
+  accList.innerHTML = Object.entries(accounts).map(([id,a])=>`
   <div class="acc-row" onclick="openAccount('${id}')">
     <div class="acc-left"><div class="name">${a.name}</div><div class="no">${a.no}</div></div>
     <div class="acc-right"><div class="amount">${a.amount}</div>${chev}</div>
   </div>`).join('');
+}
+renderAccList();
 
 function show(id){
   ['view-start','view-loading','view-detail','view-ekonomi'].forEach(v=>document.getElementById(v).classList.add('hidden'));
@@ -441,6 +451,7 @@ const flagSVG = {
   se:`<svg class="flag" viewBox="0 0 16 10" preserveAspectRatio="none"><rect width="16" height="10" fill="#006aa7"/><rect x="5" width="2" height="10" fill="#fecc00"/><rect y="4" width="16" height="2" fill="#fecc00"/></svg>`
 };
 const up = `\u00A0<span class="up">↗</span>`;
+const down = `\u00A0<span class="up">↘</span>`;
 const chevSm = `<svg width="11" height="19" viewBox="0 0 12 20" fill="none" stroke="#8a8a8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l7 8-7 8"/></svg>`;
 
 function fmt(n, dec=2){
@@ -465,7 +476,7 @@ function holdRow(h){
   return `<div class="hold" onclick="openStock('${h.tick}')">
     <div class="hold-name">${flagSVG[h.flag]||''}<span class="tick">${h.tick}</span> ${h.name}</div>
     <div class="hold-grid">
-      <div class="hg"><div class="hg-l">Idag %</div><div class="hg-v ${idagCls}">${pctStr(h.dayPct)}${up}</div></div>
+      <div class="hg"><div class="hg-l">Idag %</div><div class="hg-v ${idagCls}">${pctStr(h.dayPct)}${h.dayPct>=0?up:down}</div></div>
       <div class="hg"><div class="hg-l">Senast</div><div class="hg-v">${fmt(h.close)}</div></div>
       <div class="hg"><div class="hg-l">Sedan köp %</div><div class="hg-v pos">${h.sedan}${up}</div></div>
       <div class="hg right"><div class="hg-l">Värde</div><div class="hg-v">${h.varde}</div></div>
@@ -575,6 +586,22 @@ function stockHTML(h){
   const pills=ranges.map((r,i)=>`<div class="rp ${i===0?'on':''}">${r}</div>`).join('');
   const rets=(h.ret||[]).map(x=>{const t=x.trim(); const cls=t==='—'?'d':(t.charAt(0)==='−'?'r':'g'); return `<span class="${cls}">${t==='—'?'—':t+' %'}</span>`;}).join('');
   const sect=(h.sectors||[]).map(s=>`<div class="sect">${s}</div>`).join('');
+  const fx=h.cur==='USD'?USDSEK:1;
+  const shares=Math.round(h._shares||0);
+  const sedanPct=parseNum(h.sedan);
+  const mv=shares*h.close*fx;
+  const gav=h.close/(1+sedanPct/100);
+  const gain=mv-mv/(1+sedanPct/100);
+  const gcls=gain>=0?'g':'r';
+  const innehav=`<div class="innehav">
+      <div class="innehav-h">Ditt innehav</div>
+      <div class="innehav-grid">
+        <div><div class="ih-l">Antal</div><div class="ih-v">${shares} st</div></div>
+        <div><div class="ih-l">Marknadsvärde</div><div class="ih-v">${fmt(mv,2)} kr</div></div>
+        <div><div class="ih-l">GAV</div><div class="ih-v">${fmt(gav,2)} ${h.cur}</div></div>
+        <div><div class="ih-l">Avkastning</div><div class="ih-v ${gcls}">${gain>=0?'+':'−'}${fmt(Math.abs(gain),2)} kr</div><div class="ih-sub ${gcls}">${h.sedan} %</div></div>
+      </div>
+    </div>`;
   return `<div class="stock">
     <div class="tabs"><div class="tab on">Översikt</div><div class="tab">Nyheter</div><div class="tab">Kalender</div><div class="tab">Info</div></div>
     <div class="detail-sep"></div>
@@ -589,6 +616,7 @@ function stockHTML(h){
     ${buildChart(h)}
     <div class="rpills">${pills}</div>
     <div class="rets">${rets}</div>
+    ${innehav}
     <div class="sects">${sect}</div>
     <div class="komm-row"><h3 class="komm">Kommande händelser</h3><span class="visa">Visa fler</span></div>
     <div style="height:24px"></div>
@@ -601,6 +629,7 @@ function openStock(tick){
   show('view-loading');
   setTimeout(()=>{
     window._stockOpen=true;
+    window._currentTick=tick;
     document.getElementById('detail-topbar-title').textContent=h.disp||h.name;
     document.getElementById('paybtn-wrap').style.display='none';
     document.getElementById('buysell').style.display='';
@@ -705,6 +734,50 @@ function openAccount(id){
     last=now;
   }, {passive:false});
 })();
+// ---- simulated live prices (updates every 20s) ----
+const USDSEK = 9.9184;
+function parseNum(s){ return parseFloat(String(s).replace(/\s/g,'').replace(',','.'))||0; }
+(function initLive(){
+  Object.values(stockByTick).forEach(h=>{
+    const fx = h.cur==='USD'?USDSEK:1;
+    h._shares = parseNum(h.varde)/(h.close*fx);
+    h._prev = h.close - h.dayAbs;   // fixed previous close for the day
+    h._anchor = h.close;            // hover around the real price
+  });
+})();
+function tickPrices(){
+  Object.values(stockByTick).forEach(h=>{
+    const fx = h.cur==='USD'?USDSEK:1;
+    const rev=(h._anchor-h.close)/h._anchor*0.06;
+    let np=h.close*(1+(Math.random()-0.5)*2*0.0018+rev);
+    np=Math.min(h.high, Math.max(h.low, np));
+    h.close=Math.round(np*100)/100;
+    h.dayAbs=h.close-h._prev;
+    h.dayPct=(h.dayAbs/h._prev)*100;
+    h.varde=fmt(h.close*h._shares*fx,2);
+  });
+  const a=accounts.csn;
+  const aktier=Object.values(stockByTick).reduce((s,h)=>s+h.close*h._shares*(h.cur==='USD'?USDSEK:1),0);
+  const cash=parseNum(a.handla), inkop=parseNum(a.inkop);
+  const total=aktier+cash, utv=aktier-inkop, utvpct=utv/inkop*100;
+  a.aktierTotal=fmt(aktier,2); a.total=fmt(total,2); a.amount=fmt(total,2);
+  a.utv=(utv>=0?'+':'−')+fmt(Math.abs(utv),2);
+  a.utvpct=(utvpct>=0?'+':'−')+fmt(Math.abs(utvpct),2);
+
+  const vis=id=>!document.getElementById(id).classList.contains('hidden');
+  if(vis('view-detail')){
+    const sc=document.getElementById('detail-scroll'), st=sc.scrollTop;
+    if(window._stockOpen && stockByTick[window._currentTick]) sc.innerHTML=stockHTML(stockByTick[window._currentTick]);
+    else if(window._investId) sc.innerHTML=investHTML(accounts[window._investId]);
+    sc.scrollTop=st;
+  }
+  if(vis('view-start')) renderAccList();
+  if(vis('view-ekonomi')){
+    const sc=document.getElementById('eko-scroll'), st=sc.scrollTop;
+    renderEkonomi(); sc.scrollTop=st;
+  }
+}
+setInterval(tickPrices, 20000);
 </script>
 </body>
 </html>

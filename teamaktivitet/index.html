@@ -233,9 +233,6 @@ h1 em {
 .poll-day:not(.winner) .poll-day-date { font-size: .58rem; }
 .poll-names { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
 .poll-day:not(.winner) .poll-names { margin-top: 8px; }
-.poll-day:not(.winner) .poll-form { margin-top: 8px; }
-.poll-day:not(.winner) .poll-input,
-.poll-day:not(.winner) .poll-btn { padding: 6px 10px; font-size: .72rem; }
 .poll-empty { font-size: .78rem; color: rgba(212,184,150,.32); font-style: italic; }
 .vote-name {
   display: inline-flex; align-items: center; gap: 6px;
@@ -252,20 +249,6 @@ h1 em {
   0%   { box-shadow: 0 0 0 0 rgba(224,87,71,.9); border-color: rgba(224,87,71,.9); background: rgba(224,87,71,.4); }
   100% { box-shadow: 0 0 10px 1px rgba(224,87,71,.2); border-color: rgba(224,87,71,.55); background: rgba(224,87,71,.16); }
 }
-.poll-form { margin-top: 14px; display: flex; gap: 8px; }
-.poll-input {
-  flex: 1; min-width: 0; background: rgba(0,0,0,.25); border: 1px solid rgba(201,165,90,.2);
-  border-radius: 5px; padding: 9px 12px; font-size: .85rem; color: #ecdcbf; font-family: "Montserrat", sans-serif;
-}
-.poll-input::placeholder { color: rgba(212,184,150,.3); }
-.poll-input:focus { outline: none; border-color: var(--gold); }
-.poll-btn {
-  flex-shrink: 0; background: var(--gold); color: #1a1917; border: none; border-radius: 5px;
-  padding: 9px 16px; font-size: .78rem; font-weight: 600; letter-spacing: .02em; cursor: pointer;
-  transition: background .2s;
-}
-.poll-btn:hover { background: var(--champagne2); }
-.poll-btn:disabled { opacity: .5; cursor: default; }
 
 .menu {
   margin-top: 56px;
@@ -592,10 +575,6 @@ h1 em {
         <div class="poll-names" id="pollNames-man">
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
-        <form class="poll-form" data-day="man">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
-          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
-        </form>
       </div>
       <div class="poll-day">
         <div class="poll-day-head">
@@ -605,10 +584,6 @@ h1 em {
         <div class="poll-names" id="pollNames-tis">
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
-        <form class="poll-form" data-day="tis">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
-          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
-        </form>
       </div>
       <div class="poll-day winner">
         <span class="poll-winner-badge">✓ Vi kör denna dag</span>
@@ -619,10 +594,6 @@ h1 em {
         <div class="poll-names" id="pollNames-ons">
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
-        <form class="poll-form" data-day="ons">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
-          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
-        </form>
       </div>
       <div class="poll-day">
         <div class="poll-day-head">
@@ -632,10 +603,6 @@ h1 em {
         <div class="poll-names" id="pollNames-tors">
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
-        <form class="poll-form" data-day="tors">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
-          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
-        </form>
       </div>
       <div class="poll-day">
         <div class="poll-day-head">
@@ -645,10 +612,6 @@ h1 em {
         <div class="poll-names" id="pollNames-fre">
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
-        <form class="poll-form" data-day="fre">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
-          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
-        </form>
       </div>
     </div>
   </div>
@@ -1086,22 +1049,13 @@ document.addEventListener('mousemove', e => {
 
   const DAYS = ['man', 'tis', 'ons', 'tors', 'fre'];
 
-  const slug = name => name.toLowerCase().trim()
-    .replace(/å/g, 'a').replace(/ä/g, 'a').replace(/ö/g, 'o')
-    .replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-
   const containers = {};
   DAYS.forEach(d => { containers[d] = document.getElementById('pollNames-' + d); });
-  const forms = document.querySelectorAll('.poll-form');
-  if (!containers.ons || !forms.length) return;
+  if (!containers.ons) return;
 
   function showUnavailable(msg){
     DAYS.forEach(d => {
       containers[d].innerHTML = '<span class="poll-empty">' + msg + '</span>';
-    });
-    forms.forEach(f => {
-      f.querySelector('.poll-input').disabled = true;
-      f.querySelector('.poll-btn').disabled = true;
     });
   }
 
@@ -1171,25 +1125,6 @@ document.addEventListener('mousemove', e => {
     showUnavailable('Synkfel — kunde inte läsa röster just nu.');
   });
 
-  forms.forEach(form => {
-    const day = form.dataset.day;
-    const input = form.querySelector('.poll-input');
-    const btn = form.querySelector('.poll-btn');
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const name = input.value.trim();
-      if (!name) { input.focus(); return; }
-      const id = day + '_' + slug(name);
-      btn.disabled = true;
-      votesCol.doc(id).set({
-        name, day, createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      }).then(() => {
-        input.value = '';
-      }).catch(e => {
-        console.error('Rösta:', e);
-      }).finally(() => { btn.disabled = false; });
-    });
-  });
 })();
 </script>
 </body>

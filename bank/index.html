@@ -83,10 +83,10 @@
 
   .nav{display:flex;align-items:center;justify-content:space-between;margin:0 12px 12px;padding:6px 16px;background:#161617;border:1px solid #262628;border-radius:28px}
   .nav-top{margin-top:14px}
-  .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:600;position:relative}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:600;position:relative}
   .nav-item.active{color:var(--orange)}
   .nav-item.inactive{color:var(--nav-inactive)}
-  .nav-item.active .pill{background:#3a2a1c;border-radius:18px;padding:6px 16px;margin-bottom:-4px}
+  .nav-item.active .pill{background:#3a2a1c;border-radius:18px;padding:6px 16px}
   .nav-item .icowrap{padding:6px 0}
   .badge{position:absolute;top:-2px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--orange)}
 
@@ -156,7 +156,7 @@
   .hold{position:relative;padding:14px 18px;border-bottom:1px solid var(--divider)}
   .hold-name{display:flex;align-items:center;gap:7px;font-size:17px;font-weight:600;margin-bottom:12px}
   .flag{width:21px;height:14px;border-radius:2px;overflow:hidden;flex:0 0 auto;display:block}
-  .tick{background:#6b6a2e;color:#fff;font-weight:700;padding:2px 8px;border-radius:4px;font-size:15px}
+  .tick{background:#333335;color:#cfcfd2;font-weight:700;padding:2px 8px;border-radius:4px;font-size:15px}
   .hold-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding-right:22px;column-gap:5px}
   .hg-l{color:#8a8a8e;font-size:12px;margin-bottom:6px}
   .hg-v{font-size:15px;font-weight:600;white-space:nowrap}
@@ -202,6 +202,13 @@
   .komm-row{display:flex;align-items:baseline;justify-content:space-between;padding-right:18px}
   .komm{color:var(--orange);font-size:26px;font-weight:800;padding:22px 18px 4px}
   .visa{color:#5a9fd4;font-size:16px;font-weight:600}
+  .innehav{margin:16px 16px 4px;background:var(--card);border-radius:12px;padding:16px 18px}
+  .innehav-h{font-size:21px;font-weight:800;margin-bottom:14px}
+  .innehav-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px}
+  .ih-l{color:#8a8a8e;font-size:14px;margin-bottom:4px}
+  .ih-v{font-size:19px;font-weight:700}
+  .ih-sub{font-size:15px;font-weight:700;margin-top:2px}
+  .innehav .g{color:#7bbf6a}.innehav .r{color:#e0714e}
 
   /* din ekonomi / spara och placera */
   .eko-top{position:relative;display:flex;align-items:center}
@@ -377,34 +384,40 @@ const accounts = {
       {n:"ELRÄKNING VATTENFALL", d:"2026-09-05", a:"−689,00"},
       {n:"HYRA BOSTAD", d:"2026-09-01", a:"−7 450,00"}
     ]}]},
-  csn:    {name:"Investering ISK", amount:"2 365 408,11", no:"8327-9,509 341 276-8", invest:true,
-    handla:"24 817,60", inkop:"483 321,00", total:"2 365 408,11",
-    utv:"+1 857 269,51", utvpct:"+384,27",
-    aktierTotal:"2 340 590,51",
+  csn:    {name:"Investering ISK", amount:"2 691 454,60", no:"8327-9,509 341 276-8", invest:true,
+    handla:"24 817,60", inkop:"421 480,00", total:"2 691 454,60",
+    utv:"+2 245 157,00", utvpct:"+532,68",
+    aktierTotal:"2 666 637,00",
     holdings:[
-      {flag:"us", tick:"SNDK", name:"SanDisk B", disp:"Sandisk", sedan:"+536,38", varde:"912 840,20",
-        cur:"USD", close:1777.80, dayAbs:24.18, dayPct:1.38, open:1791.94, low:1742.59, high:1815.00,
+      {flag:"us", tick:"SNDK", name:"SanDisk B", disp:"Sandisk", sedan:"+648,93", varde:"916 912,44",
+        cur:"USD", close:1777.8, dayAbs:24.18, dayPct:1.38, open:1791.94, low:1742.59, high:1815.0,
         sectors:["Teknologi","IT-Service","Datalagring"], ret:["+1,38","+648,93","−0,78","−23,86","+1 785,46","—"]},
-      {flag:"us", tick:"MRNA", name:"Moderna", disp:"Moderna", sedan:"+399,06", varde:"623 410,15",
-        cur:"USD", close:194.82, dayAbs:12.71, dayPct:6.98, open:180.60, low:180.39, high:195.71,
-        sectors:["Bioteknik","Läkemedel","Vaccin"], ret:["+6,98","+520,00","+9,80","+64,00","+691,63","+180,00"]},
-      {flag:"us", tick:"DELL", name:"Dell Technologies", disp:"Dell Technologies", sedan:"+305,85", varde:"498 220,66",
-        cur:"USD", close:565.86, dayAbs:29.84, dayPct:5.57, open:546.50, low:541.24, high:567.05,
-        sectors:["Teknologi","Hårdvara","Servrar"], ret:["+5,57","+352,00","−5,13","+40,00","+340,26","+600,00"]},
-      {flag:"us", tick:"MU",   name:"Micron Technology", disp:"Micron Technology", sedan:"+224,84", varde:"306 119,50",
-        cur:"USD", close:1082.28, dayAbs:1.75, dayPct:0.16, open:1095.83, low:1073.00, high:1108.72,
-        sectors:["Teknologi","Halvledare","Minne"], ret:["+0,16","+560,00","+7,37","+95,00","+588,41","+900,00"]}
+      {flag:"us", tick:"MRNA", name:"Moderna", disp:"Moderna", sedan:"+574,40", varde:"631 222,85",
+        cur:"USD", close:198.88, dayAbs:4.06, dayPct:2.08, open:196.2, low:192.51, high:202.67,
+        sectors:["Bioteknik","Bioteknik & Läkemedel","Hälsovård"], ret:["+2,08","+574,40","+29,11","+195,64","+650,00","+180,00"]},
+      {flag:"us", tick:"DELL", name:"Dell Technologies", disp:"Dell Technologies", sedan:"+266,00", varde:"502 467,14",
+        cur:"USD", close:562.89, dayAbs:26.87, dayPct:5.01, open:546.29, low:541.24, high:573.8,
+        sectors:["Teknologi","Hårdvara","Servrar"], ret:["+5,01","+266,00","−5,13","+40,00","+340,26","+590,00"]},
+      {flag:"us", tick:"MU", name:"Micron Technology", disp:"Micron Technology", sedan:"+279,42", varde:"322 034,58",
+        cur:"USD", close:1082.28, dayAbs:1.75, dayPct:0.16, open:1095.83, low:1073.0, high:1108.72,
+        sectors:["Teknologi","Halvledare","Minne"], ret:["+0,16","+279,42","+7,37","+95,00","+588,41","+880,00"]},
+      {flag:"se", tick:"PLEJD", name:"Plejd", disp:"Plejd", sedan:"+38,00", varde:"294 000,00",
+        cur:"SEK", close:980.0, dayAbs:12.0, dayPct:1.24, open:968.0, low:962.0, high:986.0,
+        sectors:["Teknologi","Elektronik","Belysning"], ret:["+1,24","+38,00","+2,80","+22,52","+41,28","+954,00"]}
     ],
     alloc:{aktier:100, rantor:0, alt:0}, reserved:[], months:[]}
 };
 
 // build account list
 const accList = document.getElementById('acc-list');
-accList.innerHTML = Object.entries(accounts).map(([id,a])=>`
+function renderAccList(){
+  accList.innerHTML = Object.entries(accounts).map(([id,a])=>`
   <div class="acc-row" onclick="openAccount('${id}')">
     <div class="acc-left"><div class="name">${a.name}</div><div class="no">${a.no}</div></div>
     <div class="acc-right"><div class="amount">${a.amount}</div>${chev}</div>
   </div>`).join('');
+}
+renderAccList();
 
 function show(id){
   ['view-start','view-loading','view-detail','view-ekonomi'].forEach(v=>document.getElementById(v).classList.add('hidden'));
@@ -438,6 +451,7 @@ const flagSVG = {
   se:`<svg class="flag" viewBox="0 0 16 10" preserveAspectRatio="none"><rect width="16" height="10" fill="#006aa7"/><rect x="5" width="2" height="10" fill="#fecc00"/><rect y="4" width="16" height="2" fill="#fecc00"/></svg>`
 };
 const up = `\u00A0<span class="up">↗</span>`;
+const down = `\u00A0<span class="up">↘</span>`;
 const chevSm = `<svg width="11" height="19" viewBox="0 0 12 20" fill="none" stroke="#8a8a8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l7 8-7 8"/></svg>`;
 
 function fmt(n, dec=2){
@@ -462,7 +476,7 @@ function holdRow(h){
   return `<div class="hold" onclick="openStock('${h.tick}')">
     <div class="hold-name">${flagSVG[h.flag]||''}<span class="tick">${h.tick}</span> ${h.name}</div>
     <div class="hold-grid">
-      <div class="hg"><div class="hg-l">Idag %</div><div class="hg-v ${idagCls}">${pctStr(h.dayPct)}${up}</div></div>
+      <div class="hg"><div class="hg-l">Idag %</div><div class="hg-v ${idagCls}">${pctStr(h.dayPct)}${h.dayPct>=0?up:down}</div></div>
       <div class="hg"><div class="hg-l">Senast</div><div class="hg-v">${fmt(h.close)}</div></div>
       <div class="hg"><div class="hg-l">Sedan köp %</div><div class="hg-v pos">${h.sedan}${up}</div></div>
       <div class="hg right"><div class="hg-l">Värde</div><div class="hg-v">${h.varde}</div></div>
@@ -572,6 +586,22 @@ function stockHTML(h){
   const pills=ranges.map((r,i)=>`<div class="rp ${i===0?'on':''}">${r}</div>`).join('');
   const rets=(h.ret||[]).map(x=>{const t=x.trim(); const cls=t==='—'?'d':(t.charAt(0)==='−'?'r':'g'); return `<span class="${cls}">${t==='—'?'—':t+' %'}</span>`;}).join('');
   const sect=(h.sectors||[]).map(s=>`<div class="sect">${s}</div>`).join('');
+  const fx=h.cur==='USD'?USDSEK:1;
+  const shares=Math.round(h._shares||0);
+  const sedanPct=parseNum(h.sedan);
+  const mv=shares*h.close*fx;
+  const gav=h.close/(1+sedanPct/100);
+  const gain=mv-mv/(1+sedanPct/100);
+  const gcls=gain>=0?'g':'r';
+  const innehav=`<div class="innehav">
+      <div class="innehav-h">Ditt innehav</div>
+      <div class="innehav-grid">
+        <div><div class="ih-l">Antal</div><div class="ih-v">${shares} st</div></div>
+        <div><div class="ih-l">Marknadsvärde</div><div class="ih-v">${fmt(mv,2)} kr</div></div>
+        <div><div class="ih-l">GAV</div><div class="ih-v">${fmt(gav,2)} ${h.cur}</div></div>
+        <div><div class="ih-l">Avkastning</div><div class="ih-v ${gcls}">${gain>=0?'+':'−'}${fmt(Math.abs(gain),2)} kr</div><div class="ih-sub ${gcls}">${h.sedan} %</div></div>
+      </div>
+    </div>`;
   return `<div class="stock">
     <div class="tabs"><div class="tab on">Översikt</div><div class="tab">Nyheter</div><div class="tab">Kalender</div><div class="tab">Info</div></div>
     <div class="detail-sep"></div>
@@ -586,6 +616,7 @@ function stockHTML(h){
     ${buildChart(h)}
     <div class="rpills">${pills}</div>
     <div class="rets">${rets}</div>
+    ${innehav}
     <div class="sects">${sect}</div>
     <div class="komm-row"><h3 class="komm">Kommande händelser</h3><span class="visa">Visa fler</span></div>
     <div style="height:24px"></div>
@@ -598,6 +629,7 @@ function openStock(tick){
   show('view-loading');
   setTimeout(()=>{
     window._stockOpen=true;
+    window._currentTick=tick;
     document.getElementById('detail-topbar-title').textContent=h.disp||h.name;
     document.getElementById('paybtn-wrap').style.display='none';
     document.getElementById('buysell').style.display='';
@@ -702,6 +734,50 @@ function openAccount(id){
     last=now;
   }, {passive:false});
 })();
+// ---- simulated live prices (updates every 20s) ----
+const USDSEK = 9.9184;
+function parseNum(s){ return parseFloat(String(s).replace(/\s/g,'').replace(',','.'))||0; }
+(function initLive(){
+  Object.values(stockByTick).forEach(h=>{
+    const fx = h.cur==='USD'?USDSEK:1;
+    h._shares = parseNum(h.varde)/(h.close*fx);
+    h._prev = h.close - h.dayAbs;   // fixed previous close for the day
+    h._anchor = h.close;            // hover around the real price
+  });
+})();
+function tickPrices(){
+  Object.values(stockByTick).forEach(h=>{
+    const fx = h.cur==='USD'?USDSEK:1;
+    const rev=(h._anchor-h.close)/h._anchor*0.06;
+    let np=h.close*(1+(Math.random()-0.5)*2*0.0018+rev);
+    np=Math.min(h.high, Math.max(h.low, np));
+    h.close=Math.round(np*100)/100;
+    h.dayAbs=h.close-h._prev;
+    h.dayPct=(h.dayAbs/h._prev)*100;
+    h.varde=fmt(h.close*h._shares*fx,2);
+  });
+  const a=accounts.csn;
+  const aktier=Object.values(stockByTick).reduce((s,h)=>s+h.close*h._shares*(h.cur==='USD'?USDSEK:1),0);
+  const cash=parseNum(a.handla), inkop=parseNum(a.inkop);
+  const total=aktier+cash, utv=aktier-inkop, utvpct=utv/inkop*100;
+  a.aktierTotal=fmt(aktier,2); a.total=fmt(total,2); a.amount=fmt(total,2);
+  a.utv=(utv>=0?'+':'−')+fmt(Math.abs(utv),2);
+  a.utvpct=(utvpct>=0?'+':'−')+fmt(Math.abs(utvpct),2);
+
+  const vis=id=>!document.getElementById(id).classList.contains('hidden');
+  if(vis('view-detail')){
+    const sc=document.getElementById('detail-scroll'), st=sc.scrollTop;
+    if(window._stockOpen && stockByTick[window._currentTick]) sc.innerHTML=stockHTML(stockByTick[window._currentTick]);
+    else if(window._investId) sc.innerHTML=investHTML(accounts[window._investId]);
+    sc.scrollTop=st;
+  }
+  if(vis('view-start')) renderAccList();
+  if(vis('view-ekonomi')){
+    const sc=document.getElementById('eko-scroll'), st=sc.scrollTop;
+    renderEkonomi(); sc.scrollTop=st;
+  }
+}
+setInterval(tickPrices, 20000);
 </script>
 </body>
 </html>

@@ -207,22 +207,35 @@ h1 em {
 .poll-day {
   border: 1px solid rgba(201,165,90,.16); border-radius: 6px; padding: 18px 20px;
   background: linear-gradient(155deg, rgba(36,33,29,.5), rgba(17,15,13,.5));
+  transition: padding .3s, opacity .3s;
 }
 .poll-day.winner {
+  padding: 30px 26px;
   border-color: rgba(201,165,90,.55);
   background: linear-gradient(155deg, rgba(201,165,90,.14), rgba(36,33,29,.5));
-  box-shadow: 0 0 0 1px rgba(201,165,90,.2), 0 10px 30px rgba(201,165,90,.1);
+  box-shadow: 0 0 0 1px rgba(201,165,90,.2), 0 14px 38px rgba(201,165,90,.14);
+}
+.poll-day:not(.winner) {
+  padding: 10px 16px;
+  opacity: .5;
 }
 .poll-winner-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600;
-  color: #1a1917; background: var(--gold); border-radius: 20px; padding: 4px 10px;
-  margin-bottom: 10px;
+  display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
+  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600;
+  color: #1a1917; background: var(--gold); border-radius: 20px; padding: 5px 12px;
+  margin-bottom: 12px;
 }
 .poll-day-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .poll-day-name { font-family: "Libre Baskerville", serif; font-size: 1.05rem; color: #ecdcbf; }
+.poll-day.winner .poll-day-name { font-size: 1.55rem; }
+.poll-day:not(.winner) .poll-day-name { font-size: .84rem; }
 .poll-day-date { font-size: .68rem; letter-spacing: .1em; color: rgba(212,184,150,.4); text-transform: uppercase; }
+.poll-day:not(.winner) .poll-day-date { font-size: .58rem; }
 .poll-names { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+.poll-day:not(.winner) .poll-names { margin-top: 8px; }
+.poll-day:not(.winner) .poll-form { margin-top: 8px; }
+.poll-day:not(.winner) .poll-input,
+.poll-day:not(.winner) .poll-btn { padding: 6px 10px; font-size: .72rem; }
 .poll-empty { font-size: .78rem; color: rgba(212,184,150,.32); font-style: italic; }
 .vote-name {
   display: inline-flex; align-items: center; gap: 6px;
@@ -341,7 +354,8 @@ h1 em {
   }
   .poll { margin-top: 64px; }
   .poll-days { flex-direction: row; flex-wrap: wrap; gap: 20px; }
-  .poll-day { flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; }
+  .poll-day { flex: 1 1 180px; min-width: 0; display: flex; flex-direction: column; }
+  .poll-day.winner { flex: 1 1 100%; }
   .poll-names { flex: 1; align-content: flex-start; }
   .menu { margin-top: 56px; }
   .menu-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 30px; }

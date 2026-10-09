@@ -208,6 +208,17 @@ h1 em {
   border: 1px solid rgba(201,165,90,.16); border-radius: 6px; padding: 18px 20px;
   background: linear-gradient(155deg, rgba(36,33,29,.5), rgba(17,15,13,.5));
 }
+.poll-day.winner {
+  border-color: rgba(201,165,90,.55);
+  background: linear-gradient(155deg, rgba(201,165,90,.14), rgba(36,33,29,.5));
+  box-shadow: 0 0 0 1px rgba(201,165,90,.2), 0 10px 30px rgba(201,165,90,.1);
+}
+.poll-winner-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600;
+  color: #1a1917; background: var(--gold); border-radius: 20px; padding: 4px 10px;
+  margin-bottom: 10px;
+}
 .poll-day-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .poll-day-name { font-family: "Libre Baskerville", serif; font-size: 1.05rem; color: #ecdcbf; }
 .poll-day-date { font-size: .68rem; letter-spacing: .1em; color: rgba(212,184,150,.4); text-transform: uppercase; }
@@ -511,7 +522,7 @@ h1 em {
         </svg>
         <div>
           <div class="lbl">När</div>
-          <div class="val">Oktober 2026 — exakt datum kommer snart</div>
+          <div class="val">Onsdag 28 oktober, kl 16:30</div>
         </div>
       </div>
       <div class="row">
@@ -557,7 +568,7 @@ h1 em {
       <span>Vilken dag passar dig?</span>
       <span class="l"></span>
     </div>
-    <p class="poll-note">Vecka 44 — kryssa i den eller de dagar som funkar för dig, så bokar vi den dag flest kan.</p>
+    <p class="poll-note">Vecka 44 — omröstningen är stängd. Vi kör onsdag 28 oktober!</p>
     <div class="poll-days">
       <div class="poll-day">
         <div class="poll-day-head">
@@ -568,8 +579,8 @@ h1 em {
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
         <form class="poll-form" data-day="man">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
-          <button class="poll-btn" type="submit">Jag kan!</button>
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
+          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
         </form>
       </div>
       <div class="poll-day">
@@ -581,11 +592,12 @@ h1 em {
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
         <form class="poll-form" data-day="tis">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
-          <button class="poll-btn" type="submit">Jag kan!</button>
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
+          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
         </form>
       </div>
-      <div class="poll-day">
+      <div class="poll-day winner">
+        <span class="poll-winner-badge">✓ Vi kör denna dag</span>
         <div class="poll-day-head">
           <span class="poll-day-name">Onsdag</span>
           <span class="poll-day-date">28 okt · kl 16:30</span>
@@ -594,8 +606,8 @@ h1 em {
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
         <form class="poll-form" data-day="ons">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
-          <button class="poll-btn" type="submit">Jag kan!</button>
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
+          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
         </form>
       </div>
       <div class="poll-day">
@@ -607,8 +619,8 @@ h1 em {
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
         <form class="poll-form" data-day="tors">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
-          <button class="poll-btn" type="submit">Jag kan!</button>
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
+          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
         </form>
       </div>
       <div class="poll-day">
@@ -620,8 +632,8 @@ h1 em {
           <span class="poll-empty">Ingen har kryssat än</span>
         </div>
         <form class="poll-form" data-day="fre">
-          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off">
-          <button class="poll-btn" type="submit">Jag kan!</button>
+          <input class="poll-input" type="text" placeholder="Ditt namn" maxlength="40" autocomplete="off" disabled>
+          <button class="poll-btn" type="submit" disabled>Jag kan!</button>
         </form>
       </div>
     </div>
